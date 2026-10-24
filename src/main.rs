@@ -222,13 +222,94 @@ fn send_all(g: &World, f: &Frame) {
 }
 
 // client -> server
-//   [0]                          keepalive
-//   [1, r, g, b, name...]        دخول
-//   [2, x, y, z, yaw]  (f32)     حركة
-//   [3, text...]                 شات
+//   [0]                                               keepalive
+//   [1, r, g, b, name...]                             دخول
+//   [2, x, y, z, yaw f32, flags, pitch i8, roll i8]   حركة (آخر 3 اختيارية)
+//   [3, text...]                                      شات
+//   [6, weapon(|0x80 راس), target u16, dx, dy, dz]    ضربة / طلقة
+//   [7]                                               ريلود
+//   [12, voice...]                                    صوت
+//   [13, payload...]                                  ping
+//
+// server -> client
+//   [1, id, x, z]                                 ترحيب
+//   [2, n u16, (id u16, x, y, z, yaw f32) * n]    مواقع القريبين
+//   [3, (id u16, r, g, b, len, name) * ]          معلومات لاعبين
+//   [4, id]                                       خروج
+//   [5, id, text]                                 شات
+//   [6, n u16, (id u16, flags, pitch, roll, hp)*n] حالة القريبين
+//   [8, from u16, ix, iy, iz f32, hp]             انضربت (دفع + صحة)
+//   [9, id u16, weapon, hit u16, ex, ey, ez f32]  أثر طلقة/ضربة لاعب ثاني
+//   [10, x, z f32]                                إعادة ظهور
+//   [11, killer u16, victim u16, weapon]          قتل
+//   [12, id u16, voice...]                        صوت
+//   [13, payload...]                              pong
+
+const F_FLY: u8 = 1; // bit0 طيران، bit1-2 السلاح، bit3 تصويب، bit4 رفرفة
+const S_RELOAD: u8 = 0x20;
+const S_DEAD: u8 = 0x40;
+const W_BAT: u8 = 1;
+const W_GUN: u8 = 2;
+const JUMP_Y: f32 = 4.0;
+const FLY_SPEED: f32 = 60.0;
+const KNOCK_SPEED: f32 = 40.0;
+const KNOCK_TIME: Duration = Duration::from_millis(1500);
+const EYE: f32 = 1.5;
+const MAG: u8 = 12;
+const RELOAD: Duration = Duration::from_millis(2200);
+const RESPAWN: Duration = Duration::from_secs(3);
+const BAT_RANGE: f32 = 3.2;
+const BAT_GAP: Duration = Duration::from_millis(550);
+const BAT_DMG: u8 = 15;
+const BAT_PUSH: f32 = 22.0;
+const BAT_UP: f32 = 9.0;
+const GUN_RANGE: f32 = 150.0;
+const GUN_GAP: Duration = Duration::from_millis(140);
+const GUN_DMG: u8 = 20;
+const GUN_DMG_HEAD: u8 = 50;
+const GUN_PUSH: f32 = 2.0;
+const VOICE_DIST: f32 = 40.0;
+const VOICE_RATE: f32 = 20000.0; // بايت/ثانية لكل لاعب
+
+struct Combat {
+    hp: u8,
+    flags: u8,
+    pitch: i8,
+    roll: i8,
+    ammo: u8,
+    reload_until: Option<Instant>,
+    next_shot: Instant,
+    knock_until: Instant,
+    dead_until: Option<Instant>,
+    frozen_until: Instant,
+    voice_t: Instant,
+    voice_tokens: f32,
+}
+impl Default for Combat {
+    fn default() -> Self {
+        let n = Instant::now();
+        Combat {
+            hp: 100, flags: 0, pitch: 0, roll: 0, ammo: MAG, reload_until: None,
+            next_shot: n, knock_until: n, dead_until: None, frozen_until: n,
+            voice_t: n, voice_tokens: VOICE_RATE * 0.5,
+        }
+    }
+}
+
+fn f32at(m: &[u8], i: usize) -> f32 { f32::from_le_bytes([m[i], m[i + 1], m[i + 2], m[i + 3]]) }
+
+fn send_near(g: &World, x: f32, z: f32, r: f32, skip: u16, f: &Frame) {
+    for (&oid, o) in &g.players {
+        if oid == skip || !o.joined() { continue; }
+        let (dx, dz) = (o.x - x, o.z - z);
+        if dx * dx + dz * dz <= r * r { let _ = o.tx.try_send(f.clone()); }
+    }
+}
+
 fn on_msg(w: &Shared, id: u16, m: &[u8]) {
     let mut guard = lock(w);
     let g = &mut *guard;
+    let now = Instant::now();
     match m.first().copied() {
         Some(1) if m.len() >= 4 => {
             let Some(p) = g.players.get_mut(&id) else { return };
@@ -242,16 +323,14 @@ fn on_msg(w: &Shared, id: u16, m: &[u8]) {
             e.extend_from_slice(name.as_bytes());
             p.info = Some(e.clone());
             p.moved = true;
-            p.last = Instant::now();
+            p.last = now;
             let me_tx = p.tx.clone();
             g.dirty = true;
-            // معلومات كل اللاعبين للاعب الجديد بفريم واحد
             let mut all = vec![3u8];
             for o in g.players.values() {
                 if let Some(i) = &o.info { all.extend_from_slice(i); }
             }
             let _ = me_tx.try_send(Arc::new(ws_frame(2, &all)));
-            // ومعلومات اللاعب الجديد للباقين
             let mut one = vec![3u8];
             one.extend_from_slice(&e);
             let f = Arc::new(ws_frame(2, &one));
@@ -261,21 +340,25 @@ fn on_msg(w: &Shared, id: u16, m: &[u8]) {
         }
         Some(2) if m.len() >= 17 => {
             let Some(p) = g.players.get_mut(&id) else { return };
-            if !p.joined() { return; }
-            let f = |i: usize| f32::from_le_bytes([m[i], m[i + 1], m[i + 2], m[i + 3]]);
-            let (x, y, z, yaw) = (f(1), f(5), f(9), f(13));
+            if !p.joined() || now < p.c.frozen_until || p.c.hp == 0 { return; }
+            let (x, y, z, yaw) = (f32at(m, 1), f32at(m, 5), f32at(m, 9), f32at(m, 13));
             if !(x.is_finite() && y.is_finite() && z.is_finite() && yaw.is_finite()) { return; }
-            let now = Instant::now();
+            let (flags, pitch, roll) = if m.len() >= 20 { (m[17] & 0x1F, m[18] as i8, m[19] as i8) } else { (0, 0, 0) };
             let dt = now.duration_since(p.last).as_secs_f32().min(1.0);
             p.last = now;
-            // حماية من الغش: حد للسرعة والارتفاع
+            let flying = flags & F_FLY != 0;
+            let knocked = now < p.c.knock_until;
+            let lim = if flying { FLY_SPEED } else { MAX_SPEED } + if knocked { KNOCK_SPEED } else { 0.0 };
             let (dx, dz) = (x - p.x, z - p.z);
             let d = (dx * dx + dz * dz).sqrt();
-            let max = MAX_SPEED * dt + 0.5;
+            let max = lim * dt + 0.5;
             let k = if d > max { max / d } else { 1.0 };
-            let n = (p.x + dx * k, y.clamp(0.0, MAX_Y), p.z + dz * k, yaw.rem_euclid(TAU));
-            if n != (p.x, p.y, p.z, p.yaw) {
+            let ymax = if flying || knocked { MAX_Y } else { p.y.max(JUMP_Y) };
+            let n = (p.x + dx * k, y.clamp(0.0, ymax), p.z + dz * k, yaw.rem_euclid(TAU));
+            let st = (flags, pitch, roll);
+            if n != (p.x, p.y, p.z, p.yaw) || st != (p.c.flags, p.c.pitch, p.c.roll) {
                 (p.x, p.y, p.z, p.yaw) = n;
+                (p.c.flags, p.c.pitch, p.c.roll) = st;
                 p.moved = true;
                 g.dirty = true;
             }
@@ -283,7 +366,6 @@ fn on_msg(w: &Shared, id: u16, m: &[u8]) {
         Some(3) if m.len() >= 2 => {
             let Some(p) = g.players.get_mut(&id) else { return };
             if !p.joined() { return; }
-            let now = Instant::now();
             if now.duration_since(p.last_chat) < CHAT_GAP { return; }
             let text = clean(&m[1..], CHAT_MAX);
             if text.is_empty() { return; }
@@ -293,8 +375,134 @@ fn on_msg(w: &Shared, id: u16, m: &[u8]) {
             b.extend_from_slice(text.as_bytes());
             send_all(g, &Arc::new(ws_frame(2, &b)));
         }
+        Some(6) if m.len() >= 16 => attack(g, id, m, now),
+        Some(7) => {
+            let Some(p) = g.players.get_mut(&id) else { return };
+            if p.joined() && p.c.hp > 0 && p.c.ammo < MAG && p.c.reload_until.is_none() {
+                p.c.reload_until = Some(now + RELOAD);
+                p.moved = true;
+                g.dirty = true;
+            }
+        }
+        Some(12) if m.len() >= 2 => {
+            let Some(p) = g.players.get_mut(&id) else { return };
+            if !p.joined() { return; }
+            let el = now.duration_since(p.c.voice_t).as_secs_f32();
+            p.c.voice_t = now;
+            p.c.voice_tokens = (p.c.voice_tokens + el * VOICE_RATE).min(VOICE_RATE * 0.5);
+            let n = m.len() as f32;
+            if p.c.voice_tokens < n { return; }
+            p.c.voice_tokens -= n;
+            let (x, z) = (p.x, p.z);
+            let mut b = Vec::with_capacity(m.len() + 2);
+            b.push(12);
+            b.extend_from_slice(&id.to_le_bytes());
+            b.extend_from_slice(&m[1..]);
+            send_near(g, x, z, VOICE_DIST, id, &Arc::new(ws_frame(2, &b)));
+        }
+        Some(13) if m.len() <= 32 => {
+            if let Some(p) = g.players.get(&id) { let _ = p.tx.try_send(Arc::new(ws_frame(2, m))); }
+        }
         _ => {}
     }
+}
+
+fn attack(g: &mut World, id: u16, m: &[u8], now: Instant) {
+    let wpn = m[1] & 0x7F;
+    let head = m[1] & 0x80 != 0;
+    let target = u16::from_le_bytes([m[2], m[3]]);
+    let (mut dx, mut dy, mut dz) = (f32at(m, 4), f32at(m, 8), f32at(m, 12));
+    let l = (dx * dx + dy * dy + dz * dz).sqrt();
+    if !l.is_finite() || l < 0.5 { return; }
+    dx /= l; dy /= l; dz /= l;
+    let (range, gap, dmg, push, up) = match wpn {
+        W_BAT => (BAT_RANGE, BAT_GAP, BAT_DMG, BAT_PUSH, BAT_UP),
+        W_GUN => (GUN_RANGE, GUN_GAP, if head { GUN_DMG_HEAD } else { GUN_DMG }, GUN_PUSH, 0.0),
+        _ => return,
+    };
+    let (sx, sy, sz) = {
+        let Some(p) = g.players.get_mut(&id) else { return };
+        if !p.joined() || p.c.hp == 0 || now < p.c.next_shot { return; }
+        if wpn == W_GUN {
+            if let Some(t) = p.c.reload_until {
+                if now < t { return; }
+                p.c.ammo = MAG;
+                p.c.reload_until = None;
+            }
+            if p.c.ammo == 0 { return; }
+            p.c.ammo -= 1;
+        }
+        p.c.next_shot = now + gap;
+        (p.x, p.y + EYE, p.z)
+    };
+    let mut hit = 0u16;
+    if target != 0 && target != id {
+        if let Some(t) = g.players.get(&target) {
+            if t.joined() && t.c.hp > 0 {
+                let (vx, vy, vz) = (t.x - sx, t.y + 1.0 - sy, t.z - sz);
+                let along = vx * dx + vy * dy + vz * dz;
+                let (px, py, pz) = (vx - dx * along, vy - dy * along, vz - dz * along);
+                let perp = (px * px + py * py + pz * pz).sqrt();
+                let tol = if wpn == W_BAT { 2.5 } else { 2.0 + along * 0.02 };
+                if along > -1.0 && along <= range + 2.0 && perp <= tol { hit = target; }
+            }
+        }
+    }
+    let end = match g.players.get(&hit) {
+        Some(t) if hit != 0 => [t.x, t.y + if head { 1.65 } else { 1.1 }, t.z],
+        _ => [sx + dx * range, sy + dy * range, sz + dz * range],
+    };
+    let mut fx = vec![9u8];
+    fx.extend_from_slice(&id.to_le_bytes());
+    fx.push(m[1]);
+    fx.extend_from_slice(&hit.to_le_bytes());
+    for v in end { fx.extend_from_slice(&v.to_le_bytes()); }
+    send_near(g, sx, sz, VIEW, id, &Arc::new(ws_frame(2, &fx)));
+    if hit == 0 { return; }
+
+    let Some(t) = g.players.get_mut(&hit) else { return };
+    let (hx, hz) = (t.x - sx, t.z - sz);
+    let h = (hx * hx + hz * hz).sqrt();
+    let (nx, nz) = if h > 0.05 { (hx / h, hz / h) } else { (dx, dz) };
+    let imp = [nx * push, up + dy.max(0.0) * push * 0.3, nz * push];
+    t.c.hp = t.c.hp.saturating_sub(dmg);
+    t.c.knock_until = now + KNOCK_TIME;
+    t.moved = true;
+    let mut b = vec![8u8];
+    b.extend_from_slice(&id.to_le_bytes());
+    for v in imp { b.extend_from_slice(&v.to_le_bytes()); }
+    b.push(t.c.hp);
+    let _ = t.tx.try_send(Arc::new(ws_frame(2, &b)));
+    let dead = t.c.hp == 0;
+    if dead { t.c.dead_until = Some(now + RESPAWN); }
+    g.dirty = true;
+    if dead {
+        let mut k = vec![11u8];
+        k.extend_from_slice(&id.to_le_bytes());
+        k.extend_from_slice(&hit.to_le_bytes());
+        k.push(wpn);
+        send_all(g, &Arc::new(ws_frame(2, &k)));
+    }
+}
+
+fn respawn(p: &mut Player, now: Instant, seed: &mut u64) {
+    let a = rnd(seed) * TAU;
+    let r = 3.0 + rnd(seed) * 10.0;
+    (p.x, p.y, p.z) = (a.cos() * r, 0.0, a.sin() * r);
+    p.c.hp = 100;
+    p.c.ammo = MAG;
+    p.c.reload_until = None;
+    p.c.dead_until = None;
+    p.c.frozen_until = now + Duration::from_millis(300);
+    p.moved = true;
+    let mut b = vec![10u8];
+    b.extend_from_slice(&p.x.to_le_bytes());
+    b.extend_from_slice(&p.z.to_le_bytes());
+    let _ = p.tx.try_send(Arc::new(ws_frame(2, &b)));
+}
+
+fn state_of(p: &Player) -> u8 {
+    p.c.flags | if p.c.reload_until.is_some() { S_RELOAD } else { 0 } | if p.c.hp == 0 { S_DEAD } else { 0 }
 }
 
 fn clean(b: &[u8], max: usize) -> String {
@@ -302,26 +510,27 @@ fn clean(b: &[u8], max: usize) -> String {
     s.trim().to_owned()
 }
 
-// server -> client
-//   [1, id, x, z]                                   ترحيب
-//   [2, n u16, (id u16, x, y, z, yaw f32) * n]      اللاعبين القريبين (18 بايت لكل لاعب)
-//   [3, (id u16, r, g, b, len, name) * ]            معلومات لاعبين
-//   [4, id]                                         خروج لاعب
-//   [5, id, text]                                   شات
-//
-// Interest Management: شبكة مكانية، وكل لاعب يستلم بس القريبين منه.
-// إذا مجموعة القريبين ما تغيّرت ومحد منهم تحرك، ما ينرسل له شي.
 fn broadcaster(w: Shared) {
     let mut grid: HashMap<(i32, i32), Vec<u16>> = HashMap::new();
     let mut vis: Vec<(f32, u16)> = Vec::new();
     let mut seen: Vec<(u16, u64)> = Vec::new();
     let mut buf: Vec<u8> = Vec::with_capacity(4096);
+    let mut sbuf: Vec<u8> = Vec::with_capacity(1024);
+    let mut seed = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos() as u64).unwrap_or(7) | 1;
     let r = (VIEW / CELL).ceil() as i32;
     loop {
         let t = Instant::now();
         {
             let mut guard = lock(&w);
             let g = &mut *guard;
+            for p in g.players.values_mut() {
+                if let Some(d) = p.c.dead_until {
+                    if d <= t { respawn(p, t, &mut seed); g.dirty = true; }
+                }
+                if let Some(rl) = p.c.reload_until {
+                    if rl <= t { p.c.ammo = MAG; p.c.reload_until = None; p.moved = true; g.dirty = true; }
+                }
+            }
             if g.dirty {
                 g.dirty = false;
                 grid.clear();
@@ -360,12 +569,18 @@ fn broadcaster(w: Shared) {
                     buf.clear();
                     buf.push(2);
                     buf.extend_from_slice(&(vis.len() as u16).to_le_bytes());
+                    sbuf.clear();
+                    sbuf.push(6);
+                    sbuf.extend_from_slice(&(vis.len() as u16).to_le_bytes());
                     for &(_, oid) in &vis {
                         let o = &g.players[&oid];
                         buf.extend_from_slice(&oid.to_le_bytes());
                         for v in [o.x, o.y, o.z, o.yaw] { buf.extend_from_slice(&v.to_le_bytes()); }
+                        sbuf.extend_from_slice(&oid.to_le_bytes());
+                        sbuf.extend_from_slice(&[state_of(o), o.c.pitch as u8, o.c.roll as u8, o.c.hp]);
                     }
                     let _ = rp.tx.try_send(Arc::new(ws_frame(2, &buf)));
+                    let _ = rp.tx.try_send(Arc::new(ws_frame(2, &sbuf)));
                 }
                 for &(id, h) in &seen {
                     if let Some(p) = g.players.get_mut(&id) { p.seen = h; }
