@@ -1,45 +1,32 @@
-          match t {
-              1 if d.len() >= 11 => {
-                  self.my_id = u16le(d, 1);
-                  self.x = f32le(d, 3);
-                  self.z = f32le(d, 7);
-                  self.joined = true;
-                  if self.name.is_empty() { self.name = format!("Player{}", self.my_id); }
-                  if self.me_label.is_none() {
-                      let c = self.rgb.map(|v| v as f32 / 255.0);
-                      self.me_label = Some(new_label(&self.doc, &self.labels, &self.name, c));
-                  }
-              }
-              2 if d.len() >= 3 => {
-                  let n = u16le(d, 1) as usize;
-                  if d.len() < 3 + n * 18 { return; }
-                  self.seen_buf.clear();
-                  for i in 0..n {
-                      let o = 3 + i * 18;
-                      let id = u16le(d, o);
-                      if id == self.my_id { continue; }
-                      let (x, y, z, yw) = (f32le(d, o + 2), f32le(d, o + 6), f32le(d, o + 10), f32le(d, o + 14));
-                      self.seen_buf.push(id);
-                      let (doc, labels, infos) = (&self.doc, &self.labels, &self.infos);
-                      let r = self.remotes.entry(id).or_insert_with(|| {
-                          let (nm, c) = infos.get(&id).cloned().unwrap_or_else(|| ("...".into(), [1.0; 3]));
-                          Remote { x, y, z, yaw: yw, tx: x, ty: y, tz: z, tyaw: yw, ph: 0.0, amp: 0.0, rgb: c, label: new_label(doc, labels, &nm, c) }
-                      });
-                      r.tx = x; r.ty = y; r.tz = z; r.tyaw = yw;
-                  }
-                  let seen = &self.seen_buf;
-                  self.remotes.retain(|id, r| {
-                      let keep = seen.contains(id);
-                      if !keep { r.label.root.remove(); }
-                      keep
-                  });
-              }
-              3 => {
-                  let mut o = 1;
-                  while o + 6 <= d.len() {
-                      let id = u16le(d, o);
-                      let c = [d[o + 2], d[o + 3], d[o + 4]].map(|v| v as f32 / 255.0);
-                      let l = d[o + 5] as usize;
-                      o += 6;
-                      if o + l > d.len() { break; }
-                      let nm = String::from_utf8_lossy(&d[o..o + l]).into_owned();
+      let (sx, sy) = ((cx * 0.5 + 0.5) * w, (0.5 - cy * 0.5) * h);
+      let _ = l.root.style().set_property("transform", &format!("translate3d({sx:.1}px,{sy:.1}px,0) translate(-50%,-100%)"));
+  }
+
+  fn expire(l: &mut Label, now: f64) {
+      if l.bubble_until > 0.0 && now > l.bubble_until {
+          l.bub.set_text_content(None);
+          l.bubble_until = 0.0;
+      }
+  }
+
+  // ---------------- Gamepad ----------------
+  #[derive(Default, Clone, Copy)]
+  struct Pad { lx: f32, ly: f32, rx: f32, ry: f32, a: bool, run: bool, start: bool, zin: bool, zout: bool }
+
+  fn poll_pad(nav: &Navigator) -> Option<Pad> {
+      let pads = nav.get_gamepads().ok()?;
+      for v in pads.iter() {
+          let Ok(gp) = v.dyn_into::<Gamepad>() else { continue };
+          if !gp.connected() { continue; }
+          let ax = gp.axes();
+          let a = |i: u32| dz(ax.get(i).as_f64().unwrap_or(0.0) as f32);
+          let bt = gp.buttons();
+          let b = |i: u32| bt.get(i).dyn_into::<GamepadButton>().map(|x| x.pressed() || x.value() > 0.5).unwrap_or(false);
+          return Some(Pad {
+              lx: a(0), ly: a(1), rx: a(2), ry: a(3),
+              a: b(0), run: b(10) || b(7) || b(5), start: b(9), zin: b(12), zout: b(13),
+          });
+      }
+      None
+  }
+

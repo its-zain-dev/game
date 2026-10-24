@@ -1,45 +1,24 @@
-  }
-
-  fn run_loop(g: Rc<RefCell<Game>>) {
-      let f: Rc<RefCell<Option<Closure<dyn FnMut(f64)>>>> = Rc::new(RefCell::new(None));
-      let f2 = f.clone();
-      let win = g.borrow().win.clone();
-      *f2.borrow_mut() = Some(Closure::new(move |t: f64| {
-          let want = g.borrow_mut().frame(t);
-          if want { join(&g, false); }
-          if let Some(cb) = f.borrow().as_ref() { let _ = win.request_animation_frame(cb.as_ref().unchecked_ref()); }
-      }));
-      if let (Some(w), Some(cb)) = (web_sys::window(), f2.borrow().as_ref()) {
-          let _ = w.request_animation_frame(cb.as_ref().unchecked_ref());
-      };
-  }
-
-  // ---------------- Entry ----------------
-  #[wasm_bindgen(start)]
-  pub fn start() -> Result<(), JsValue> {
-      let win = web_sys::window().ok_or("no window")?;
-      let doc = win.document().ok_or("no document")?;
-      let canvas: HtmlCanvasElement = el(&doc, "c")?;
-
-      let opts = js_sys::Object::new();
-      js_sys::Reflect::set(&opts, &"antialias".into(), &true.into())?;
-      js_sys::Reflect::set(&opts, &"powerPreference".into(), &"high-performance".into())?;
-      let gl: GL = match canvas.get_context_with_context_options("webgl2", &opts)? {
-          Some(c) => c.dyn_into()?,
-          None => {
-              if let Some(b) = doc.body() { b.set_text_content(Some("المتصفح ما يدعم WebGL2")); }
-              return Ok(());
-          }
-      };
-      let r = Renderer::new(&gl)?;
-
-      let name_in: HtmlInputElement = el(&doc, "name")?;
-      let col_in: HtmlInputElement = el(&doc, "col")?;
-      if let Ok(Some(s)) = win.local_storage() {
-          if let Ok(Some(n)) = s.get_item("name") { name_in.set_value(&n); }
-          match s.get_item("col") {
-              Ok(Some(c)) => col_in.set_value(&c),
-              _ => col_in.set_value(&format!("#{:06x}", (js_sys::Math::random() * 16_777_215.0) as u32)),
-          }
-      }
-      let touch = win.match_media("(pointer: coarse)").ok().flatten().map(|m| m.matches()).unwrap_or(false);
+                  self.seen_buf.clear();
+                  for i in 0..n {
+                      let o = 3 + i * 18;
+                      let id = u16le(d, o);
+                      if id == self.my_id { continue; }
+                      let (x, y, z, yw) = (f32le(d, o + 2), f32le(d, o + 6), f32le(d, o + 10), f32le(d, o + 14));
+                      self.seen_buf.push(id);
+                      let (doc, labels, infos) = (&self.doc, &self.labels, &self.infos);
+                      let r = self.remotes.entry(id).or_insert_with(|| {
+                          let (nm, c) = infos.get(&id).cloned().unwrap_or_else(|| ("...".into(), [1.0; 3]));
+                          Remote { x, y, z, yaw: yw, tx: x, ty: y, tz: z, tyaw: yw, ph: 0.0, amp: 0.0, rgb: c, label: new_label(doc, labels, &nm, c) }
+                      });
+                      r.tx = x; r.ty = y; r.tz = z; r.tyaw = yw;
+                  }
+                  let seen = &self.seen_buf;
+                  self.remotes.retain(|id, r| {
+                      let keep = seen.contains(id);
+                      if !keep { r.label.root.remove(); }
+                      keep
+                  });
+              }
+              3 => {
+                  let mut o = 1;
+                  while o + 6 <= d.len() {

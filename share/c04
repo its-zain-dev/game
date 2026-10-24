@@ -1,45 +1,30 @@
-          gl.clear_color(SKY[0], SKY[1], SKY[2], 1.0);
-          gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT);
-          // 1) الأرض
-          gl.use_program(Some(&self.gp));
-          gl.uniform_matrix4fv_with_f32_array(self.g_vp.as_ref(), false, vp);
-          gl.uniform3f(self.g_sky.as_ref(), SKY[0], SKY[1], SKY[2]);
-          gl.uniform2f(self.g_off.as_ref(), off.0, off.1);
-          gl.bind_vertex_array(Some(&self.g_vao));
-          gl.draw_arrays(GL::TRIANGLE_STRIP, 0, 4);
-          // 2) الظلال
-          let ns = (self.shad.len() / 3) as i32;
-          if ns > 0 {
-              gl.disable(GL::DEPTH_TEST);
-              gl.enable(GL::BLEND);
-              gl.use_program(Some(&self.sp));
-              gl.uniform_matrix4fv_with_f32_array(self.s_vp.as_ref(), false, vp);
-              gl.bind_vertex_array(Some(&self.s_vao));
-              gl.bind_buffer(GL::ARRAY_BUFFER, Some(&self.sb));
-              gl.buffer_data_with_u8_array(GL::ARRAY_BUFFER, bytes(&self.shad), GL::STREAM_DRAW);
-              gl.draw_arrays_instanced(GL::TRIANGLE_STRIP, 0, 4, ns);
-              gl.disable(GL::BLEND);
-              gl.enable(GL::DEPTH_TEST);
-          }
-          // 3) كل الشخصيات (instancing)
-          let ni = (self.inst.len() / 10) as i32;
-          if ni > 0 {
-              gl.use_program(Some(&self.bp));
-              gl.uniform_matrix4fv_with_f32_array(self.b_vp.as_ref(), false, vp);
-              gl.uniform3f(self.b_sky.as_ref(), SKY[0], SKY[1], SKY[2]);
-              gl.bind_vertex_array(Some(&self.b_vao));
-              gl.bind_buffer(GL::ARRAY_BUFFER, Some(&self.ib));
-              gl.buffer_data_with_u8_array(GL::ARRAY_BUFFER, bytes(&self.inst), GL::STREAM_DRAW);
-              gl.draw_arrays_instanced(GL::TRIANGLES, 0, 36, ni);
+          let u = [n[1], n[2], n[0]];
+          let w = [n[1] * u[2] - n[2] * u[1], n[2] * u[0] - n[0] * u[2], n[0] * u[1] - n[1] * u[0]];
+          for (a, b) in [(-1.0f32, -1.0f32), (1., -1.), (1., 1.), (-1., -1.), (1., 1.), (-1., 1.)] {
+              for i in 0..3 { v.push((n[i] + u[i] * a + w[i] * b) * 0.5); }
+              v.extend_from_slice(&n);
           }
       }
+      v
   }
 
-  // ---------------- Math ----------------
-  fn persp(fy: f32, a: f32, n: f32, f: f32) -> [f32; 16] {
-      let t = 1.0 / (fy / 2.0).tan();
-      [t / a, 0., 0., 0., 0., t, 0., 0., 0., 0., (f + n) / (n - f), -1., 0., 0., 2. * f * n / (n - f), 0.]
-  }
+  impl Renderer {
+      fn new(gl: &GL) -> Result<Self, JsValue> {
+          let gp = program(gl, GROUND_VS, GROUND_FS)?;
+          let bp = program(gl, BOX_VS, BOX_FS)?;
+          let sp = program(gl, SHADOW_VS, SHADOW_FS)?;
+          let g_vao = gl.create_vertex_array().ok_or("vao")?;
 
-  fn look_at(e: [f32; 3], t: [f32; 3]) -> [f32; 16] {
-      let (mut zx, mut zy, mut zz) = (e[0] - t[0], e[1] - t[1], e[2] - t[2]);
+          let b_vao = gl.create_vertex_array().ok_or("vao")?;
+          gl.bind_vertex_array(Some(&b_vao));
+          let vb = gl.create_buffer().ok_or("buf")?;
+          gl.bind_buffer(GL::ARRAY_BUFFER, Some(&vb));
+          gl.buffer_data_with_u8_array(GL::ARRAY_BUFFER, bytes(&cube()), GL::STATIC_DRAW);
+          attrib(gl, 0, 3, 24, 0, 0);
+          attrib(gl, 1, 3, 24, 12, 0);
+          let ib = gl.create_buffer().ok_or("buf")?;
+          gl.bind_buffer(GL::ARRAY_BUFFER, Some(&ib));
+          attrib(gl, 2, 4, 40, 0, 1);
+          attrib(gl, 3, 3, 40, 16, 1);
+          attrib(gl, 4, 3, 40, 28, 1);
+

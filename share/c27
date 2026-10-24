@@ -1,0 +1,26 @@
+          let _ = gm.win.set_timeout_with_callback_and_timeout_and_arguments_0(cb.unchecked_ref(), 2000);
+      });
+      ws.set_onclose(Some(onclose.as_ref().unchecked_ref()));
+      onclose.forget();
+
+      g.borrow_mut().ws = Some(ws);
+  }
+
+  // ---------------- Input binding ----------------
+  fn bind(g: &Rc<RefCell<Game>>) -> Result<(), JsValue> {
+      let (win, doc, canvas) = { let gm = g.borrow(); (gm.win.clone(), gm.doc.clone(), gm.canvas.clone()) };
+      let go: HtmlElement = el(&doc, "go")?;
+      let jump: HtmlElement = el(&doc, "jump")?;
+      let chatbtn: HtmlElement = el(&doc, "chatbtn")?;
+
+      { let g = g.clone(); on(&go, "click", move |_| join(&g, true)); }
+      { let g = g.clone(); on(&win, "keydown", move |e| g.borrow_mut().key(e.unchecked_ref(), true)); }
+      { let g = g.clone(); on(&win, "keyup", move |e| g.borrow_mut().key(e.unchecked_ref(), false)); }
+      { let g = g.clone(); on(&win, "blur", move |_| g.borrow_mut().keys = [false; 6]); }
+      {
+          let g = g.clone();
+          on(&win, "mousemove", move |e| {
+              let e: &MouseEvent = e.unchecked_ref();
+              let mut gm = g.borrow_mut();
+              if gm.doc.pointer_lock_element().is_some() {
+                  gm.yaw -= e.movement_x() as f32 * 0.0025;

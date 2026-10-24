@@ -1,0 +1,29 @@
+          let k = 1.0 - (-dt * 25.0).exp();
+          let now = self.now;
+          for r in self.remotes.values_mut() {
+              let (dx, dz) = ((r.tx - r.x) * k, (r.tz - r.z) * k);
+              r.x += dx; r.z += dz;
+              r.y += (r.ty - r.y) * k;
+              r.yaw += wrap(r.tyaw - r.yaw) * k;
+              let m = dx.hypot(dz);
+              r.ph += m * 1.8;
+              let target = if dt > 0.0 { (m / dt / 3.0).min(1.0) } else { 0.0 };
+              r.amp += (target - r.amp) * (dt * 8.0).min(1.0);
+              expire(&mut r.label, now);
+          }
+          if let Some(l) = self.me_label.as_mut() { expire(l, now); }
+          while let Some((t0, _)) = self.chat_lines.front() {
+              if now - *t0 < CHAT_LINE_MS { break; }
+              if let Some((_, e)) = self.chat_lines.pop_front() { e.remove(); }
+          }
+      }
+
+      fn net(&mut self) {
+          if !self.joined || self.now - self.last_send < SEND_MS { return; }
+          self.last_send = self.now;
+          let cur = [self.x, self.y, self.z, self.face];
+          if cur != self.sent {
+              let mut b = [0u8; 17];
+              b[0] = 2;
+              for (i, v) in cur.iter().enumerate() { b[1 + i * 4..5 + i * 4].copy_from_slice(&v.to_le_bytes()); }
+              self.send(&b);

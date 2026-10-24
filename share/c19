@@ -1,19 +1,22 @@
-      if touch { if let Some(b) = doc.body() { let _ = b.set_attribute("data-touch", "1"); } }
-
-      let g = Rc::new(RefCell::new(Game {
-          nav: win.navigator(),
-          ui: el(&doc, "ui")?, hud: el(&doc, "hud")?, labels: el(&doc, "labels")?, chatlog: el(&doc, "chatlog")?,
-          chatin: el(&doc, "chatin")?, joy: el(&doc, "joy")?, knob: el(&doc, "knob")?,
-          name_in, col_in, win, doc, canvas, gl, r,
-          ws: None, started: false, joined: false, my_id: 0, name: String::new(), rgb: [255; 3],
-          x: 0.0, y: 0.0, z: 0.0, vy: 0.0, yaw: 0.0, face: 0.0, pitch: 0.35, dist: 7.0, ph: 0.0, amp: 0.0, grounded: true,
-          keys: [false; 6], touch, chat_open: false,
-          joy_id: None, joy_o: (0.0, 0.0), joy_v: (0.0, 0.0), look_id: None, look_p: (0.0, 0.0), jump_tap: false,
-          infos: HashMap::new(), remotes: HashMap::new(), me_label: None,
-          chat_lines: VecDeque::new(), seen_buf: Vec::with_capacity(128),
-          now: 0.0, last_t: 0.0, last_send: 0.0, last_ka: 0.0, sent: [f32::NAN; 4], fps_n: 0, fps_t: 0.0, pad_on: false,
-      }));
-      bind(&g)?;
-      run_loop(g);
-      Ok(())
-  }
+                      let id = u16le(d, o);
+                      let c = [d[o + 2], d[o + 3], d[o + 4]].map(|v| v as f32 / 255.0);
+                      let l = d[o + 5] as usize;
+                      o += 6;
+                      if o + l > d.len() { break; }
+                      let nm = String::from_utf8_lossy(&d[o..o + l]).into_owned();
+                      o += l;
+                      if let Some(r) = self.remotes.get_mut(&id) { r.rgb = c; set_name(&r.label, &nm, c); }
+                      self.infos.insert(id, (nm, c));
+                  }
+              }
+              4 if d.len() >= 3 => {
+                  let id = u16le(d, 1);
+                  self.infos.remove(&id);
+                  if let Some(r) = self.remotes.remove(&id) { r.label.root.remove(); }
+              }
+              5 if d.len() >= 3 => {
+                  let id = u16le(d, 1);
+                  let text = String::from_utf8_lossy(&d[3..]).into_owned();
+                  let nm = if id == self.my_id { self.name.clone() } else { self.infos.get(&id).map(|i| i.0.clone()).unwrap_or_default() };
+                  self.add_chat(&nm, &text);
+                  let until = self.now + BUBBLE_MS;

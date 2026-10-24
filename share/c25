@@ -1,0 +1,32 @@
+          } else if self.started { "Connecting...".into() } else { format!("FPS {fps}{}", if self.pad_on { " | 🎮 Start" } else { "" }) };
+          self.hud.set_text_content(Some(&s));
+      }
+  }
+
+  // ---------------- Join / Network ----------------
+  fn join(g: &Rc<RefCell<Game>>, gesture: bool) {
+      {
+          let mut gm = g.borrow_mut();
+          if gm.started { return; }
+          gm.started = true;
+          gm.name = gm.name_in.value().trim().chars().filter(|c| !c.is_control()).take(16).collect();
+          let col = gm.col_in.value();
+          let v = u32::from_str_radix(col.trim_start_matches('#'), 16).unwrap_or(0xffffff);
+          gm.rgb = [(v >> 16) as u8, (v >> 8) as u8, v as u8];
+          if let Ok(Some(s)) = gm.win.local_storage() {
+              let _ = s.set_item("name", &gm.name);
+              let _ = s.set_item("col", &col);
+          }
+          show(&gm.ui, false);
+          if gesture {
+              gm.fullscreen();
+              if !gm.touch { gm.canvas.request_pointer_lock(); }
+          }
+      }
+      connect(g);
+  }
+
+  fn connect(g: &Rc<RefCell<Game>>) {
+      let url = {
+          let gm = g.borrow();
+          let loc = gm.win.location();

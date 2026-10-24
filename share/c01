@@ -1,3 +1,13 @@
+  const GROUND_VS: &str = r#"#version 300 es
+  uniform mat4 vp;uniform vec2 off;out vec2 lp;out vec2 gp;
+  void main(){vec2 c=vec2(gl_VertexID&1,gl_VertexID>>1)*2.-1.;lp=c*1500.;gp=lp+off;gl_Position=vp*vec4(lp.x,0.,lp.y,1.);}"#;
+
+  const GROUND_FS: &str = r#"#version 300 es
+  precision highp float;in vec2 lp;in vec2 gp;out vec4 o;uniform vec3 sky;
+  vec3 fog(vec3 c,float d){return mix(c,sky,1.-exp(-d*d*.000004));}
+  float grid(float s){vec2 q=gp/s;vec2 g=abs(fract(q-.5)-.5)/fwidth(q);return 1.-min(min(g.x,g.y),1.);}
+  void main(){vec3 c=vec3(.97)-vec3(.05)*grid(1.)-vec3(.1)*grid(10.);o=vec4(fog(c,length(lp)),1.);}"#;
+
   const BOX_VS: &str = r#"#version 300 es
   layout(location=0)in vec3 p;layout(location=1)in vec3 n;layout(location=2)in vec4 ip;layout(location=3)in vec3 sc;layout(location=4)in vec3 cl;
   uniform mat4 vp;out vec3 vn;out vec3 vc;out vec3 wp;
@@ -7,39 +17,3 @@
   const BOX_FS: &str = r#"#version 300 es
   precision highp float;in vec3 vn;in vec3 vc;in vec3 wp;out vec4 o;uniform vec3 sky;
   vec3 fog(vec3 c,float d){return mix(c,sky,1.-exp(-d*d*.000004));}
-  void main(){vec3 N=normalize(vn);float d=max(dot(N,normalize(vec3(.4,1.,.3))),0.);float h=.5+.5*N.y;
-  o=vec4(fog(vc*(.35+.15*h+.5*d),length(wp.xz)),1.);}"#;
-
-  const SHADOW_VS: &str = r#"#version 300 es
-  layout(location=0)in vec3 s;uniform mat4 vp;out vec2 uv;
-  void main(){vec2 c=vec2(gl_VertexID&1,gl_VertexID>>1)*2.-1.;uv=c;gl_Position=vp*vec4(s.x+c.x*s.z,.01,s.y+c.y*s.z,1.);}"#;
-
-  const SHADOW_FS: &str = r#"#version 300 es
-  precision mediump float;in vec2 uv;out vec4 o;
-  void main(){o=vec4(0.,0.,0.,smoothstep(1.,.25,length(uv))*.3);}"#;
-
-  // ---------------- Renderer: 3 draw calls بس ----------------
-  struct Renderer {
-      gp: WebGlProgram, g_vp: Option<WebGlUniformLocation>, g_off: Option<WebGlUniformLocation>,
-      g_sky: Option<WebGlUniformLocation>, g_vao: WebGlVertexArrayObject,
-      bp: WebGlProgram, b_vp: Option<WebGlUniformLocation>, b_sky: Option<WebGlUniformLocation>,
-      b_vao: WebGlVertexArrayObject, ib: WebGlBuffer,
-      sp: WebGlProgram, s_vp: Option<WebGlUniformLocation>, s_vao: WebGlVertexArrayObject, sb: WebGlBuffer,
-      inst: Vec<f32>,
-      shad: Vec<f32>,
-  }
-
-  fn bytes(v: &[f32]) -> &[u8] {
-      unsafe { std::slice::from_raw_parts(v.as_ptr() as *const u8, v.len() * 4) }
-  }
-
-  fn shader(gl: &GL, t: u32, src: &str) -> Result<web_sys::WebGlShader, JsValue> {
-      let s = gl.create_shader(t).ok_or("shader")?;
-      gl.shader_source(&s, src);
-      gl.compile_shader(&s);
-      if gl.get_shader_parameter(&s, GL::COMPILE_STATUS).as_bool() == Some(true) { Ok(s) }
-      else { Err(gl.get_shader_info_log(&s).unwrap_or_default().into()) }
-  }
-
-  fn program(gl: &GL, vs: &str, fs: &str) -> Result<WebGlProgram, JsValue> {
-      let p = gl.create_program().ok_or("program")?;
