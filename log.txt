@@ -1,0 +1,748 @@
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	﻿2026-10-24T20:11:33.9236811Z ##[group]Run wasm-pack build --release --target web --no-typescript --out-dir pkg
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:33.9237463Z ^[[36;1mwasm-pack build --release --target web --no-typescript --out-dir pkg^[[0m
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:33.9300072Z shell: /usr/bin/bash -e {0}
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:33.9300343Z env:
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:33.9300547Z   CARGO_HOME: /home/runner/.cargo
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:33.9300821Z   CARGO_INCREMENTAL: 0
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:33.9301046Z   CARGO_TERM_COLOR: always
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:33.9301273Z ##[endgroup]
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:34.5458227Z [INFO]: 🎯  Checking for the Wasm target...
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:34.5736667Z [INFO]: 🌀  Compiling to Wasm...
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:34.6450388Z ^[[1m^[[92m   Compiling^[[0m wasm-bindgen-shared v0.2.129
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:34.6464490Z ^[[1m^[[92m   Compiling^[[0m proc-macro2 v1.0.107
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:34.8381332Z ^[[1m^[[92m   Compiling^[[0m unicode-ident v1.0.27
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:34.9219895Z ^[[1m^[[92m   Compiling^[[0m quote v1.0.47
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:35.0799957Z ^[[1m^[[92m   Compiling^[[0m rustversion v1.0.23
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:35.6520205Z ^[[1m^[[92m   Compiling^[[0m syn v3.0.9
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:35.9430306Z ^[[1m^[[92m   Compiling^[[0m bumpalo v3.20.3
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:36.1209672Z ^[[1m^[[92m   Compiling^[[0m wasm-bindgen v0.2.129
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:37.1700823Z ^[[1m^[[92m   Compiling^[[0m pin-project-lite v0.2.17
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:37.2080318Z ^[[1m^[[92m   Compiling^[[0m cfg-if v1.0.5
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:37.2340379Z ^[[1m^[[92m   Compiling^[[0m futures-task v0.3.34
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:37.3300047Z ^[[1m^[[92m   Compiling^[[0m once_cell v1.21.4
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:37.3870180Z ^[[1m^[[92m   Compiling^[[0m futures-core v0.3.34
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:37.4704624Z ^[[1m^[[92m   Compiling^[[0m slab v0.4.12
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:37.6000074Z ^[[1m^[[92m   Compiling^[[0m futures-util v0.3.34
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:40.2409949Z ^[[1m^[[92m   Compiling^[[0m wasm-bindgen-macro-support v0.2.129
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:43.8060496Z ^[[1m^[[92m   Compiling^[[0m wasm-bindgen-macro v0.2.129
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:44.9181530Z ^[[1m^[[92m   Compiling^[[0m js-sys v0.3.106
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:11:52.8474042Z ^[[1m^[[92m   Compiling^[[0m web-sys v0.3.106
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:09.5393146Z ^[[1m^[[92m   Compiling^[[0m world v0.1.0 (/home/runner/work/game/game)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:10.4729642Z ^[[1m^[[92m    Finished^[[0m `release` profile [optimized] target(s) in 35.88s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:10.4779739Z [INFO]: ⬇️  Installing wasm-bindgen...
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5337889Z [INFO]: Optimizing wasm binaries with `wasm-opt`...
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5486682Z [wasm-validator error in function 0] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5488016Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5488955Z  (local.get $19)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5489577Z  (local.get $13)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5499384Z  (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5500001Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5501051Z [wasm-validator error in function 0] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5502264Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5502803Z  (local.get $13)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5503319Z  (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5503863Z  (local.get $12)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5504366Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5505403Z [wasm-validator error in function 0] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5506617Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5507119Z  (local.get $19)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5507635Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5508158Z   (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5508894Z   (i32.const 152)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5509407Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5509863Z  (i32.const 80)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5510339Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5511328Z [wasm-validator error in function 0] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5512487Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5512960Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5513507Z   (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5514024Z   (i32.const -86)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5514509Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5514949Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5515416Z   (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5519234Z   (i32.const 64)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5521910Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5522613Z  (i32.const 86)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5523082Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5523998Z [wasm-validator error in function 1] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5525630Z (i32.trunc_sat_f64_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5526293Z  (f64.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5527027Z   (local.tee $34
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5537998Z    (select
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5539812Z     (local.tee $34
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5540406Z      (select
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5540740Z       (f64.const 2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5541080Z       (local.get $34)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5541431Z       (f64.ne
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5541746Z        (local.get $34)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5542113Z        (local.get $34)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5542457Z       )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5542734Z      )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5543012Z     )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5543298Z     (f64.const 2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5543617Z     (f64.lt
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5543919Z      (local.get $34)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5544269Z      (f64.const 2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5544577Z     )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5544852Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5545124Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5545625Z   (f64.convert_i32_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5545980Z    (local.tee $11
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5546295Z     (select
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5546594Z      (local.tee $8
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5546915Z       (call $350
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5547237Z        (local.get $7)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5547571Z       )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5547848Z      )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5548142Z      (i32.const 1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5548653Z      (i32.gt_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5549043Z       (local.get $8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5549373Z       (i32.const 1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5549679Z      )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5549853Z     )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5550019Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5550181Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5550342Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5550505Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5550880Z [wasm-validator error in function 1] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5551340Z (i32.trunc_sat_f64_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5551538Z  (f64.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5551714Z   (local.get $34)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5551909Z   (f64.convert_i32_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5552109Z    (local.tee $12
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5552314Z     (select
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5552493Z      (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5552683Z      (i32.const 1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5552872Z      (i32.gt_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5553050Z       (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5553241Z       (i32.const 1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5553421Z      )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5553583Z     )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5553743Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5553901Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5554059Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5554222Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5554575Z [wasm-validator error in function 1] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5555012Z (i32.trunc_sat_f64_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5555200Z  (f64.div
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5555366Z   (f64.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5555542Z    (f64.convert_i32_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5555746Z     (local.get $7)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5555928Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5556094Z    (f64.const 1e3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5556274Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5556445Z   (local.get $34)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5556631Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5556798Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5557267Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5557809Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5557989Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5558168Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5558357Z   (i32.const 8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5558831Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5559011Z  (i32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5559206Z  (i32.const 152)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5559397Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5559872Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5560417Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5560597Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5560765Z   (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5561145Z    (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5561334Z    (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5561515Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5561678Z   (i32.const 8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5561977Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5562137Z  (i32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5562314Z  (i32.const 152)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5562492Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5562945Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5563482Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5563654Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5563817Z   (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5563986Z    (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5564167Z    (i32.const 328)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5564350Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5564514Z   (i32.const 8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5564687Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5564848Z  (i32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5565027Z  (i32.const 152)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5565203Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5565649Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5566186Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5566360Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5566528Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5566717Z   (i32.const 496)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5566894Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5567055Z  (i32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5567235Z  (i32.const 156)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5567411Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5567853Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5568379Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5568970Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5569158Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5569363Z   (i32.const 1148)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5569552Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5569727Z  (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5569918Z  (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5570098Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5570569Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5571123Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5571309Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5571482Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5571670Z   (i32.const 656)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5571855Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5572021Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5572189Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5572370Z   (i32.const 492)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5572545Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5572705Z  (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5572881Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5573354Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5573896Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5574075Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5574243Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5574427Z   (i32.const 820)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5574604Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5574767Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5574931Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5575112Z   (i32.const 492)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5575286Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5575443Z  (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5575620Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5576075Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5576614Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5576790Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5576957Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5577138Z   (i32.const 984)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5577313Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5577475Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5577641Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5577824Z   (i32.const 492)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5578001Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5578164Z  (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5578749Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5579414Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5580145Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5580615Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5580930Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5581244Z   (i32.const 1148)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5581604Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5581846Z  (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5582345Z  (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5582614Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5636965Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5638202Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5638801Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5639102Z   (local.get $15)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5639403Z   (i32.const 1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5639692Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5639953Z  (i32.const 48)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5640264Z  (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5640559Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5641392Z [wasm-validator error in function 2] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5642407Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5642740Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5643051Z   (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5643382Z   (i32.const 1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5643698Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5643988Z  (i32.const 48)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5644313Z  (local.get $30)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5644662Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5645515Z [wasm-validator error in function 3] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5646460Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5646652Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5646827Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5647017Z   (i32.const 20)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5647195Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5647363Z  (i32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5647544Z  (i32.const 152)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5647723Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5648189Z [wasm-validator error in function 3] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5649004Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5649186Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5649361Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5649542Z   (i32.const 180)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5649726Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5649893Z  (i32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5650072Z  (i32.const 156)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5650250Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5650714Z [wasm-validator error in function 3] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5651259Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5651442Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5651623Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5651810Z   (i32.const 668)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5651990Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5652155Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5652327Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5652514Z   (i32.const 176)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5652689Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5652849Z  (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5653023Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5653465Z [wasm-validator error in function 3] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5653989Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5654165Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5654337Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5654521Z   (i32.const 340)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5654697Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5654859Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5655030Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5655215Z   (i32.const 176)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5655392Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5655556Z  (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5655734Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5656176Z [wasm-validator error in function 3] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5656702Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5656876Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5657049Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5657231Z   (i32.const 504)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5657406Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5657563Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5657731Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5657913Z   (i32.const 176)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5658089Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5658252Z  (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5658702Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5659239Z [wasm-validator error in function 3] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5659804Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5659990Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5660173Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5660572Z   (i32.const 668)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5660759Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5660925Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5661103Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5661406Z   (i32.const 176)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5661591Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5661756Z  (i32.const 164)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5661939Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5662407Z [wasm-validator error in function 3] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5663074Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5663353Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5663640Z   (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5663873Z   (local.get $30)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5664056Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5664217Z  (i32.const 48)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5664400Z  (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5664575Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5665033Z [wasm-validator error in function 3] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5665566Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5665744Z  (local.get $11)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5665934Z  (i32.const 48)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5666111Z  (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5666289Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5666742Z [wasm-validator error in function 3] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5667283Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5667461Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5667633Z   (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5667816Z   (i32.const 1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5667991Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5668154Z  (i32.const 48)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5668333Z  (local.get $11)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5668802Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5669279Z [wasm-validator error in function 4] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5669817Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5669997Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5670163Z   (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5670346Z   (i32.const 480)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5670529Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5670691Z  (i32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5670876Z  (i32.const 80)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5671048Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5671398Z [wasm-validator error in function 4] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5671837Z (i32.trunc_sat_f64_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5672032Z  (f64.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5672204Z   (local.get $37)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5672402Z   (f64.const 5.9604644775390625e-08)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5672643Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5672801Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5673145Z [wasm-validator error in function 4] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5673582Z (i32.trunc_sat_f64_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5673779Z  (f64.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5673952Z   (local.get $37)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5674136Z   (f64.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5674309Z    (local.tee $39
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5674497Z     (f64.convert_i32_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5674705Z      (i32.trunc_sat_f64_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5674910Z       (f64.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5675097Z        (local.get $37)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5675312Z        (f64.const 5.9604644775390625e-08)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5675554Z       )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5675720Z      )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5675885Z     )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5676053Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5676234Z    (f64.const -16777216)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5676438Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5676596Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5676753Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5677101Z [wasm-validator error in function 4] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5677531Z (i32.trunc_sat_f64_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5677733Z  (local.get $37)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5677915Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5678254Z [wasm-validator error in function 4] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5678954Z (i32.trunc_sat_f64_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5679164Z  (local.get $37)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5679350Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5679702Z [wasm-validator error in function 4] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5680141Z (i32.trunc_sat_f64_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5680500Z  (f64.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5680676Z   (local.get $37)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5680877Z   (f64.const 5.9604644775390625e-08)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5681224Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5681384Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5681733Z [wasm-validator error in function 4] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5682168Z (i32.trunc_sat_f64_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5682362Z  (f64.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5682539Z   (local.get $37)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5682727Z   (f64.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5682908Z    (f64.convert_i32_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5683114Z     (local.get $14)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5683305Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5683482Z    (f64.const -16777216)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5683688Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5683845Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5684002Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5684463Z [wasm-validator error in function 6] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5685008Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5685192Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5685372Z   (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5685555Z    (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5685744Z    (i32.const 296)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5685960Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5686120Z   (i32.const 8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5686292Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5686446Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5686612Z   (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5686779Z    (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5686958Z    (i32.const 148)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5687133Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5687293Z   (i32.const 8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5687468Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5687631Z  (i32.const 96)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5687802Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5688153Z [wasm-validator error in function 6] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5688721Z (i32.trunc_sat_f64_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5688913Z  (f64.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5689084Z   (call $389)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5689270Z   (f64.const 16777215)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5689466Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5689624Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5690078Z [wasm-validator error in function 6] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5690607Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5690787Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5690957Z   (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5691141Z   (i32.const 408)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5691320Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5691497Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5691665Z   (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5691848Z   (i32.const 296)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5692031Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5692190Z  (i32.const 104)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5692363Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5692819Z [wasm-validator error in function 6] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5693347Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5693522Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5693690Z   (local.get $9)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5693871Z   (i32.const 12)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5694049Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5694211Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5694381Z   (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5694567Z   (i32.const 404)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5694750Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5694911Z  (i32.const 108)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5695084Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5695534Z [wasm-validator error in function 11] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5696098Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5696277Z  (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5696456Z  (i32.const 255)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5696635Z  (local.get $7)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5696809Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5697252Z [wasm-validator error in function 14] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5697780Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5697954Z  (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5698133Z  (i32.const 255)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5698311Z  (local.get $7)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5698599Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5699045Z [wasm-validator error in function 14] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5699704Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5699880Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5700052Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5700232Z   (i32.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5700503Z    (i32.xor
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5700678Z     (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5700878Z     (i32.const -1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5701069Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5701235Z    (i32.const 88)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5701416Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5701577Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5701737Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5701913Z   (local.get $11)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5702094Z   (i32.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5702264Z    (i32.xor
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5702438Z     (local.get $13)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5702636Z     (i32.const -1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5702868Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5703038Z    (i32.const 88)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5703226Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5703385Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5703547Z  (i32.const 88)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5703724Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5704092Z [wasm-validator error in function 16] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5704543Z (i32.trunc_sat_f64_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5704747Z  (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5704925Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5705280Z [wasm-validator error in function 17] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5705713Z (i32.trunc_sat_f64_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5705909Z  (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5706092Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5706543Z [wasm-validator error in function 18] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5707083Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5707266Z  (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5707449Z  (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5707629Z  (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5707801Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5708257Z [wasm-validator error in function 18] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5708910Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5709089Z  (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5709277Z  (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5709460Z  (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5709630Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5710076Z [wasm-validator error in function 21] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5710618Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5710789Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5710959Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5711145Z   (local.get $8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5711326Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5711489Z  (local.get $10)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5711672Z  (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5711847Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5712297Z [wasm-validator error in function 24] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5712834Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5713017Z  (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5713198Z  (i32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5713377Z  (i32.const 160)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5713553Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5713997Z [wasm-validator error in function 24] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5714532Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5714715Z  (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5714897Z  (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5715078Z  (i32.const 160)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5715265Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5715708Z [wasm-validator error in function 26] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5716236Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5716406Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5716579Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5716759Z   (i32.const 8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5716933Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5717091Z  (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5717268Z  (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5717439Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5717891Z [wasm-validator error in function 26] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5718539Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5718850Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5719028Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5719210Z   (i32.const 8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5719388Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5719555Z  (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5719864Z  (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5720038Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5720513Z [wasm-validator error in function 26] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5721043Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5721222Z  (local.get $8)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5721403Z  (local.get $11)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5721589Z  (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5721783Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5722230Z [wasm-validator error in function 36] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5722758Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5722933Z  (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5723113Z  (i32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5723290Z  (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5723464Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5723906Z [wasm-validator error in function 37] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5724436Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5724614Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5724789Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5724977Z   (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5725153Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5725316Z  (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5725500Z  (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5725677Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5726123Z [wasm-validator error in function 37] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5726652Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5726829Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5727007Z   (i32.load offset=40
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5727213Z    (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5727397Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5727570Z   (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5727747Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5727907Z  (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5728086Z  (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5728261Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5728743Z [wasm-validator error in function 44] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5729180Z (i32.trunc_sat_f32_s
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5729375Z  (f32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5729539Z   (f32.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5729711Z    (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5729907Z    (f32.const 1.4426950216293335)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5730139Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5730311Z   (f32.load offset=1058012
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5730522Z    (i32.shl
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5730695Z     (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5730880Z     (i32.const 2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5731058Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5731222Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5731380Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5731538Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5731990Z [wasm-validator error in function 53] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5732530Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5732712Z  (local.get $11)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5732904Z  (i32.const 48)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5733091Z  (local.get $10)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5733267Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5733712Z [wasm-validator error in function 53] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5734244Z (memory.fill
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5734418Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5734587Z   (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5734767Z   (i32.const 1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5734939Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5735100Z  (i32.const 48)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5735277Z  (local.get $11)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5735459Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5735914Z [wasm-validator error in function 64] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5736442Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5736617Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5736793Z   (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5736975Z   (local.get $4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5737153Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5737313Z  (local.get $6)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5737490Z  (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5737660Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5738243Z [wasm-validator error in function 65] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5741730Z (i32.trunc_sat_f32_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5742078Z  (f32.min
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5742246Z   (f32.max
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5742419Z    (local.tee $6
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5742600Z     (f32.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5742774Z      (f32.load
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5742955Z       (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5743147Z      )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5743318Z      (f32.const 255)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5743504Z     )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5743669Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5743832Z    (f32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5744010Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5744177Z   (f32.const 255)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5744363Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5744519Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5744872Z [wasm-validator error in function 65] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5745306Z (i32.trunc_sat_f32_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5745498Z  (f32.min
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5745663Z   (f32.max
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5745837Z    (local.tee $6
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5746019Z     (f32.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5746199Z      (f32.load offset=4
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5746403Z       (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5746592Z      )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5746760Z      (f32.const 255)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5746951Z     )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5747114Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5747279Z    (f32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5747457Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5747622Z   (f32.const 255)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5747806Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5747967Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5748316Z [wasm-validator error in function 65] unexpected false: all used features should be allowed, on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5748879Z (i32.trunc_sat_f32_u
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5749070Z  (f32.min
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5749237Z   (f32.max
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5749406Z    (local.tee $6
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5749583Z     (f32.mul
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5749770Z      (f32.load offset=8
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5749973Z       (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5750159Z      )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5750330Z      (f32.const 255)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5750511Z     )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5750685Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5750859Z    (f32.const 0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5751040Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5751201Z   (f32.const 255)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5751381Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5751537Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5751996Z [wasm-validator error in function 86] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5752535Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5752712Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5752881Z   (local.tee $5
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5753068Z    (i32.load offset=4
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5753266Z     (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5753450Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5753609Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5753767Z   (i32.shl
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5753937Z    (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5754120Z    (i32.const 4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5754298Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5754460Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5754626Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5754795Z   (local.get $5)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5754978Z   (i32.shl
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5755148Z    (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5755333Z    (i32.const 4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5755509Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5755673Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5755842Z  (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5756019Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5756475Z [wasm-validator error in function 86] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5757018Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5757195Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5757372Z   (local.tee $0
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5757561Z    (i32.load offset=4
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5757763Z     (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5757949Z    )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5758108Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5758264Z   (i32.shl
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5758551Z    (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5758736Z    (i32.const 4)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5758908Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5759062Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5759223Z  (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5759408Z  (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5759708Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5760174Z [wasm-validator error in function 122] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5760817Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5760994Z  (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5761172Z  (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5761348Z  (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5761520Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5761968Z [wasm-validator error in function 149] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5762507Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5762681Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5762854Z   (i32.load offset=4
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5763048Z    (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5763231Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5763394Z   (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5763571Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5763732Z  (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5763911Z  (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5764086Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5764535Z [wasm-validator error in function 150] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5765073Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5765250Z  (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5765436Z  (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5765623Z  (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5765799Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5766252Z [wasm-validator error in function 154] unexpected false: Bulk memory operations require bulk memory [--enable-bulk-memory], on 
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5766786Z (memory.copy
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5766960Z  (i32.add
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5767133Z   (i32.load offset=4
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5767329Z    (local.get $0)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5767505Z   )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5767672Z   (local.get $3)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5767853Z  )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5768021Z  (local.get $1)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5768705Z  (local.get $2)
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5768963Z )
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5769158Z Fatal: error validating input
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5769615Z Error: failed to execute `wasm-opt`: exited with exit status: 1
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5770528Z   full command: "/home/runner/.cache/.wasm-pack/wasm-opt-1ceaaea8b7b5f7e0/bin/wasm-opt" "/home/runner/work/game/game/pkg/client_bg.wasm" "-o" "/home/runner/work/game/game/pkg/client_bg.wasm-opt.wasm" "-O"
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5771497Z To disable `wasm-opt`, add `wasm-opt = false` to your package metadata in your `Cargo.toml`.
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5772013Z Caused by: failed to execute `wasm-opt`: exited with exit status: 1
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5772908Z   full command: "/home/runner/.cache/.wasm-pack/wasm-opt-1ceaaea8b7b5f7e0/bin/wasm-opt" "/home/runner/work/game/game/pkg/client_bg.wasm" "-o" "/home/runner/work/game/game/pkg/client_bg.wasm-opt.wasm" "-O"
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5773857Z To disable `wasm-opt`, add `wasm-opt = false` to your package metadata in your `Cargo.toml`.
+build	Run wasm-pack build --release --target web --no-typescript --out-dir pkg	2026-10-24T20:12:12.5784468Z ##[error]Process completed with exit code 1.
