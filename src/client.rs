@@ -328,7 +328,53 @@
   }
 
   // ---------------- Game ----------------
-  struct Remote { x: f32, y: f32, z: f32, yaw: f32, tx: f32, ty: f32, tz: f32, tyaw: f32, ph: f32, amp: f32, rgb: [f32; 3], label: Label }
+  struct Remote { x: f32, y: f32, z: f32, yaw: f32, tx: f32, ty: f32, tz: f32, tyaw: f32, ph: f32, amp: f32, rgb: [f32; 3], label: Label, buf: VecDeque<(f64, [f32; 4])>, off: f64, jit: f64, dly: f64, st: [u8; 4] }
+
+// ---- Jitter buffer: نعرض اللاعب الثاني بخطه الزمني الحقيقي ----
+fn rs_push(r: &mut Remote, now: f64, ts: f64, p: [f32; 4]) {
+    if let Some(&(lt, lp)) = r.buf.back() {
+        if ts <= lt && lt - ts < 60000.0 { return; }
+        let (dx, dy, dz) = (p[0] - lp[0], p[1] - lp[1], p[2] - lp[2]);
+        if ts <= lt || dx * dx + dy * dy + dz * dz > 100.0 {
+            r.buf.clear();
+            r.off = f64::NAN;
+        } else if ts - lt > 150.0 {
+            r.buf.push_back((ts - SEND_MS, lp));
+        }
+    }
+    let o = now - ts;
+    if r.off.is_nan() {
+        r.off = o;
+    } else {
+        r.off = (r.off + 0.005).min(o);
+        let e = o - r.off;
+        r.jit = if e > r.jit { e } else { r.jit + (e - r.jit) * 0.01 };
+    }
+    r.buf.push_back((ts, p));
+    while r.buf.len() > 64 { r.buf.pop_front(); }
+}
+
+fn rs_sample(b: &VecDeque<(f64, [f32; 4])>, t: f64) -> Option<[f32; 4]> {
+    let (t0, a) = *b.front()?;
+    if t <= t0 { return Some(a); }
+    for i in 1..b.len() {
+        let (t1, q) = b[i];
+        if t <= t1 {
+            let (t0, a) = b[i - 1];
+            let k = ((t - t0) / (t1 - t0).max(1.0)) as f32;
+            return Some([a[0] + (q[0] - a[0]) * k, a[1] + (q[1] - a[1]) * k, a[2] + (q[2] - a[2]) * k, a[3] + wrap(q[3] - a[3]) * k]);
+        }
+    }
+    b.back().map(|v| v.1)
+}
+
+fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
+    let tgt = (r.jit + 12.0).clamp(24.0, 300.0);
+    r.dly += (tgt - r.dly) * (dt as f64 * 2.0).min(1.0);
+    let t = now - r.off - r.dly;
+    while r.buf.len() > 2 && r.buf[1].0 <= t { r.buf.pop_front(); }
+    if let Some(p) = rs_sample(&r.buf, t) { r.tx = p[0]; r.ty = p[1].max(0.0); r.tz = p[2]; r.tyaw = p[3]; }
+}
 
   struct Game {
       win: Window, doc: Document, nav: Navigator, canvas: HtmlCanvasElement, gl: GL, r: Renderer,
@@ -518,9 +564,38 @@
                       let (doc, labels, infos) = (&self.doc, &self.labels, &self.infos);
                       let r = self.remotes.entry(id).or_insert_with(|| {
                           let (nm, c) = infos.get(&id).cloned().unwrap_or_else(|| ("...".into(), [1.0; 3]));
-                          Remote { x, y, z, yaw: yw, tx: x, ty: y, tz: z, tyaw: yw, ph: 0.0, amp: 0.0, rgb: c, label: new_label(doc, labels, &nm, c) }
+                          Remote { x, y, z, yaw: yw, tx: x, ty: y, tz: z, tyaw: yw, ph: 0.0, amp: 0.0, rgb: c, label: new_label(doc, labels, &nm, c), buf: VecDeque::new(), off: f64::NAN, jit: 40.0, dly: 60.0, st: [0; 4] }
                       });
                       r.tx = x; r.ty = y; r.tz = z; r.tyaw = yw;
+                  }
+                  let seen = &self.seen_buf;
+                  self.remotes.retain(|id, r| {
+                      let keep = seen.contains(id);
+                      if !keep { r.label.root.remove(); }
+                      keep
+                  });
+              }
+              14 if d.len() >= 3 => {
+                  let n = u16le(d, 1) as usize;
+                  if d.len() < 3 + n * 26 { return; }
+                  let now = self.now;
+                  self.seen_buf.clear();
+                  for i in 0..n {
+                      let o = 3 + i * 26;
+                      let id = u16le(d, o);
+                      if id == self.my_id { continue; }
+                      let p = [f32le(d, o + 2), f32le(d, o + 6), f32le(d, o + 10), f32le(d, o + 14)];
+                      let ts = u32::from_le_bytes([d[o + 18], d[o + 19], d[o + 20], d[o + 21]]) as f64;
+                      let st = [d[o + 22], d[o + 23], d[o + 24], d[o + 25]];
+                      self.seen_buf.push(id);
+                      let (doc, labels, infos) = (&self.doc, &self.labels, &self.infos);
+                      let r = self.remotes.entry(id).or_insert_with(|| {
+                          let (nm, c) = infos.get(&id).cloned().unwrap_or_else(|| ("...".into(), [1.0; 3]));
+                          Remote { x: p[0], y: p[1], z: p[2], yaw: p[3], tx: p[0], ty: p[1], tz: p[2], tyaw: p[3], ph: 0.0, amp: 0.0, rgb: c,
+                              label: new_label(doc, labels, &nm, c), buf: VecDeque::new(), off: f64::NAN, jit: 40.0, dly: 60.0, st }
+                      });
+                      r.st = st;
+                      rs_push(r, now, ts, p);
                   }
                   let seen = &self.seen_buf;
                   self.remotes.retain(|id, r| {
@@ -616,6 +691,7 @@
           let k = 1.0 - (-dt * 25.0).exp();
           let now = self.now;
           for r in self.remotes.values_mut() {
+              let k = if r.off.is_nan() { k } else { rs_interp(r, now, dt); 1.0 };
               let (dx, dz) = ((r.tx - r.x) * k, (r.tz - r.z) * k);
               r.x += dx; r.z += dz;
               r.y += (r.ty - r.y) * k;
@@ -638,9 +714,10 @@
           self.last_send = self.now;
           let cur = [self.x, self.y, self.z, self.face];
           if cur != self.sent {
-              let mut b = [0u8; 17];
+              let mut b = [0u8; 24];
               b[0] = 2;
               for (i, v) in cur.iter().enumerate() { b[1 + i * 4..5 + i * 4].copy_from_slice(&v.to_le_bytes()); }
+              b[20..24].copy_from_slice(&(self.now as u32).to_le_bytes());
               self.send(&b);
               self.sent = cur;
               self.last_ka = self.now;

@@ -284,6 +284,7 @@ struct Combat {
     frozen_until: Instant,
     voice_t: Instant,
     voice_tokens: f32,
+    ts: u32,
 }
 impl Default for Combat {
     fn default() -> Self {
@@ -291,7 +292,7 @@ impl Default for Combat {
         Combat {
             hp: 100, flags: 0, pitch: 0, roll: 0, ammo: MAG, reload_until: None,
             next_shot: n, knock_until: n, dead_until: None, frozen_until: n,
-            voice_t: n, voice_tokens: VOICE_RATE * 0.5,
+            voice_t: n, voice_tokens: VOICE_RATE * 0.5, ts: 0,
         }
     }
 }
@@ -344,6 +345,7 @@ fn on_msg(w: &Shared, id: u16, m: &[u8]) {
             let (x, y, z, yaw) = (f32at(m, 1), f32at(m, 5), f32at(m, 9), f32at(m, 13));
             if !(x.is_finite() && y.is_finite() && z.is_finite() && yaw.is_finite()) { return; }
             let (flags, pitch, roll) = if m.len() >= 20 { (m[17] & 0x1F, m[18] as i8, m[19] as i8) } else { (0, 0, 0) };
+            if m.len() >= 24 { p.c.ts = u32::from_le_bytes([m[20], m[21], m[22], m[23]]); }
             let dt = now.duration_since(p.last).as_secs_f32().min(1.0);
             p.last = now;
             let flying = flags & F_FLY != 0;
@@ -570,16 +572,17 @@ fn broadcaster(w: Shared) {
                     buf.push(2);
                     buf.extend_from_slice(&(vis.len() as u16).to_le_bytes());
                     sbuf.clear();
-                    sbuf.push(6);
+                    sbuf.push(14);
                     sbuf.extend_from_slice(&(vis.len() as u16).to_le_bytes());
                     for &(_, oid) in &vis {
                         let o = &g.players[&oid];
                         buf.extend_from_slice(&oid.to_le_bytes());
                         for v in [o.x, o.y, o.z, o.yaw] { buf.extend_from_slice(&v.to_le_bytes()); }
                         sbuf.extend_from_slice(&oid.to_le_bytes());
+                        for v in [o.x, o.y, o.z, o.yaw] { sbuf.extend_from_slice(&v.to_le_bytes()); }
+                        sbuf.extend_from_slice(&o.c.ts.to_le_bytes());
                         sbuf.extend_from_slice(&[state_of(o), o.c.pitch as u8, o.c.roll as u8, o.c.hp]);
                     }
-                    let _ = rp.tx.try_send(Arc::new(ws_frame(2, &buf)));
                     let _ = rp.tx.try_send(Arc::new(ws_frame(2, &sbuf)));
                 }
                 for &(id, h) in &seen {
