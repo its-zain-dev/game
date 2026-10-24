@@ -152,23 +152,110 @@
           })
       }
 
-      fn wings(&mut self, x: f32, y: f32, z: f32, yaw: f32, roll: f32, time: f32, color: [f32; 3]) {
-    let (sn, cs) = yaw.sin_cos();
-    let flap = (time * 5.0).sin() * 0.09;
-    for side in [-1.0f32, 1.0] {
-        for i in 0..5 {
-            let span = 0.52 + i as f32 * 0.39;
-            let lateral = side * span;
-            let sweep = 0.12 + i as f32 * 0.13;
-            let lift = lateral * roll.sin() + span * flap;
-            let c = color.map(|v| (v * 0.55 + 0.35).min(1.0));
-            self.bx(
-                [x + cs * lateral + sn * sweep, y + 1.25 + lift, z - sn * lateral + cs * sweep, yaw],
-                [0.43, 0.09, 0.85 - i as f32 * 0.11], c);
+          fn elytra(&mut self, x: f32, y: f32, z: f32, yw: f32, c: [f32; 3], t: f32, roll: f32, boost: bool) {
+        let (sn, cs) = yw.sin_cos();
+        let (fx, fz, rx, rz) = (-sn, -cs, cs, -sn);
+        let at = |f: f32, r: f32| (x + fx * f + rx * r, z + fz * f + rz * r);
+        let dark = c.map(|v| v * 0.55);
+        let mid = c.map(|v| v * 0.75);
+        let by = y + 0.55;
+        let (qx, qz) = at(0.0, 0.0);
+        self.bx([qx, by, qz, yw], [0.62, 0.36, 0.72], c);
+        let (qx, qz) = at(0.58, 0.0);
+        self.bx([qx, by + 0.03, qz, yw], [0.46, 0.44, 0.44], c.map(|v| v * 0.8 + 0.2));
+        let (qx, qz) = at(0.81, 0.0);
+        self.bx([qx, by + 0.08, qz, yw], [0.36, 0.13, 0.04], [0.08, 0.1, 0.14]);
+        for &k in [-1.0f32, 1.0].iter() {
+            let kick = (t * 8.0 + k).sin() * 0.035;
+            let (qx, qz) = at(-0.72, 0.14 * k);
+            self.bx([qx, by + kick, qz, yw], [0.22, 0.24, 0.72], dark);
+            let (qx, qz) = at(0.0, 0.4 * k);
+            self.bx([qx, by - 0.04, qz, yw], [0.16, 0.18, 0.64], mid);
+            for i in 0..7 {
+                let fi = i as f32;
+                let span = 0.22 + fi * 0.16;
+                let chord = (0.95 - fi * 0.1).max(0.32);
+                let back = 0.22 - fi * 0.12 - chord * 0.5;
+                let flut = (t * 14.0 + fi * 0.8).sin() * 0.006 * fi;
+                let dy = 0.22 - fi * 0.03 + k * roll * span * 0.6 + flut;
+                let col = if i >= 5 { [0.34, 0.31, 0.44] } else { [0.6, 0.58, 0.7] };
+                let (qx, qz) = at(back, span * k);
+                self.bx([qx, by + dy, qz, yw], [0.17, 0.045, chord], col);
+            }
+        }
+        if boost {
+            let fl = 0.22 + (t * 40.0).sin().abs() * 0.14;
+            let (qx, qz) = at(-1.2, 0.0);
+            self.bx([qx, by, qz, yw], [fl, fl, fl * 1.8], [1.0, 0.62, 0.18]);
+        }
+        self.shad.extend_from_slice(&[x, z, 0.7 * (1.0 - (y * 0.02).min(0.7))]);
+    }
+
+    fn folded(&mut self, x: f32, y: f32, z: f32, yw: f32, ph: f32, amp: f32) {
+        let (sn, cs) = yw.sin_cos();
+        let (fx, fz, rx, rz) = (-sn, -cs, cs, -sn);
+        let bob = ph.sin().abs() * 0.06 * amp;
+        for &k in [-1.0f32, 1.0].iter() {
+            self.bx([x - fx * 0.23 + rx * 0.15 * k, y + 1.0 + bob, z - fz * 0.23 + rz * 0.15 * k, yw], [0.28, 0.8, 0.06], [0.58, 0.56, 0.68]);
+            self.bx([x - fx * 0.24 + rx * 0.2 * k, y + 0.58 + bob, z - fz * 0.24 + rz * 0.2 * k, yw], [0.18, 0.12, 0.06], [0.34, 0.31, 0.44]);
         }
     }
-}
-fn begin(&mut self) { self.inst.clear(); self.shad.clear(); }
+
+    fn weapon(&mut self, x: f32, y: f32, z: f32, yw: f32, w: u8, flying: bool, swing: f32) {
+        if w == 0 { return; }
+        let (sn, cs) = yw.sin_cos();
+        let (fx, fz, rx, rz) = (-sn, -cs, cs, -sn);
+        let at = |f: f32, r: f32| (x + fx * f + rx * r, z + fz * f + rz * r);
+        if w == 2 {
+            let gy = if flying { y + 0.52 } else { y + 0.82 };
+            let kick = if swing < 1.0 { (1.0 - swing) * 0.08 } else { 0.0 };
+            let (qx, qz) = at(if flying { 0.45 } else { 0.3 } - kick, 0.42);
+            self.bx([qx, gy, qz, yw], [0.08, 0.12, 0.42], [0.14, 0.14, 0.16]);
+            let (qx, qz) = at(if flying { 0.33 } else { 0.18 }, 0.42);
+            self.bx([qx, gy - 0.1, qz, yw], [0.07, 0.16, 0.09], [0.28, 0.2, 0.13]);
+            if swing < 0.35 {
+                let (qx, qz) = at(if flying { 0.76 } else { 0.6 }, 0.42);
+                self.bx([qx, gy + 0.01, qz, yw], [0.16, 0.16, 0.16], [1.0, 0.85, 0.35]);
+            }
+        } else {
+            let wood = [0.58, 0.38, 0.2];
+            if flying {
+                let (qx, qz) = at(0.0, 0.52);
+                self.bx([qx, y + 0.58, qz, yw], [0.09, 0.09, 0.85], wood);
+            } else if swing < 1.0 {
+                let (qx, qz) = at(0.55, 0.45 - swing * 0.9);
+                self.bx([qx, y + 1.05, qz, yw], [0.11, 0.11, 0.9], wood);
+            } else {
+                let (qx, qz) = at(0.12, 0.43);
+                self.bx([qx, y + 1.12, qz, yw], [0.09, 0.8, 0.09], wood);
+            }
+        }
+    }
+
+    fn bar(&mut self, x: f32, y: f32, z: f32, yw: f32, hp: u8) {
+        let (sn, cs) = yw.sin_cos();
+        let w = hp.min(100) as f32 / 100.0;
+        let (rx, rz) = (cs, -sn);
+        let (tx, tz) = (sn * 0.02, cs * 0.02);
+        self.bx([x, y, z, yw], [0.9, 0.1, 0.02], [0.1, 0.1, 0.1]);
+        let off = -(1.0 - w) * 0.43;
+        self.bx([x + rx * off + tx, y, z + rz * off + tz, yw], [0.86 * w, 0.07, 0.02], [1.0 - w, 0.25 + w * 0.65, 0.2]);
+    }
+
+    fn tracer(&mut self, s: [f32; 3], e: [f32; 3], fade: f32) {
+        let d = [e[0] - s[0], e[1] - s[1], e[2] - s[2]];
+        let l = (d[0] * d[0] + d[1] * d[1] + d[2] * d[2]).sqrt();
+        let n = ((l / 0.8) as usize).clamp(1, 190);
+        let yw = (-d[0]).atan2(-d[2]);
+        let sz = 0.04 + 0.04 * fade;
+        for i in 0..=n {
+            let k = i as f32 / n as f32;
+            self.bx([s[0] + d[0] * k, s[1] + d[1] * k, s[2] + d[2] * k, yw], [sz, sz, 0.7], [1.0, 0.92, 0.5]);
+        }
+        let im = 0.08 + 0.2 * fade;
+        self.bx([e[0], e[1], e[2], yw], [im, im, im], [1.0, 0.6, 0.3]);
+    }
+    fn begin(&mut self) { self.inst.clear(); self.shad.clear(); }
 
       #[inline]
       fn bx(&mut self, p: [f32; 4], s: [f32; 3], c: [f32; 3]) {
@@ -395,16 +482,22 @@ fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
   // NET_PING_V1
 #[derive(Default)]
 struct NetPing { last: f64, seq: u32, waiting: Option<(u32, f64)>, rtt: Option<f64> }
-// FLIGHT_V1
+// ELYTRA_V3
+fn el_f32(d: &[u8], i: usize) -> f32 { f32::from_le_bytes([d[i], d[i + 1], d[i + 2], d[i + 3]]) }
+
 #[derive(Default)]
-// FLIGHT_V2
-struct FlightState {
-    active: bool, sent_active: bool, held: bool,
-    last_jump: f64, speed: f32, lift: f32, roll: f32,
-    vx: f32, vz: f32, pitch: f32, stall: bool,
+struct Elytra { on: bool, held: bool, boost_block: bool, boosting: bool, v: [f32; 3], kv: [f32; 2], roll: f32, fuel: f32 }
+
+#[derive(Default)]
+struct Arms {
+    weapon: u8, hp: u8, ammo: u8, reload_until: f64, next: f64, swing: f64,
+    dead: bool, fire_held: bool, sent_flags: u8,
+    fx: Vec<(f64, [f32; 3], [f32; 3])>,
+    rswing: HashMap<u16, f64>,
 }
 struct Game {
-    fly: FlightState,
+    ely: Elytra,
+    arms: Arms,
     ping: NetPing,
       win: Window, doc: Document, nav: Navigator, canvas: HtmlCanvasElement, gl: GL, r: Renderer,
       ui: HtmlElement, hud: HtmlElement, labels: HtmlElement, chatlog: HtmlElement, chatin: HtmlInputElement,
@@ -555,7 +648,7 @@ struct Game {
               let _ = self.knob.style().set_property("transform", &format!("translate({dx:.0}px,{dy:.0}px)"));
           } else if id == self.look_id && id.is_some() {
               self.yaw -= (x - self.look_p.0) * 0.006;
-              self.pitch = (self.pitch + (y - self.look_p.1) * 0.004).clamp(-0.15, 1.3);
+              self.pitch = (self.pitch + (y - self.look_p.1) * 0.004).clamp(-1.25, 1.3);
               self.look_p = (x, y);
           }
       }
@@ -601,6 +694,10 @@ fn ping_pong(&mut self, d: &[u8]) {
 fn on_net(&mut self, d: &[u8]) {
           let Some(&t) = d.first() else { return };
           match t {
+            8 if d.len() >= 16 => { self.on_hit(d); }
+            9 if d.len() >= 18 => { self.on_fx(d); }
+            10 if d.len() >= 9 => { self.on_respawn(d); }
+            11 if d.len() >= 6 => { self.on_kill(d); }
     13 if d.len() == 5 => { self.ping_pong(d); }
               1 if d.len() >= 11 => {
                   self.my_id = u16le(d, 1);
@@ -710,125 +807,308 @@ fn on_net(&mut self, d: &[u8]) {
           self.animate(dt);
           self.net();
     self.ping_tick();
+          self.combat_tick();
           self.render();
           self.hud_update(t);
           want_join
       }
 
-      fn flight_input(&mut self, down: bool) -> bool {
-    let pressed = down && !self.fly.held;
-    self.fly.held = down;
-    if pressed {
-        if self.now - self.fly.last_jump <= 330.0 {
-            self.fly.active = !self.fly.active;
-            self.fly.last_jump = -1000.0;
-            if self.fly.active {
-                let (sy, cy) = self.yaw.sin_cos();
-                let boost = 14.0;
-                self.fly.vx = -sy * boost;
-                self.fly.vz = -cy * boost;
-                self.vy = self.vy.max(5.0);
-                self.fly.pitch = 0.35;
-                self.fly.roll = 0.0;
-                self.fly.lift = 1.5;
-                self.fly.speed = boost;
-                self.grounded = false;
-                self.y = self.y.max(0.2);
-            } else {
-                self.fly.lift = 0.0;
-                self.fly.stall = false;
-            }
+          fn look_dir(&self) -> [f32; 3] {
+        let (sp, cp) = self.pitch.sin_cos();
+        let (sy, cy) = self.yaw.sin_cos();
+        [-sy * cp, -sp, -cy * cp]
+    }
+
+    fn net_flags(&self) -> u8 {
+        (if self.ely.on { 1u8 } else { 0 }) | ((self.arms.weapon & 3) << 1) | (if self.ely.boosting { 0x10u8 } else { 0 })
+    }
+
+    fn ely_open(&mut self) {
+        if self.arms.hp == 0 || self.ely.on { return; }
+        let (sy, cy) = self.yaw.sin_cos();
+        if self.grounded { self.y = self.y.max(0.3); self.vy = self.vy.max(9.0); }
+        self.grounded = false;
+        self.ely.on = true;
+        self.ely.roll = 0.0;
+        self.ely.v = [-sy * 0.35 + self.ely.kv[0] / 20.0, self.vy / 20.0, -cy * 0.35 + self.ely.kv[1] / 20.0];
+        self.ely.kv = [0.0; 2];
+    }
+
+    fn ely_close(&mut self) {
+        if !self.ely.on { return; }
+        self.ely.on = false;
+        self.ely.boosting = false;
+        self.vy = self.ely.v[1] * 20.0;
+        self.ely.kv = [self.ely.v[0] * 20.0, self.ely.v[2] * 20.0];
+    }
+
+    fn ely_toggle(&mut self) {
+        if !self.joined || self.chat_open { return; }
+        if self.ely.on { self.ely_close(); } else { self.ely_open(); self.ely.boost_block = true; }
+    }
+
+    fn elytra_step(&mut self, dt: f32, boost: bool, close: bool) {
+        if close { self.ely_close(); return; }
+        let t = (dt * 20.0).min(3.0);
+        let look = self.look_dir();
+        let hl = (look[0] * look[0] + look[2] * look[2]).sqrt();
+        let pitch = self.pitch;
+        let mut v = self.ely.v;
+        let hv = (v[0] * v[0] + v[2] * v[2]).sqrt();
+        let lift = hl * hl;
+        v[1] += (-0.08 + lift * 0.06) * t;
+        if v[1] < 0.0 && hl > 0.001 {
+            let a = v[1] * -0.1 * lift * t;
+            v[1] += a;
+            v[0] += look[0] * a / hl;
+            v[2] += look[2] * a / hl;
+        }
+        if pitch < 0.0 && hl > 0.001 {
+            let a = hv * (-pitch).sin() * 0.04 * t;
+            v[1] += a * 3.2;
+            v[0] -= look[0] * a / hl;
+            v[2] -= look[2] * a / hl;
+        }
+        if hl > 0.001 {
+            let f = 1.0 - 0.9f32.powf(t);
+            v[0] += (look[0] / hl * hv - v[0]) * f;
+            v[2] += (look[2] / hl * hv - v[2]) * f;
+        }
+        self.ely.boosting = boost && self.ely.fuel > 0.02;
+        if self.ely.boosting {
+            let f = 1.0 - 0.5f32.powf(t);
+            for i in 0..3 { v[i] += look[i] * 0.1 * t + (look[i] * 1.5 - v[i]) * f; }
+            self.ely.fuel = (self.ely.fuel - dt * 0.3).max(0.0);
         } else {
-            self.fly.last_jump = self.now;
-            if self.fly.active {
-                self.fly.lift = (self.fly.lift + 1.0).min(3.0);
-                self.vy += 2.5;
-            }
+            self.ely.fuel = (self.ely.fuel + dt * 0.06).min(1.0);
+        }
+        v[0] *= 0.99f32.powf(t);
+        v[1] *= 0.98f32.powf(t);
+        v[2] *= 0.99f32.powf(t);
+        let s = (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]).sqrt();
+        if s > 2.75 { for c in v.iter_mut() { *c *= 2.75 / s; } }
+        self.x += v[0] * t;
+        self.y += v[1] * t;
+        self.z += v[2] * t;
+        let hv2 = (v[0] * v[0] + v[2] * v[2]).sqrt();
+        if hv2 > 0.02 {
+            let nf = (-v[0]).atan2(-v[2]);
+            let turn = wrap(nf - self.face) / dt.max(0.001);
+            self.face = nf;
+            let tr = (turn * 0.35).clamp(-0.9, 0.9);
+            self.ely.roll += (tr - self.ely.roll) * (dt * 6.0).min(1.0);
+        }
+        self.ely.v = v;
+        self.vy = v[1] * 20.0;
+        self.grounded = false;
+        if self.y >= 400.0 { self.y = 400.0; if self.ely.v[1] > 0.0 { self.ely.v[1] = 0.0; } }
+        if self.y <= 0.0 {
+            self.y = 0.0;
+            self.vy = 0.0;
+            self.grounded = true;
+            self.ely.on = false;
+            self.ely.boosting = false;
+            self.ely.kv = [v[0] * 5.0, v[2] * 5.0];
         }
     }
-    pressed
-}
 
-fn flight_step(&mut self, dt: f32, steer: f32, throttle: f32) {
-    const G: f32 = 9.81;
-    const MASS: f32 = 80.0;
-    const HALF_RHO_S: f32 = 0.5 * 1.225 * 9.0;
-    const THRUST: f32 = 220.0;
-    const STALL_AOA: f32 = 0.28;
-    let dt = dt.min(0.05);
-    let mut vel = [self.fly.vx, self.vy, self.fly.vz];
-    let speed = (vel[0] * vel[0] + vel[1] * vel[1] + vel[2] * vel[2]).sqrt();
-    let authority = (speed / 18.0).clamp(0.25, 1.0);
-    self.fly.roll += (steer * 1.1 - self.fly.roll) * (dt * 3.5 * authority).min(1.0);
-    self.fly.pitch = (self.fly.pitch - throttle * 1.3 * authority * dt).clamp(-1.25, 1.25);
-    self.fly.pitch -= self.fly.pitch * 0.15 * dt;
-    self.yaw -= G * self.fly.roll.tan().clamp(-3.0, 3.0) / speed.max(10.0) * dt;
-    let (sy, cy) = self.yaw.sin_cos();
-    let (sp, cp) = self.fly.pitch.sin_cos();
-    let (sr, cr) = self.fly.roll.sin_cos();
-    let fwd = [-sy * cp, sp, -cy * cp];
-    let right = [cy, 0.0, -sy];
-    let up0 = [sy * sp, cp, cy * sp];
-    let up = [up0[0] * cr + right[0] * sr, up0[1] * cr, up0[2] * cr + right[2] * sr];
-    let dot = |a: [f32; 3], b: [f32; 3]| a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-    let (cl, cd, aoa) = if speed > 0.5 {
-        let vf = dot(vel, fwd);
-        let vu = dot(vel, up);
-        let aoa = (-vu).atan2(vf.max(0.01));
-        let a = aoa.abs();
-        let cl = if a < STALL_AOA { 5.0 * aoa } else { (5.0 * STALL_AOA - (a - STALL_AOA) * 4.0).max(0.25) * aoa.signum() };
-        let cd = 0.035 + 0.05 * cl * cl + if a > STALL_AOA { 0.35 * ((a - STALL_AOA) * 4.0).min(1.0) } else { 0.0 };
-        (cl, cd, aoa)
-    } else { (0.0, 0.05, 0.0) };
-    self.fly.stall = aoa.abs() > STALL_AOA && speed > 3.0;
-    let q = HALF_RHO_S * speed * speed;
-    let vhat = if speed > 0.01 { [vel[0] / speed, vel[1] / speed, vel[2] / speed] } else { fwd };
-    let k = dot(up, vhat);
-    let mut ld = [up[0] - vhat[0] * k, up[1] - vhat[1] * k, up[2] - vhat[2] * k];
-    let ln = (ld[0] * ld[0] + ld[1] * ld[1] + ld[2] * ld[2]).sqrt();
-    if ln > 1e-3 { ld = [ld[0] / ln, ld[1] / ln, ld[2] / ln]; } else { ld = up; }
-    self.fly.lift *= (-dt * 1.2).exp();
-    let thrust = THRUST + self.fly.lift * 120.0;
-    let lift = q * cl;
-    let drag = q * cd;
-    let mut acc = [0.0f32; 3];
-    for i in 0..3 { acc[i] = (ld[i] * lift - vhat[i] * drag + fwd[i] * thrust) / MASS; }
-    acc[1] -= G;
-    for i in 0..3 { vel[i] += acc[i] * dt; }
-    let s2 = (vel[0] * vel[0] + vel[1] * vel[1] + vel[2] * vel[2]).sqrt();
-    if s2 > 95.0 { for v in vel.iter_mut() { *v *= 95.0 / s2; } }
-    self.x += vel[0] * dt;
-    self.y += vel[1] * dt;
-    self.z += vel[2] * dt;
-    self.fly.vx = vel[0];
-    self.vy = vel[1];
-    self.fly.vz = vel[2];
-    self.fly.speed = s2;
-    self.face = self.yaw;
-    self.ph += dt * (2.0 + self.fly.lift * 3.0);
-    self.amp *= (-dt * 8.0).exp();
-    self.grounded = false;
-    if self.y >= 400.0 { self.y = 400.0; if self.vy > 0.0 { self.vy = 0.0; } self.fly.pitch = self.fly.pitch.min(0.0); }
-    if self.y <= 0.0 {
+    fn knock_step(&mut self, dt: f32) {
+        if self.ely.kv[0] == 0.0 && self.ely.kv[1] == 0.0 { return; }
+        self.x += self.ely.kv[0] * dt;
+        self.z += self.ely.kv[1] * dt;
+        let d = (-dt * if self.grounded { 8.0 } else { 1.5 }).exp();
+        self.ely.kv[0] *= d;
+        self.ely.kv[1] *= d;
+        if self.ely.kv[0].abs() + self.ely.kv[1].abs() < 0.05 { self.ely.kv = [0.0; 2]; }
+    }
+
+    fn set_weapon(&mut self, w: u8) {
+        if self.arms.hp == 0 { return; }
+        self.arms.weapon = if w > 2 { 0 } else { w };
+        self.arms.fire_held = false;
+    }
+
+    fn reload(&mut self) {
+        if self.arms.weapon != 2 || self.arms.ammo >= 12 || self.arms.reload_until > 0.0 || self.arms.hp == 0 { return; }
+        self.arms.reload_until = self.now + 2250.0;
+        self.send(&[7]);
+    }
+
+    fn combat_tick(&mut self) {
+        if self.arms.reload_until > 0.0 && self.now >= self.arms.reload_until {
+            self.arms.ammo = 12;
+            self.arms.reload_until = 0.0;
+        }
+        if self.arms.fire_held { self.try_attack(); }
+        let now = self.now;
+        self.arms.fx.retain(|f| now - f.0 < 140.0);
+        self.arms.rswing.retain(|_, t| now - *t < 350.0);
+    }
+
+    fn try_attack(&mut self) {
+        if !self.joined || self.chat_open || self.arms.hp == 0 { return; }
+        let w = self.arms.weapon;
+        if w == 0 || self.now < self.arms.next { return; }
+        if w == 2 {
+            if self.arms.reload_until > 0.0 { return; }
+            if self.arms.ammo == 0 { self.reload(); return; }
+        }
+        self.arms.next = self.now + if w == 1 { 580.0 } else { 150.0 };
+        let dir = self.look_dir();
+        let (sp, cp) = self.pitch.sin_cos();
+        let (sy, cy) = self.yaw.sin_cos();
+        let cam = [sy * cp * self.dist, 1.4 + self.y + sp * self.dist, cy * cp * self.dist];
+        let eye = [0.0f32, self.y + 1.5, 0.0];
+        let mut best: Option<(f32, u16, [f32; 3], bool)> = None;
+        for (&id, r) in self.remotes.iter() {
+            if r.st[0] & 0x40 != 0 { continue; }
+            let base = [r.x - self.x, r.y, r.z - self.z];
+            if w == 1 {
+                let p = [base[0], base[1] + 1.0, base[2]];
+                let v = [p[0] - eye[0], p[1] - eye[1], p[2] - eye[2]];
+                let d = (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]).sqrt();
+                if d > 3.4 { continue; }
+                let hd = (dir[0] * dir[0] + dir[2] * dir[2]).sqrt().max(0.001);
+                let hvl = (v[0] * v[0] + v[2] * v[2]).sqrt().max(0.001);
+                let facing = (v[0] * dir[0] + v[2] * dir[2]) / hd / hvl;
+                if d > 1.2 && facing < 0.35 { continue; }
+                if best.map_or(true, |b| d < b.0) { best = Some((d, id, p, false)); }
+            } else {
+                for &(h, py, tol) in [(true, 1.65f32, 0.32f32), (false, 1.05f32, 0.62f32)].iter() {
+                    let p = [base[0], base[1] + py, base[2]];
+                    let v = [p[0] - cam[0], p[1] - cam[1], p[2] - cam[2]];
+                    let along = v[0] * dir[0] + v[1] * dir[1] + v[2] * dir[2];
+                    if along <= 0.0 { continue; }
+                    let q = [v[0] - dir[0] * along, v[1] - dir[1] * along, v[2] - dir[2] * along];
+                    let perp = (q[0] * q[0] + q[1] * q[1] + q[2] * q[2]).sqrt();
+                    let e = [p[0] - eye[0], p[1] - eye[1], p[2] - eye[2]];
+                    let fe = (e[0] * e[0] + e[1] * e[1] + e[2] * e[2]).sqrt();
+                    if perp > tol + along * 0.004 || fe > 150.0 { continue; }
+                    if best.map_or(true, |b| along < b.0) { best = Some((along, id, p, h)); }
+                    break;
+                }
+            }
+        }
+        let (target, aim, head) = match best {
+            Some((_, id, p, h)) => (id, [p[0] - eye[0], p[1] - eye[1], p[2] - eye[2]], h),
+            None => (0u16, dir, false),
+        };
+        let mut b = [0u8; 16];
+        b[0] = 6;
+        b[1] = w | (if head { 0x80u8 } else { 0 });
+        b[2..4].copy_from_slice(&target.to_le_bytes());
+        for i in 0..3 { b[4 + i * 4..8 + i * 4].copy_from_slice(&aim[i].to_le_bytes()); }
+        self.send(&b);
+        self.arms.swing = self.now;
+        if !self.ely.on { self.face = (-dir[0]).atan2(-dir[2]); }
+        if w == 2 {
+            self.arms.ammo -= 1;
+            let l = (aim[0] * aim[0] + aim[1] * aim[1] + aim[2] * aim[2]).sqrt().max(0.001);
+            let reach = if target != 0 { l } else { 150.0 };
+            let (fx, fz) = (-self.face.sin(), -self.face.cos());
+            let (rx, rz) = (self.face.cos(), -self.face.sin());
+            let s = [self.x + rx * 0.42 + fx * 0.6, self.y + if self.ely.on { 0.52 } else { 0.82 }, self.z + rz * 0.42 + fz * 0.6];
+            let e = [self.x + aim[0] / l * reach, eye[1] + aim[1] / l * reach, self.z + aim[2] / l * reach];
+            self.arms.fx.push((self.now, s, e));
+            if self.arms.ammo == 0 { self.reload(); }
+        }
+    }
+
+    fn on_hit(&mut self, d: &[u8]) {
+        let (ix, iy, iz) = (el_f32(d, 3), el_f32(d, 7), el_f32(d, 11));
+        if ix.is_finite() && iy.is_finite() && iz.is_finite() {
+            if self.ely.on {
+                self.ely.v[0] += ix / 20.0;
+                self.ely.v[1] += iy / 20.0;
+                self.ely.v[2] += iz / 20.0;
+            } else {
+                self.ely.kv[0] += ix;
+                self.ely.kv[1] += iz;
+                if iy > 0.0 { self.vy = self.vy.max(0.0) + iy; self.grounded = false; }
+            }
+        }
+        self.arms.hp = d[15];
+        if self.arms.hp == 0 {
+            self.arms.dead = true;
+            self.arms.fire_held = false;
+            self.ely_close();
+        }
+    }
+
+    fn on_fx(&mut self, d: &[u8]) {
+        let id = u16::from_le_bytes([d[1], d[2]]);
+        if id == self.my_id { return; }
+        let w = d[3] & 0x7F;
+        let e = [el_f32(d, 6), el_f32(d, 10), el_f32(d, 14)];
+        if !(e[0].is_finite() && e[1].is_finite() && e[2].is_finite()) { return; }
+        let s = match self.remotes.get(&id) {
+            Some(r) => [r.x, r.y + if r.st[0] & 1 != 0 { 0.55 } else { 0.85 }, r.z],
+            None => return,
+        };
+        if w == 2 { self.arms.fx.push((self.now, s, e)); }
+        self.arms.rswing.insert(id, self.now);
+    }
+
+    fn on_respawn(&mut self, d: &[u8]) {
+        let (x, z) = (el_f32(d, 1), el_f32(d, 5));
+        if x.is_finite() && z.is_finite() { self.x = x; self.z = z; }
         self.y = 0.0;
         self.vy = 0.0;
         self.grounded = true;
-        self.fly.active = false;
-        self.fly.lift = 0.0;
-        self.fly.roll = 0.0;
-        self.fly.pitch = 0.0;
-        self.fly.stall = false;
-        self.fly.vx = 0.0;
-        self.fly.vz = 0.0;
+        self.ely.on = false;
+        self.ely.boosting = false;
+        self.ely.kv = [0.0; 2];
+        self.ely.v = [0.0; 3];
+        self.ely.fuel = 1.0;
+        self.arms.hp = 100;
+        self.arms.ammo = 12;
+        self.arms.reload_until = 0.0;
+        self.arms.dead = false;
+        self.sent = [f32::NAN; 4];
     }
-}
 
-fn control(&mut self, dt: f32, pad: Pad) {
+    fn on_kill(&mut self, d: &[u8]) {
+        let killer = u16::from_le_bytes([d[1], d[2]]);
+        let victim = u16::from_le_bytes([d[3], d[4]]);
+        let w = if d[5] & 0x7F == 1 { "🏏" } else { "🔫" };
+        let nm = |g: &Self, id: u16| -> String {
+            if id == g.my_id { g.name.clone() } else { g.infos.get(&id).map(|i| i.0.clone()).unwrap_or_else(|| format!("#{id}")) }
+        };
+        let text = format!("{} {} {}", nm(self, killer), w, nm(self, victim));
+        self.add_chat("☠", &text);
+    }
+    fn control(&mut self, dt: f32, pad: Pad) {
+        // ELYTRA_V3 hook
+        if self.arms.dead {
+            self.jump_tap = false;
+            self.ely.on = false;
+            self.vy -= 20.0 * dt;
+            self.y = (self.y + self.vy * dt).max(0.0);
+            if self.y <= 0.0 { self.vy = 0.0; self.grounded = true; }
+            return;
+        }
+        let jd = !self.chat_open && (self.keys[5] || pad.a || self.jump_tap);
+        let jp = jd && !self.ely.held;
+        self.ely.held = jd;
+        if !jd { self.ely.boost_block = false; }
+        if self.ely.on {
+            self.jump_tap = false;
+            let close = !self.chat_open && self.keys[4];
+            let boost = jd && !self.ely.boost_block;
+            self.elytra_step(dt, boost, close);
+            return;
+        }
+        if jp && !self.grounded && self.y > 0.6 {
+            self.ely_open();
+            self.ely.boost_block = true;
+            self.jump_tap = false;
+            return;
+        }
+        self.ely.fuel = (self.ely.fuel + dt * if self.grounded { 0.5 } else { 0.06 }).min(1.0);
+        self.knock_step(dt);
+
           let (k, pad) = if self.chat_open { ([false; 6], Pad::default()) } else { (self.keys, pad) };
-          let jump_down = !self.chat_open && (k[5] || pad.a || self.jump_tap);
-    let jump_pressed = self.flight_input(jump_down);
-    self.jump_tap = false;
-    let mut ix = (k[3] as i32 - k[2] as i32) as f32 + pad.lx;
+          let mut ix = (k[3] as i32 - k[2] as i32) as f32 + pad.lx;
           let mut iy = (k[0] as i32 - k[1] as i32) as f32 - pad.ly;
           if self.joy_id.is_some() { ix += self.joy_v.0; iy -= self.joy_v.1; }
           let mag = ix.hypot(iy);
@@ -837,17 +1117,12 @@ fn control(&mut self, dt: f32, pad: Pad) {
           let run = k[4] || pad.run || (self.joy_id.is_some() && mag > 0.95);
 
           self.yaw -= pad.rx * 2.6 * dt;
-          self.pitch = (self.pitch + pad.ry * 1.8 * dt).clamp(-0.15, 1.3);
+          self.pitch = (self.pitch + pad.ry * 1.8 * dt).clamp(-1.25, 1.3);
           if pad.zin { self.dist *= 1.0 - dt * 1.5; }
           if pad.zout { self.dist *= 1.0 + dt * 1.5; }
           self.dist = self.dist.clamp(3.0, 25.0);
 
-          if self.fly.active {
-    self.flight_step(dt, ix, iy);
-    return;
-}
-self.fly.roll = 0.0;
-let (s, c) = self.yaw.sin_cos();
+          let (s, c) = self.yaw.sin_cos();
           let (mx, mz) = (-s * iy + c * ix, -c * iy - s * ix);
           let sp = if run { RUN } else { WALK };
           let moving = mag > 0.01;
@@ -859,7 +1134,7 @@ let (s, c) = self.yaw.sin_cos();
           }
           self.amp += ((if moving { mag.max(0.4) } else { 0.0 }) - self.amp) * (dt * 10.0).min(1.0);
 
-          if jump_pressed && self.grounded { self.vy = JUMP; self.grounded = false; }
+          if (k[5] || pad.a || self.jump_tap) && self.grounded { self.vy = JUMP; self.grounded = false; }
           self.jump_tap = false;
           self.vy -= GRAVITY * dt;
           self.y += self.vy * dt;
@@ -892,13 +1167,17 @@ let (s, c) = self.yaw.sin_cos();
           if !self.joined || self.now - self.last_send < SEND_MS { return; }
           self.last_send = self.now;
           let cur = [self.x, self.y, self.z, self.face];
-          if cur != self.sent || self.fly.active != self.fly.sent_active || self.fly.active {
+          let fl = self.net_flags();
+            if cur != self.sent || fl != self.arms.sent_flags {
               let mut b = [0u8; 24];
               b[0] = 2;
-    b[17] = if self.fly.active { 1 } else { 0 };
-    b[18] = ((self.fly.pitch * 60.0).clamp(-127.0, 127.0) as i8) as u8;
-    b[19] = ((self.fly.roll * 60.0).clamp(-127.0, 127.0) as i8) as u8;
-    self.fly.sent_active = self.fly.active;
+                b[17] = fl;
+                let hv = (self.ely.v[0] * self.ely.v[0] + self.ely.v[2] * self.ely.v[2]).sqrt();
+                let bp: f32 = if self.ely.on { self.ely.v[1].atan2(hv.max(0.0001)) } else { 0.0 };
+                let br: f32 = if self.ely.on { self.ely.roll } else { 0.0 };
+                b[18] = ((bp * 60.0).clamp(-127.0, 127.0) as i8) as u8;
+                b[19] = ((br * 60.0).clamp(-127.0, 127.0) as i8) as u8;
+                self.arms.sent_flags = fl;
               for (i, v) in cur.iter().enumerate() { b[1 + i * 4..5 + i * 4].copy_from_slice(&v.to_le_bytes()); }
               b[20..24].copy_from_slice(&(self.now as u32).to_le_bytes());
               self.send(&b);
@@ -929,26 +1208,48 @@ let (s, c) = self.yaw.sin_cos();
           self.r.begin();
           if self.joined {
               let c = self.rgb.map(|v| v as f32 / 255.0);
-              self.r.hero(0.0, self.y, 0.0, self.face, c, self.ph, self.amp);
+              let lsw = ((self.now - self.arms.swing) / 300.0) as f32;
+            if self.ely.on {
+                self.r.elytra(0.0, self.y, 0.0, self.face, c, (self.now * 0.001) as f32, self.ely.roll, self.ely.boosting);
+            } else {
+                self.r.hero(0.0, self.y, 0.0, self.face, c, self.ph, self.amp);
+                self.r.folded(0.0, self.y, 0.0, self.face, self.ph, self.amp);
+            }
+            if self.arms.hp > 0 { self.r.weapon(0.0, self.y, 0.0, self.face, self.arms.weapon, self.ely.on, lsw); }
+
           }
           for r in self.remotes.values() {
               let (x, z) = (r.x - self.x, r.z - self.z);
               if x.abs() > 1500.0 || z.abs() > 1500.0 { continue; }
-              self.r.hero(x, r.y, z, r.yaw, r.rgb, r.ph, r.amp);
+              if r.st[0] & 1 != 0 {
+                self.r.elytra(x, r.y, z, r.yaw, r.rgb, (self.now * 0.001) as f32, (r.st[2] as i8) as f32 / 60.0, r.st[0] & 0x10 != 0);
+            } else {
+                self.r.hero(x, r.y, z, r.yaw, r.rgb, r.ph, r.amp);
+                self.r.folded(x, r.y, z, r.yaw, r.ph, r.amp);
+            }
           }
-          if self.joined && self.fly.active {
-    self.r.wings(0.0, self.y, 0.0, self.face, self.fly.roll, (self.now * 0.001) as f32, self.rgb.map(|v| v as f32 / 255.0));
-}
-for remote in self.remotes.values() {
-    if remote.st[0] & 1 != 0 {
-        let x = remote.x - self.x;
-        let z = remote.z - self.z;
-        if x.abs() <= 1500.0 && z.abs() <= 1500.0 {
-            self.r.wings(x, remote.y, z, remote.yaw, remote.st[2] as i8 as f32 / 60.0, (self.now * 0.001) as f32, remote.rgb);
+                  {
+            let tnow = self.now;
+            for (id, r) in self.remotes.iter() {
+                let (x, z) = (r.x - self.x, r.z - self.z);
+                if x.abs() > 300.0 || z.abs() > 300.0 { continue; }
+                let fl = r.st[0];
+                if fl & 0x40 != 0 { continue; }
+                let fly = fl & 1 != 0;
+                let sw = self.arms.rswing.get(id).map(|t0| ((tnow - *t0) / 300.0) as f32).unwrap_or(9.0);
+                self.r.weapon(x, r.y, z, r.yaw, (fl >> 1) & 3, fly, sw);
+                let hp = r.st[3];
+                if hp > 0 && x * x + z * z < 900.0 {
+                    self.r.bar(x, r.y + if fly { 1.3 } else { 2.05 }, z, self.yaw, hp);
+                }
+            }
+            for f in self.arms.fx.iter() {
+                let fade = 1.0 - ((tnow - f.0) / 140.0) as f32;
+                if fade <= 0.0 { continue; }
+                self.r.tracer([f.1[0] - self.x, f.1[1], f.1[2] - self.z], [f.2[0] - self.x, f.2[1], f.2[2] - self.z], fade);
+            }
         }
-    }
-}
-self.r.draw(&self.gl, &vp, (self.x.rem_euclid(10.0), self.z.rem_euclid(10.0)));
+          self.r.draw(&self.gl, &vp, (self.x.rem_euclid(10.0), self.z.rem_euclid(10.0)));
 
           let (lw, lh) = (cw as f32, ch as f32);
           if let Some(l) = self.me_label.as_mut() { place(l, &vp, [0.0, self.y + 2.25, 0.0], lw, lh, true); }
@@ -971,10 +1272,20 @@ self.r.draw(&self.gl, &vp, (self.x.rem_euclid(10.0), self.z.rem_euclid(10.0)));
     let ping = self.ping.rtt.map(|v| format!("{v:.0} ms")).unwrap_or_else(|| "--".into());
     format!("{s} | Ping {ping}")
 } else { s };
-let s = if self.joined && self.fly.active {
-    format!("{s} | FLY {:.0} m/s | ALT {:.0} m{}", self.fly.speed, self.y, if self.fly.stall { " | STALL" } else { "" })
-} else { s };
-self.hud.set_text_content(Some(&s));
+        let s = if self.joined {
+            let wn = match self.arms.weapon {
+                1 => "🏏 Bat".to_string(),
+                2 => if self.arms.reload_until > 0.0 { "🔫 Reloading".to_string() } else { format!("🔫 {}/12", self.arms.ammo) },
+                _ => "✋ Hands".to_string(),
+            };
+            let fl = if self.ely.on {
+                let v = self.ely.v;
+                format!(" | 🪽 {:.0} m/s | ALT {:.0} m | 🚀 {:.0}%", (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]).sqrt() * 20.0, self.y, self.ely.fuel * 100.0)
+            } else { String::new() };
+            let dead = if self.arms.hp == 0 { " | ☠ Respawning..." } else { "" };
+            format!("{s} | ❤ {} | {wn}{fl}{dead}", self.arms.hp)
+        } else { s };
+          self.hud.set_text_content(Some(&s));
       }
   }
 
@@ -1059,7 +1370,7 @@ self.hud.set_text_content(Some(&s));
               let mut gm = g.borrow_mut();
               if gm.doc.pointer_lock_element().is_some() {
                   gm.yaw -= e.movement_x() as f32 * 0.0025;
-                  gm.pitch = (gm.pitch + e.movement_y() as f32 * 0.0025).clamp(-0.15, 1.3);
+                  gm.pitch = (gm.pitch + e.movement_y() as f32 * 0.0025).clamp(-1.25, 1.3);
               }
           });
       }
@@ -1086,6 +1397,70 @@ self.hud.set_text_content(Some(&s));
           on(&jump, "pointerdown", move |e| { e.prevent_default(); e.stop_propagation(); g.borrow_mut().jump_tap = true; });
       }
       { let g = g.clone(); on(&chatbtn, "click", move |_| g.borrow_mut().open_chat()); }
+    {
+        let g = g.clone();
+        on(&win, "keydown", move |e| {
+            let e: &KeyboardEvent = e.unchecked_ref();
+            let mut gm = g.borrow_mut();
+            if !gm.joined || gm.chat_open || e.repeat() { return; }
+            match e.code().as_str() {
+                "KeyG" => gm.ely_toggle(),
+                "KeyQ" => { let w = (gm.arms.weapon + 1) % 3; gm.set_weapon(w); }
+                "Digit1" => gm.set_weapon(1),
+                "Digit2" => gm.set_weapon(2),
+                "Digit3" => gm.set_weapon(0),
+                "KeyR" => gm.reload(),
+                _ => {}
+            }
+        });
+    }
+    {
+        let g = g.clone();
+        on(&win, "mousedown", move |e| {
+            let e: &MouseEvent = e.unchecked_ref();
+            let mut gm = g.borrow_mut();
+            if e.button() == 0 && gm.doc.pointer_lock_element().is_some() {
+                gm.arms.fire_held = true;
+                gm.try_attack();
+            }
+        });
+    }
+    {
+        let g = g.clone();
+        on(&win, "mouseup", move |e| {
+            let e: &MouseEvent = e.unchecked_ref();
+            if e.button() == 0 { g.borrow_mut().arms.fire_held = false; }
+        });
+    }
+    {
+        let body = doc.body().ok_or("no body")?;
+        let ch = doc.create_element("div")?;
+        ch.set_text_content(Some("+"));
+        ch.set_attribute("style", "position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;font:bold 22px monospace;text-shadow:0 0 3px #000;pointer-events:none;z-index:5")?;
+        body.append_child(&ch)?;
+        let touch = g.borrow().touch;
+        if touch {
+            let mk = |label: &str, css: &str| -> Result<Element, JsValue> {
+                let b = doc.create_element("div")?;
+                b.set_text_content(Some(label));
+                b.set_attribute("style", &format!("position:fixed;{css};width:60px;height:60px;border-radius:50%;background:rgba(0,0,0,.4);color:#fff;font:24px sans-serif;display:flex;align-items:center;justify-content:center;z-index:6;user-select:none;touch-action:none"))?;
+                body.append_child(&b)?;
+                Ok(b)
+            };
+            let flyb = mk("🪽", "right:20px;top:70px")?;
+            let swb = mk("🔁", "right:90px;top:70px")?;
+            let rlb = mk("R", "right:160px;top:70px")?;
+            let atk = mk("⚔", "right:120px;bottom:40px")?;
+            { let g = g.clone(); on(&flyb, "pointerdown", move |e| { e.prevent_default(); e.stop_propagation(); g.borrow_mut().ely_toggle(); }); }
+            { let g = g.clone(); on(&swb, "pointerdown", move |e| { e.prevent_default(); e.stop_propagation(); let mut gm = g.borrow_mut(); let w = (gm.arms.weapon + 1) % 3; gm.set_weapon(w); }); }
+            { let g = g.clone(); on(&rlb, "pointerdown", move |e| { e.prevent_default(); e.stop_propagation(); g.borrow_mut().reload(); }); }
+            { let g = g.clone(); on(&atk, "pointerdown", move |e| { e.prevent_default(); e.stop_propagation(); let mut gm = g.borrow_mut(); gm.arms.fire_held = true; gm.try_attack(); }); }
+            for ev in ["pointerup", "pointercancel", "pointerleave"].iter() {
+                let g = g.clone();
+                on(&atk, ev, move |_| { g.borrow_mut().arms.fire_held = false; });
+            }
+        }
+    }
       Ok(())
   }
 
@@ -1135,7 +1510,8 @@ self.hud.set_text_content(Some(&s));
       if touch { if let Some(b) = doc.body() { let _ = b.set_attribute("data-touch", "1"); } }
 
       let g = Rc::new(RefCell::new(Game {
-    fly: FlightState { last_jump: -1000.0, ..Default::default() },
+          ely: Elytra { fuel: 1.0, ..Default::default() },
+          arms: Arms { hp: 100, ammo: 12, weapon: 1, sent_flags: 255, ..Default::default() },
     ping: NetPing::default(),
           nav: win.navigator(),
           ui: el(&doc, "ui")?, hud: el(&doc, "hud")?, labels: el(&doc, "labels")?, chatlog: el(&doc, "chatlog")?,
