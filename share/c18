@@ -1,0 +1,45 @@
+  }
+
+  fn run_loop(g: Rc<RefCell<Game>>) {
+      let f: Rc<RefCell<Option<Closure<dyn FnMut(f64)>>>> = Rc::new(RefCell::new(None));
+      let f2 = f.clone();
+      let win = g.borrow().win.clone();
+      *f2.borrow_mut() = Some(Closure::new(move |t: f64| {
+          let want = g.borrow_mut().frame(t);
+          if want { join(&g, false); }
+          if let Some(cb) = f.borrow().as_ref() { let _ = win.request_animation_frame(cb.as_ref().unchecked_ref()); }
+      }));
+      if let (Some(w), Some(cb)) = (web_sys::window(), f2.borrow().as_ref()) {
+          let _ = w.request_animation_frame(cb.as_ref().unchecked_ref());
+      };
+  }
+
+  // ---------------- Entry ----------------
+  #[wasm_bindgen(start)]
+  pub fn start() -> Result<(), JsValue> {
+      let win = web_sys::window().ok_or("no window")?;
+      let doc = win.document().ok_or("no document")?;
+      let canvas: HtmlCanvasElement = el(&doc, "c")?;
+
+      let opts = js_sys::Object::new();
+      js_sys::Reflect::set(&opts, &"antialias".into(), &true.into())?;
+      js_sys::Reflect::set(&opts, &"powerPreference".into(), &"high-performance".into())?;
+      let gl: GL = match canvas.get_context_with_context_options("webgl2", &opts)? {
+          Some(c) => c.dyn_into()?,
+          None => {
+              if let Some(b) = doc.body() { b.set_text_content(Some("المتصفح ما يدعم WebGL2")); }
+              return Ok(());
+          }
+      };
+      let r = Renderer::new(&gl)?;
+
+      let name_in: HtmlInputElement = el(&doc, "name")?;
+      let col_in: HtmlInputElement = el(&doc, "col")?;
+      if let Ok(Some(s)) = win.local_storage() {
+          if let Ok(Some(n)) = s.get_item("name") { name_in.set_value(&n); }
+          match s.get_item("col") {
+              Ok(Some(c)) => col_in.set_value(&c),
+              _ => col_in.set_value(&format!("#{:06x}", (js_sys::Math::random() * 16_777_215.0) as u32)),
+          }
+      }
+      let touch = win.match_media("(pointer: coarse)").ok().flatten().map(|m| m.matches()).unwrap_or(false);

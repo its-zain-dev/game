@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#dbe5ef">
+<title>World</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#dbe5ef;font-family:system-ui,sans-serif;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#labels{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.lbl{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;gap:4px;will-change:transform;white-space:nowrap}
+.n{font-size:13px;font-weight:600;color:#fff;background:rgba(0,0,0,.45);padding:2px 8px;border-radius:6px;border-bottom:2px solid #fff}
+.b{max-width:220px;white-space:normal;text-align:center;font-size:13px;background:#fff;color:#222;padding:5px 9px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.b:empty{display:none}
+#hud{position:fixed;top:8px;left:8px;font:12px monospace;color:#333;direction:ltr;pointer-events:none}
+#chatlog{position:fixed;left:10px;bottom:60px;width:min(420px,70vw);display:flex;flex-direction:column;gap:3px;pointer-events:none}
+#chatlog div{background:rgba(0,0,0,.4);color:#fff;font-size:13px;padding:3px 8px;border-radius:6px;align-self:flex-start;max-width:100%;overflow-wrap:anywhere}
+#chatin{position:fixed;left:10px;bottom:12px;width:min(420px,80vw);display:none;font-size:16px;padding:8px 12px;border-radius:8px;border:0;outline:2px solid #222}
+#ui{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.55)}
+.card{background:#fff;padding:24px 32px;border-radius:14px;box-shadow:0 6px 30px rgba(0,0,0,.15);text-align:center;display:flex;flex-direction:column;gap:12px;min-width:260px}
+#name{font-size:17px;padding:10px;border-radius:8px;border:1px solid #ccc;text-align:center}
+.row{display:flex;align-items:center;justify-content:center;gap:12px}
+input[type=color]{width:70px;height:44px;border:0;background:none;cursor:pointer}
+#go{font-size:18px;padding:12px;border:0;border-radius:8px;background:#222;color:#fff;cursor:pointer}
+.tip{margin:0;font-size:12px;color:#777}
+#help{position:fixed;bottom:8px;right:8px;font-size:12px;color:#555;pointer-events:none}
+#tc{display:none}
+body[data-touch] #tc{display:block}
+body[data-touch] #help{display:none}
+#joy{position:fixed;left:0;top:0;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:rgba(0,0,0,.12);border:2px solid rgba(0,0,0,.2);display:none;pointer-events:none}
+#knob{position:absolute;left:33px;top:33px;width:50px;height:50px;border-radius:50%;background:rgba(0,0,0,.35)}
+#jump,#chatbtn{position:fixed;border:0;border-radius:50%;background:rgba(0,0,0,.25);color:#fff;touch-action:none}
+#jump{right:calc(24px + env(safe-area-inset-right));bottom:calc(30px + env(safe-area-inset-bottom));width:80px;height:80px;font-size:34px}
+#chatbtn{right:calc(120px + env(safe-area-inset-right));bottom:calc(40px + env(safe-area-inset-bottom));width:56px;height:56px;font-size:24px}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="labels"></div>
+<div id="hud">Loading...</div>

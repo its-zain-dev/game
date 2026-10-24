@@ -1,0 +1,45 @@
+          let Ok(gp) = v.dyn_into::<Gamepad>() else { continue };
+          if !gp.connected() { continue; }
+          let ax = gp.axes();
+          let a = |i: u32| dz(ax.get(i).as_f64().unwrap_or(0.0) as f32);
+          let bt = gp.buttons();
+          let b = |i: u32| bt.get(i).dyn_into::<GamepadButton>().map(|x| x.pressed() || x.value() > 0.5).unwrap_or(false);
+          return Some(Pad {
+              lx: a(0), ly: a(1), rx: a(2), ry: a(3),
+              a: b(0), run: b(10) || b(7) || b(5), start: b(9), zin: b(12), zout: b(13),
+          });
+      }
+      None
+  }
+
+  // ---------------- Game ----------------
+  struct Remote { x: f32, y: f32, z: f32, yaw: f32, tx: f32, ty: f32, tz: f32, tyaw: f32, ph: f32, amp: f32, rgb: [f32; 3], label: Label }
+
+  struct Game {
+      win: Window, doc: Document, nav: Navigator, canvas: HtmlCanvasElement, gl: GL, r: Renderer,
+      ui: HtmlElement, hud: HtmlElement, labels: HtmlElement, chatlog: HtmlElement, chatin: HtmlInputElement,
+      joy: HtmlElement, knob: HtmlElement, name_in: HtmlInputElement, col_in: HtmlInputElement,
+      ws: Option<WebSocket>, started: bool, joined: bool, my_id: u16, name: String, rgb: [u8; 3],
+      x: f32, y: f32, z: f32, vy: f32, yaw: f32, face: f32, pitch: f32, dist: f32, ph: f32, amp: f32, grounded: bool,
+      keys: [bool; 6], touch: bool, chat_open: bool,
+      joy_id: Option<i32>, joy_o: (f32, f32), joy_v: (f32, f32), look_id: Option<i32>, look_p: (f32, f32), jump_tap: bool,
+      infos: HashMap<u16, (String, [f32; 3])>, remotes: HashMap<u16, Remote>, me_label: Option<Label>,
+      chat_lines: VecDeque<(f64, Element)>, seen_buf: Vec<u16>,
+      now: f64, last_t: f64, last_send: f64, last_ka: f64, sent: [f32; 4], fps_n: u32, fps_t: f64, pad_on: bool,
+  }
+
+  impl Game {
+      fn fullscreen(&self) {
+          if self.doc.fullscreen_element().is_none() {
+              if let Some(e) = self.doc.document_element() { let _ = e.request_fullscreen(); }
+          }
+      }
+
+      fn lock_landscape(&self) {
+          if !self.touch { return; }
+          if let Ok(s) = self.win.screen() {
+              if let Ok(p) = s.orientation().lock(OrientationLockType::Landscape) {
+                  NOOP.with(|c| { let _ = p.catch(c); });
+              }
+          }
+      }

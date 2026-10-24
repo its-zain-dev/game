@@ -1,0 +1,45 @@
+              if x.abs() > 1500.0 || z.abs() > 1500.0 { continue; }
+              self.r.hero(x, r.y, z, r.yaw, r.rgb, r.ph, r.amp);
+          }
+          self.r.draw(&self.gl, &vp, (self.x.rem_euclid(10.0), self.z.rem_euclid(10.0)));
+
+          let (lw, lh) = (cw as f32, ch as f32);
+          if let Some(l) = self.me_label.as_mut() { place(l, &vp, [0.0, self.y + 2.25, 0.0], lw, lh, true); }
+          for r in self.remotes.values_mut() {
+              let (x, z) = (r.x - self.x, r.z - self.z);
+              place(&mut r.label, &vp, [x, r.y + 2.25, z], lw, lh, x * x + z * z < LABEL_DIST * LABEL_DIST);
+          }
+      }
+
+      fn hud_update(&mut self, t: f64) {
+          self.fps_n += 1;
+          if t - self.fps_t < 500.0 { return; }
+          let fps = (self.fps_n as f64 * 1000.0 / (t - self.fps_t)) as u32;
+          self.fps_n = 0;
+          self.fps_t = t;
+          let s = if self.joined {
+              format!("FPS {fps} | players {} | X {:.0} Z {:.0}{}", self.remotes.len() + 1, self.x, self.z, if self.pad_on { " | 🎮" } else { "" })
+          } else if self.started { "Connecting...".into() } else { format!("FPS {fps}{}", if self.pad_on { " | 🎮 Start" } else { "" }) };
+          self.hud.set_text_content(Some(&s));
+      }
+  }
+
+  // ---------------- Join / Network ----------------
+  fn join(g: &Rc<RefCell<Game>>, gesture: bool) {
+      {
+          let mut gm = g.borrow_mut();
+          if gm.started { return; }
+          gm.started = true;
+          gm.name = gm.name_in.value().trim().chars().filter(|c| !c.is_control()).take(16).collect();
+          let col = gm.col_in.value();
+          let v = u32::from_str_radix(col.trim_start_matches('#'), 16).unwrap_or(0xffffff);
+          gm.rgb = [(v >> 16) as u8, (v >> 8) as u8, v as u8];
+          if let Ok(Some(s)) = gm.win.local_storage() {
+              let _ = s.set_item("name", &gm.name);
+              let _ = s.set_item("col", &col);
+          }
+          show(&gm.ui, false);
+          if gesture {
+              gm.fullscreen();
+              if !gm.touch { gm.canvas.request_pointer_lock(); }
+          }

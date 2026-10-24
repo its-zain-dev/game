@@ -1,0 +1,45 @@
+          b.extend_from_slice(t.as_bytes());
+          self.send(&b);
+      }
+
+      fn add_chat(&mut self, name: &str, text: &str) {
+          let Ok(e) = self.doc.create_element("div") else { return };
+          e.set_text_content(Some(&format!("{name}: {text}")));
+          let _ = self.chatlog.append_child(&e);
+          self.chat_lines.push_back((self.now, e));
+          while self.chatlog.child_element_count() > CHAT_LINES {
+              if let Some((_, old)) = self.chat_lines.pop_front() { old.remove(); } else { break; }
+          }
+      }
+
+      fn key(&mut self, e: &KeyboardEvent, down: bool) {
+          if !self.started { return; }
+          if self.chat_open {
+              if down {
+                  match e.key().as_str() {
+                      "Enter" => { e.prevent_default(); self.send_chat(); self.close_chat(); }
+                      "Escape" => self.close_chat(),
+                      _ => {}
+                  }
+              }
+              return;
+          }
+          let code = e.code();
+          let i = match code.as_str() {
+              "KeyW" | "ArrowUp" => 0,
+              "KeyS" | "ArrowDown" => 1,
+              "KeyA" | "ArrowLeft" => 2,
+              "KeyD" | "ArrowRight" => 3,
+              "ShiftLeft" | "ShiftRight" => 4,
+              "Space" => 5,
+              "Enter" if down => { e.prevent_default(); self.open_chat(); return; }
+              "KeyF" if down => { self.toggle_fs(); return; }
+              _ => return,
+          };
+          self.keys[i] = down;
+          if i == 5 || code.starts_with("Arrow") { e.prevent_default(); }
+      }
+
+      fn pdown(&mut self, e: &PointerEvent) {
+          if !self.started || self.chat_open { return; }
+          if e.pointer_type() == "touch" {

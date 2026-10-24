@@ -1,0 +1,45 @@
+      let l = (zx * zx + zy * zy + zz * zz).sqrt().max(1e-6);
+      zx /= l; zy /= l; zz /= l;
+      let (mut xx, xy, mut xz) = (zz, 0.0f32, -zx);
+      let l = (xx * xx + xz * xz).sqrt().max(1e-6);
+      xx /= l; xz /= l;
+      let (yx, yy, yz) = (zy * xz - zz * xy, zz * xx - zx * xz, zx * xy - zy * xx);
+      [xx, yx, zx, 0., xy, yy, zy, 0., xz, yz, zz, 0.,
+       -(xx * e[0] + xy * e[1] + xz * e[2]), -(yx * e[0] + yy * e[1] + yz * e[2]), -(zx * e[0] + zy * e[1] + zz * e[2]), 1.]
+  }
+
+  fn mul(a: &[f32; 16], b: &[f32; 16]) -> [f32; 16] {
+      let mut o = [0.0; 16];
+      for c in 0..4 { for r in 0..4 {
+          let mut s = 0.0;
+          for k in 0..4 { s += a[k * 4 + r] * b[c * 4 + k]; }
+          o[c * 4 + r] = s;
+      } }
+      o
+  }
+
+  fn wrap(a: f32) -> f32 { (a + PI).rem_euclid(TAU) - PI }
+  fn dz(v: f32) -> f32 { if v.abs() < DEAD { 0.0 } else { (v - DEAD * v.signum()) / (1.0 - DEAD) } }
+  fn u16le(d: &[u8], o: usize) -> u16 { u16::from_le_bytes([d[o], d[o + 1]]) }
+  fn f32le(d: &[u8], o: usize) -> f32 { f32::from_le_bytes([d[o], d[o + 1], d[o + 2], d[o + 3]]) }
+
+  // ---------------- DOM helpers ----------------
+  fn el<T: JsCast>(doc: &Document, id: &str) -> Result<T, JsValue> {
+      doc.get_element_by_id(id).ok_or_else(|| JsValue::from_str(id))?.dyn_into::<T>().map_err(Into::into)
+  }
+
+  fn on(t: &EventTarget, ev: &str, f: impl FnMut(Event) + 'static) {
+      let c = Closure::<dyn FnMut(Event)>::new(f);
+      let _ = t.add_event_listener_with_callback(ev, c.as_ref().unchecked_ref());
+      c.forget();
+  }
+
+  fn show(e: &HtmlElement, v: bool) { let _ = e.style().set_property("display", if v { "block" } else { "none" }); }
+
+  fn css_rgb(c: [f32; 3]) -> String {
+      format!("rgb({},{},{})", (c[0] * 255.0) as u8, (c[1] * 255.0) as u8, (c[2] * 255.0) as u8)
+  }
+
+  // ---------------- Labels (أسماء + فقاعات الشات) ----------------
+  struct Label { root: HtmlElement, bub: HtmlElement, name: HtmlElement, shown: bool, bubble_until: f64 }
+

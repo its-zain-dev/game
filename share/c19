@@ -1,0 +1,19 @@
+      if touch { if let Some(b) = doc.body() { let _ = b.set_attribute("data-touch", "1"); } }
+
+      let g = Rc::new(RefCell::new(Game {
+          nav: win.navigator(),
+          ui: el(&doc, "ui")?, hud: el(&doc, "hud")?, labels: el(&doc, "labels")?, chatlog: el(&doc, "chatlog")?,
+          chatin: el(&doc, "chatin")?, joy: el(&doc, "joy")?, knob: el(&doc, "knob")?,
+          name_in, col_in, win, doc, canvas, gl, r,
+          ws: None, started: false, joined: false, my_id: 0, name: String::new(), rgb: [255; 3],
+          x: 0.0, y: 0.0, z: 0.0, vy: 0.0, yaw: 0.0, face: 0.0, pitch: 0.35, dist: 7.0, ph: 0.0, amp: 0.0, grounded: true,
+          keys: [false; 6], touch, chat_open: false,
+          joy_id: None, joy_o: (0.0, 0.0), joy_v: (0.0, 0.0), look_id: None, look_p: (0.0, 0.0), jump_tap: false,
+          infos: HashMap::new(), remotes: HashMap::new(), me_label: None,
+          chat_lines: VecDeque::new(), seen_buf: Vec::with_capacity(128),
+          now: 0.0, last_t: 0.0, last_send: 0.0, last_ka: 0.0, sent: [f32::NAN; 4], fps_n: 0, fps_t: 0.0, pad_on: false,
+      }));
+      bind(&g)?;
+      run_loop(g);
+      Ok(())
+  }

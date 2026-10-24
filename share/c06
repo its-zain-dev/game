@@ -1,0 +1,45 @@
+  fn new_label(doc: &Document, parent: &HtmlElement, name: &str, c: [f32; 3]) -> Label {
+      let mk = |cls: &str| -> HtmlElement {
+          let e: HtmlElement = doc.create_element("div").unwrap().unchecked_into();
+          e.set_class_name(cls);
+          e
+      };
+      let (root, bub, nm) = (mk("lbl"), mk("b"), mk("n"));
+      let _ = root.append_child(&bub);
+      let _ = root.append_child(&nm);
+      let _ = parent.append_child(&root);
+      let l = Label { root, bub, name: nm, shown: true, bubble_until: 0.0 };
+      set_name(&l, name, c);
+      l
+  }
+
+  fn set_name(l: &Label, name: &str, c: [f32; 3]) {
+      l.name.set_text_content(Some(name));
+      let _ = l.name.style().set_property("border-color", &css_rgb(c));
+  }
+
+  fn place(l: &mut Label, vp: &[f32; 16], p: [f32; 3], w: f32, h: f32, near: bool) {
+      let cw = vp[3] * p[0] + vp[7] * p[1] + vp[11] * p[2] + vp[15];
+      let vis = near && cw > 0.1;
+      if vis != l.shown { show(&l.root, vis); l.shown = vis; }
+      if !vis { return; }
+      let cx = (vp[0] * p[0] + vp[4] * p[1] + vp[8] * p[2] + vp[12]) / cw;
+      let cy = (vp[1] * p[0] + vp[5] * p[1] + vp[9] * p[2] + vp[13]) / cw;
+      let (sx, sy) = ((cx * 0.5 + 0.5) * w, (0.5 - cy * 0.5) * h);
+      let _ = l.root.style().set_property("transform", &format!("translate3d({sx:.1}px,{sy:.1}px,0) translate(-50%,-100%)"));
+  }
+
+  fn expire(l: &mut Label, now: f64) {
+      if l.bubble_until > 0.0 && now > l.bubble_until {
+          l.bub.set_text_content(None);
+          l.bubble_until = 0.0;
+      }
+  }
+
+  // ---------------- Gamepad ----------------
+  #[derive(Default, Clone, Copy)]
+  struct Pad { lx: f32, ly: f32, rx: f32, ry: f32, a: bool, run: bool, start: bool, zin: bool, zout: bool }
+
+  fn poll_pad(nav: &Navigator) -> Option<Pad> {
+      let pads = nav.get_gamepads().ok()?;
+      for v in pads.iter() {

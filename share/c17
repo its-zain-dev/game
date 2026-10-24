@@ -1,0 +1,45 @@
+  fn bind(g: &Rc<RefCell<Game>>) -> Result<(), JsValue> {
+      let (win, doc, canvas) = { let gm = g.borrow(); (gm.win.clone(), gm.doc.clone(), gm.canvas.clone()) };
+      let go: HtmlElement = el(&doc, "go")?;
+      let jump: HtmlElement = el(&doc, "jump")?;
+      let chatbtn: HtmlElement = el(&doc, "chatbtn")?;
+
+      { let g = g.clone(); on(&go, "click", move |_| join(&g, true)); }
+      { let g = g.clone(); on(&win, "keydown", move |e| g.borrow_mut().key(e.unchecked_ref(), true)); }
+      { let g = g.clone(); on(&win, "keyup", move |e| g.borrow_mut().key(e.unchecked_ref(), false)); }
+      { let g = g.clone(); on(&win, "blur", move |_| g.borrow_mut().keys = [false; 6]); }
+      {
+          let g = g.clone();
+          on(&win, "mousemove", move |e| {
+              let e: &MouseEvent = e.unchecked_ref();
+              let mut gm = g.borrow_mut();
+              if gm.doc.pointer_lock_element().is_some() {
+                  gm.yaw -= e.movement_x() as f32 * 0.0025;
+                  gm.pitch = (gm.pitch + e.movement_y() as f32 * 0.0025).clamp(-0.15, 1.3);
+              }
+          });
+      }
+      {
+          let g = g.clone();
+          on(&win, "wheel", move |e| {
+              let e: &WheelEvent = e.unchecked_ref();
+              let mut gm = g.borrow_mut();
+              gm.dist = (gm.dist * if e.delta_y() > 0.0 { 1.1 } else { 0.9 }).clamp(3.0, 25.0);
+          });
+      }
+      { let g = g.clone(); on(&canvas, "pointerdown", move |e| g.borrow_mut().pdown(e.unchecked_ref())); }
+      { let g = g.clone(); on(&win, "pointermove", move |e| g.borrow_mut().pmove(e.unchecked_ref())); }
+      for ev in ["pointerup", "pointercancel"] {
+          let g = g.clone();
+          on(&win, ev, move |e| g.borrow_mut().pup(e.unchecked_ref()));
+      }
+      on(&canvas, "contextmenu", |e| e.prevent_default());
+      // أي لمسة أو ضغطة ترجع ملء الشاشة إذا طلعت منه
+      { let g = g.clone(); on(&win, "pointerdown", move |_| { let gm = g.borrow(); if gm.joined { gm.fullscreen(); } }); }
+      { let g = g.clone(); on(&doc, "fullscreenchange", move |_| { let gm = g.borrow(); if gm.doc.fullscreen_element().is_some() { gm.lock_landscape(); } }); }
+      {
+          let g = g.clone();
+          on(&jump, "pointerdown", move |e| { e.prevent_default(); e.stop_propagation(); g.borrow_mut().jump_tap = true; });
+      }
+      { let g = g.clone(); on(&chatbtn, "click", move |_| g.borrow_mut().open_chat()); }
+      Ok(())
