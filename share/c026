@@ -1,0 +1,16 @@
+          e
+      };
+      let (root, bub, nm) = (mk("lbl"), mk("b"), mk("n"));
+      let _ = root.append_child(&bub);
+      let _ = root.append_child(&nm);
+      let _ = parent.append_child(&root);
+      let l = Label { root, bub, name: nm, shown: true, bubble_until: 0.0 };
+      set_name(&l, name, c);
+      l
+  }
+
+  fn set_name(l: &Label, name: &str, c: [f32; 3]) {
+      l.name.set_text_content(Some(name));
+      let _ = l.name.style().set_property("border-color", &css_rgb(c));
+  }
+

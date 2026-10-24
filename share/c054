@@ -1,0 +1,10 @@
+                      let c = [d[o + 2], d[o + 3], d[o + 4]].map(|v| v as f32 / 255.0);
+                      let l = d[o + 5] as usize;
+                      o += 6;
+                      if o + l > d.len() { break; }
+                      let nm = String::from_utf8_lossy(&d[o..o + l]).into_owned();
+                      o += l;
+                      if let Some(r) = self.remotes.get_mut(&id) { r.rgb = c; set_name(&r.label, &nm, c); }
+                      self.infos.insert(id, (nm, c));
+                  }
+              }

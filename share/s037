@@ -1,0 +1,17 @@
+    let mut b = vec![8u8];
+    b.extend_from_slice(&id.to_le_bytes());
+    for v in imp { b.extend_from_slice(&v.to_le_bytes()); }
+    b.push(t.c.hp);
+    let _ = t.tx.try_send(Arc::new(ws_frame(2, &b)));
+    let dead = t.c.hp == 0;
+    if dead { t.c.dead_until = Some(now + RESPAWN); }
+    g.dirty = true;
+    if dead {
+        let mut k = vec![11u8];
+        k.extend_from_slice(&id.to_le_bytes());
+        k.extend_from_slice(&hit.to_le_bytes());
+        k.push(wpn);
+        send_all(g, &Arc::new(ws_frame(2, &k)));
+    }
+}
+

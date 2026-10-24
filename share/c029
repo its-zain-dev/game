@@ -1,0 +1,10 @@
+      let pads = nav.get_gamepads().ok()?;
+      for v in pads.iter() {
+          let Ok(gp) = v.dyn_into::<Gamepad>() else { continue };
+          if !gp.connected() { continue; }
+          let ax = gp.axes();
+          let a = |i: u32| dz(ax.get(i).as_f64().unwrap_or(0.0) as f32);
+          let bt = gp.buttons();
+          let b = |i: u32| bt.get(i).dyn_into::<GamepadButton>().map(|x| x.pressed() || x.value() > 0.5).unwrap_or(false);
+          return Some(Pad {
+              lx: a(0), ly: a(1), rx: a(2), ry: a(3),

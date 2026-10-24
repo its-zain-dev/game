@@ -1,0 +1,13 @@
+      sp: WebGlProgram, s_vp: Option<WebGlUniformLocation>, s_vao: WebGlVertexArrayObject, sb: WebGlBuffer,
+      inst: Vec<f32>,
+      shad: Vec<f32>,
+  }
+
+  fn bytes(v: &[f32]) -> &[u8] {
+      unsafe { std::slice::from_raw_parts(v.as_ptr() as *const u8, v.len() * 4) }
+  }
+
+  fn shader(gl: &GL, t: u32, src: &str) -> Result<web_sys::WebGlShader, JsValue> {
+      let s = gl.create_shader(t).ok_or("shader")?;
+      gl.shader_source(&s, src);
+      gl.compile_shader(&s);

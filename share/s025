@@ -1,0 +1,9 @@
+            let f = Arc::new(ws_frame(2, &one));
+            for (&oid, o) in &g.players {
+                if oid != id && o.joined() { let _ = o.tx.try_send(f.clone()); }
+            }
+        }
+        Some(2) if m.len() >= 17 => {
+            let Some(p) = g.players.get_mut(&id) else { return };
+            if !p.joined() || now < p.c.frozen_until || p.c.hp == 0 { return; }
+            let (x, y, z, yaw) = (f32at(m, 1), f32at(m, 5), f32at(m, 9), f32at(m, 13));

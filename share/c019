@@ -1,0 +1,10 @@
+              gl.buffer_data_with_u8_array(GL::ARRAY_BUFFER, bytes(&self.shad), GL::STREAM_DRAW);
+              gl.draw_arrays_instanced(GL::TRIANGLE_STRIP, 0, 4, ns);
+              gl.disable(GL::BLEND);
+              gl.enable(GL::DEPTH_TEST);
+          }
+          // 3) كل الشخصيات (instancing)
+          let ni = (self.inst.len() / 10) as i32;
+          if ni > 0 {
+              gl.use_program(Some(&self.bp));
+              gl.uniform_matrix4fv_with_f32_array(self.b_vp.as_ref(), false, vp);

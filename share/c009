@@ -1,0 +1,12 @@
+      else { Err(gl.get_program_info_log(&p).unwrap_or_default().into()) }
+  }
+
+  fn attrib(gl: &GL, loc: u32, size: i32, stride: i32, off: i32, div: u32) {
+      gl.enable_vertex_attrib_array(loc);
+      gl.vertex_attrib_pointer_with_i32(loc, size, GL::FLOAT, false, stride, off);
+      if div > 0 { gl.vertex_attrib_divisor(loc, div); }
+  }
+
+  fn cube() -> Vec<f32> {
+      let mut v = Vec::with_capacity(216);
+      for n in [[1.0f32, 0., 0.], [-1., 0., 0.], [0., 1., 0.], [0., -1., 0.], [0., 0., 1.], [0., 0., -1.]] {

@@ -1,0 +1,10 @@
+          let bp = program(gl, BOX_VS, BOX_FS)?;
+          let sp = program(gl, SHADOW_VS, SHADOW_FS)?;
+          let g_vao = gl.create_vertex_array().ok_or("vao")?;
+
+          let b_vao = gl.create_vertex_array().ok_or("vao")?;
+          gl.bind_vertex_array(Some(&b_vao));
+          let vb = gl.create_buffer().ok_or("buf")?;
+          gl.bind_buffer(GL::ARRAY_BUFFER, Some(&vb));
+          gl.buffer_data_with_u8_array(GL::ARRAY_BUFFER, bytes(&cube()), GL::STATIC_DRAW);
+          attrib(gl, 0, 3, 24, 0, 0);

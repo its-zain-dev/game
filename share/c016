@@ -1,0 +1,8 @@
+              self.bx([x + rx * 0.41 * k - fx * sw * 0.8, y + 1.05 + bob, z + rz * 0.41 * k - fz * sw * 0.8, yw], [0.16, 0.62, 0.2], mid);
+          }
+          self.bx([x, y + 1.05 + bob, z, yw], [0.62, 0.72, 0.36], c);
+          self.bx([x, y + 1.66 + bob, z, yw], [0.46, 0.46, 0.46], c.map(|v| v * 0.8 + 0.2));
+          self.bx([x + fx * 0.22, y + 1.7 + bob, z + fz * 0.22, yw], [0.36, 0.13, 0.06], [0.08, 0.1, 0.14]);
+          self.shad.extend_from_slice(&[x, z, 0.55 * (1.0 - (y * 0.2).min(0.6))]);
+      }
+

@@ -1,0 +1,8 @@
+            let lim = if flying { FLY_SPEED } else { MAX_SPEED } + if knocked { KNOCK_SPEED } else { 0.0 };
+            let (dx, dz) = (x - p.x, z - p.z);
+            let d = (dx * dx + dz * dz).sqrt();
+            let max = lim * dt + 0.5;
+            let k = if d > max { max / d } else { 1.0 };
+            let ymax = if flying || knocked { MAX_Y } else { p.y.max(JUMP_Y) };
+            let n = (p.x + dx * k, y.clamp(0.0, ymax), p.z + dz * k, yaw.rem_euclid(TAU));
+            let st = (flags, pitch, roll);

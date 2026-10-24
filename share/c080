@@ -1,0 +1,9 @@
+      let doc = win.document().ok_or("no document")?;
+      let canvas: HtmlCanvasElement = el(&doc, "c")?;
+
+      let opts = js_sys::Object::new();
+      js_sys::Reflect::set(&opts, &"antialias".into(), &true.into())?;
+      js_sys::Reflect::set(&opts, &"powerPreference".into(), &"high-performance".into())?;
+      let gl: GL = match canvas.get_context_with_context_options("webgl2", &opts)? {
+          Some(c) => c.dyn_into()?,
+          None => {

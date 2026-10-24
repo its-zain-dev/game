@@ -1,0 +1,12 @@
+                p.c.reload_until = Some(now + RELOAD);
+                p.moved = true;
+                g.dirty = true;
+            }
+        }
+        Some(12) if m.len() >= 2 => {
+            let Some(p) = g.players.get_mut(&id) else { return };
+            if !p.joined() { return; }
+            let el = now.duration_since(p.c.voice_t).as_secs_f32();
+            p.c.voice_t = now;
+            p.c.voice_tokens = (p.c.voice_tokens + el * VOICE_RATE).min(VOICE_RATE * 0.5);
+            let n = m.len() as f32;

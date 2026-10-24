@@ -1,0 +1,10 @@
+      format!("rgb({},{},{})", (c[0] * 255.0) as u8, (c[1] * 255.0) as u8, (c[2] * 255.0) as u8)
+  }
+
+  // ---------------- Labels (أسماء + فقاعات الشات) ----------------
+  struct Label { root: HtmlElement, bub: HtmlElement, name: HtmlElement, shown: bool, bubble_until: f64 }
+
+  fn new_label(doc: &Document, parent: &HtmlElement, name: &str, c: [f32; 3]) -> Label {
+      let mk = |cls: &str| -> HtmlElement {
+          let e: HtmlElement = doc.create_element("div").unwrap().unchecked_into();
+          e.set_class_name(cls);

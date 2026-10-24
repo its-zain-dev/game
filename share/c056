@@ -1,0 +1,12 @@
+                  self.add_chat(&nm, &text);
+                  let until = self.now + BUBBLE_MS;
+                  let lbl = if id == self.my_id { self.me_label.as_mut() } else { self.remotes.get_mut(&id).map(|r| &mut r.label) };
+                  if let Some(l) = lbl { l.bub.set_text_content(Some(&text)); l.bubble_until = until; }
+              }
+              _ => {}
+          }
+      }
+
+      fn frame(&mut self, t: f64) -> bool {
+          let dt = (((t - self.last_t) / 1000.0) as f32).clamp(0.0, 0.1);
+          self.last_t = t;

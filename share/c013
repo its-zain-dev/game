@@ -1,0 +1,9 @@
+          gl.bind_vertex_array(None);
+
+          gl.enable(GL::DEPTH_TEST);
+          gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
+          Ok(Self {
+              g_vp: gl.get_uniform_location(&gp, "vp"), g_off: gl.get_uniform_location(&gp, "off"),
+              g_sky: gl.get_uniform_location(&gp, "sky"), gp, g_vao,
+              b_vp: gl.get_uniform_location(&bp, "vp"), b_sky: gl.get_uniform_location(&bp, "sky"), bp, b_vao, ib,
+              s_vp: gl.get_uniform_location(&sp, "vp"), sp, s_vao, sb,

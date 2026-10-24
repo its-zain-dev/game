@@ -1,0 +1,16 @@
+        let r = thread::Builder::new().stack_size(STACK).spawn(move || {
+            let _g = ConnGuard;
+            let _ = handle(s, w);
+        });
+        if r.is_err() { CONNS.fetch_sub(1, Ordering::Relaxed); }
+    }
+}
+
+// ---------------- HTTP ----------------
+fn handle(mut s: TcpStream, w: Shared) -> io::Result<()> {
+    s.set_nodelay(true)?;
+    s.set_read_timeout(Some(Duration::from_secs(10)))?;
+    s.set_write_timeout(Some(Duration::from_secs(20)))?;
+    let mut buf = [0u8; 4096];
+    let mut n = 0;
+    loop {

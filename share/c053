@@ -1,0 +1,15 @@
+                      });
+                      r.st = st;
+                      rs_push(r, now, ts, p);
+                  }
+                  let seen = &self.seen_buf;
+                  self.remotes.retain(|id, r| {
+                      let keep = seen.contains(id);
+                      if !keep { r.label.root.remove(); }
+                      keep
+                  });
+              }
+              3 => {
+                  let mut o = 1;
+                  while o + 6 <= d.len() {
+                      let id = u16le(d, o);

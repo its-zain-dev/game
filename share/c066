@@ -1,0 +1,11 @@
+          // Floating Origin: كل شي ينرسم نسبةً للاعب
+          self.r.begin();
+          if self.joined {
+              let c = self.rgb.map(|v| v as f32 / 255.0);
+              self.r.hero(0.0, self.y, 0.0, self.face, c, self.ph, self.amp);
+          }
+          for r in self.remotes.values() {
+              let (x, z) = (r.x - self.x, r.z - self.z);
+              if x.abs() > 1500.0 || z.abs() > 1500.0 { continue; }
+              self.r.hero(x, r.y, z, r.yaw, r.rgb, r.ph, r.amp);
+          }

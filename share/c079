@@ -1,0 +1,13 @@
+          let want = g.borrow_mut().frame(t);
+          if want { join(&g, false); }
+          if let Some(cb) = f.borrow().as_ref() { let _ = win.request_animation_frame(cb.as_ref().unchecked_ref()); }
+      }));
+      if let (Some(w), Some(cb)) = (web_sys::window(), f2.borrow().as_ref()) {
+          let _ = w.request_animation_frame(cb.as_ref().unchecked_ref());
+      };
+  }
+
+  // ---------------- Entry ----------------
+  #[wasm_bindgen(start)]
+  pub fn start() -> Result<(), JsValue> {
+      let win = web_sys::window().ok_or("no window")?;

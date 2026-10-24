@@ -1,0 +1,7 @@
+  layout(location=0)in vec3 p;layout(location=1)in vec3 n;layout(location=2)in vec4 ip;layout(location=3)in vec3 sc;layout(location=4)in vec3 cl;
+  uniform mat4 vp;out vec3 vn;out vec3 vc;out vec3 wp;
+  void main(){float c=cos(ip.w),s=sin(ip.w);vec3 q=p*sc;q=vec3(c*q.x+s*q.z,q.y,-s*q.x+c*q.z)+ip.xyz;
+  vn=vec3(c*n.x+s*n.z,n.y,-s*n.x+c*n.z);vc=cl;wp=q;gl_Position=vp*vec4(q,1.);}"#;
+
+  const BOX_FS: &str = r#"#version 300 es
+  precision highp float;in vec3 vn;in vec3 vc;in vec3 wp;out vec4 o;uniform vec3 sky;

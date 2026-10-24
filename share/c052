@@ -1,0 +1,5 @@
+                      let (doc, labels, infos) = (&self.doc, &self.labels, &self.infos);
+                      let r = self.remotes.entry(id).or_insert_with(|| {
+                          let (nm, c) = infos.get(&id).cloned().unwrap_or_else(|| ("...".into(), [1.0; 3]));
+                          Remote { x: p[0], y: p[1], z: p[2], yaw: p[3], tx: p[0], ty: p[1], tz: p[2], tyaw: p[3], ph: 0.0, amp: 0.0, rgb: c,
+                              label: new_label(doc, labels, &nm, c), buf: VecDeque::new(), off: f64::NAN, jit: 40.0, dly: 60.0, st }

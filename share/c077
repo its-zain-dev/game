@@ -1,0 +1,8 @@
+          let g = g.clone();
+          on(&win, ev, move |e| g.borrow_mut().pup(e.unchecked_ref()));
+      }
+      on(&canvas, "contextmenu", |e| e.prevent_default());
+      // أي لمسة أو ضغطة ترجع ملء الشاشة إذا طلعت منه
+      { let g = g.clone(); on(&win, "pointerdown", move |_| { let gm = g.borrow(); if gm.joined { gm.fullscreen(); } }); }
+      { let g = g.clone(); on(&doc, "fullscreenchange", move |_| { let gm = g.borrow(); if gm.doc.fullscreen_element().is_some() { gm.lock_landscape(); } }); }
+      {

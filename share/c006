@@ -1,0 +1,9 @@
+  precision mediump float;in vec2 uv;out vec4 o;
+  void main(){o=vec4(0.,0.,0.,smoothstep(1.,.25,length(uv))*.3);}"#;
+
+  // ---------------- Renderer: 3 draw calls بس ----------------
+  struct Renderer {
+      gp: WebGlProgram, g_vp: Option<WebGlUniformLocation>, g_off: Option<WebGlUniformLocation>,
+      g_sky: Option<WebGlUniformLocation>, g_vao: WebGlVertexArrayObject,
+      bp: WebGlProgram, b_vp: Option<WebGlUniformLocation>, b_sky: Option<WebGlUniformLocation>,
+      b_vao: WebGlVertexArrayObject, ib: WebGlBuffer,

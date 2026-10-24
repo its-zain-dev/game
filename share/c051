@@ -1,0 +1,9 @@
+                  self.seen_buf.clear();
+                  for i in 0..n {
+                      let o = 3 + i * 26;
+                      let id = u16le(d, o);
+                      if id == self.my_id { continue; }
+                      let p = [f32le(d, o + 2), f32le(d, o + 6), f32le(d, o + 10), f32le(d, o + 14)];
+                      let ts = u32::from_le_bytes([d[o + 18], d[o + 19], d[o + 20], d[o + 21]]) as f64;
+                      let st = [d[o + 22], d[o + 23], d[o + 24], d[o + 25]];
+                      self.seen_buf.push(id);

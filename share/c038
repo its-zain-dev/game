@@ -1,0 +1,17 @@
+          let mut b = vec![1u8, self.rgb[0], self.rgb[1], self.rgb[2]];
+          b.extend_from_slice(self.name.as_bytes());
+          self.send(&b);
+      }
+
+      fn open_chat(&mut self) {
+          if !self.joined { return; }
+          self.chat_open = true;
+          self.keys = [false; 6];
+          show(&self.chatin, true);
+          let _ = self.chatin.focus();
+          self.doc.exit_pointer_lock();
+      }
+
+      fn close_chat(&mut self) {
+          self.chat_open = false;
+          self.chatin.set_value("");

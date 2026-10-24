@@ -1,0 +1,13 @@
+          self.hud.set_text_content(Some(&s));
+      }
+  }
+
+  // ---------------- Join / Network ----------------
+  fn join(g: &Rc<RefCell<Game>>, gesture: bool) {
+      {
+          let mut gm = g.borrow_mut();
+          if gm.started { return; }
+          gm.started = true;
+          gm.name = gm.name_in.value().trim().chars().filter(|c| !c.is_control()).take(16).collect();
+          let col = gm.col_in.value();
+          let v = u32::from_str_radix(col.trim_start_matches('#'), 16).unwrap_or(0xffffff);

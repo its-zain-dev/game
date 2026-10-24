@@ -1,0 +1,12 @@
+              if let Some(b) = doc.body() { b.set_text_content(Some("المتصفح ما يدعم WebGL2")); }
+              return Ok(());
+          }
+      };
+      let r = Renderer::new(&gl)?;
+
+      let name_in: HtmlInputElement = el(&doc, "name")?;
+      let col_in: HtmlInputElement = el(&doc, "col")?;
+      if let Ok(Some(s)) = win.local_storage() {
+          if let Ok(Some(n)) = s.get_item("name") { name_in.set_value(&n); }
+          match s.get_item("col") {
+              Ok(Some(c)) => col_in.set_value(&c),

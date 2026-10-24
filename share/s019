@@ -1,0 +1,15 @@
+//   [11, killer u16, victim u16, weapon]          قتل
+//   [12, id u16, voice...]                        صوت
+//   [13, payload...]                              pong
+
+const F_FLY: u8 = 1; // bit0 طيران، bit1-2 السلاح، bit3 تصويب، bit4 رفرفة
+const S_RELOAD: u8 = 0x20;
+const S_DEAD: u8 = 0x40;
+const W_BAT: u8 = 1;
+const W_GUN: u8 = 2;
+const JUMP_Y: f32 = 4.0;
+const FLY_SPEED: f32 = 60.0;
+const KNOCK_SPEED: f32 = 40.0;
+const KNOCK_TIME: Duration = Duration::from_millis(1500);
+const EYE: f32 = 1.5;
+const MAG: u8 = 12;

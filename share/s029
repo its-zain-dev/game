@@ -1,0 +1,11 @@
+            if text.is_empty() { return; }
+            p.last_chat = now;
+            let mut b = vec![5u8];
+            b.extend_from_slice(&id.to_le_bytes());
+            b.extend_from_slice(text.as_bytes());
+            send_all(g, &Arc::new(ws_frame(2, &b)));
+        }
+        Some(6) if m.len() >= 16 => attack(g, id, m, now),
+        Some(7) => {
+            let Some(p) = g.players.get_mut(&id) else { return };
+            if p.joined() && p.c.hp > 0 && p.c.ammo < MAG && p.c.reload_until.is_none() {

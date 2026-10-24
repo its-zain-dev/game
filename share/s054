@@ -1,0 +1,7 @@
+      o.push(T[(n >> 12 & 63) as usize] as char);
+      o.push(if c.len() > 1 { T[(n >> 6 & 63) as usize] as char } else { '=' });
+      o.push(if c.len() > 2 { T[(n & 63) as usize] as char } else { '=' });
+  }
+  o
+}
+

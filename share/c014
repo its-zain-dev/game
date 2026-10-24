@@ -1,0 +1,13 @@
+              inst: Vec::with_capacity(10 * 6 * 64), shad: Vec::with_capacity(3 * 64),
+          })
+      }
+
+      fn begin(&mut self) { self.inst.clear(); self.shad.clear(); }
+
+      #[inline]
+      fn bx(&mut self, p: [f32; 4], s: [f32; 3], c: [f32; 3]) {
+          self.inst.extend_from_slice(&[p[0], p[1], p[2], p[3], s[0], s[1], s[2], c[0], c[1], c[2]]);
+      }
+
+      fn hero(&mut self, x: f32, y: f32, z: f32, yw: f32, c: [f32; 3], ph: f32, amp: f32) {
+          let (sn, cs) = yw.sin_cos();

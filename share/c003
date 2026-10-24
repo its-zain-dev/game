@@ -1,0 +1,7 @@
+  const GROUND_FS: &str = r#"#version 300 es
+  precision highp float;in vec2 lp;in vec2 gp;out vec4 o;uniform vec3 sky;
+  vec3 fog(vec3 c,float d){return mix(c,sky,1.-exp(-d*d*.000004));}
+  float grid(float s){vec2 q=gp/s;vec2 g=abs(fract(q-.5)-.5)/fwidth(q);return 1.-min(min(g.x,g.y),1.);}
+  void main(){vec3 c=vec3(.97)-vec3(.05)*grid(1.)-vec3(.1)*grid(10.);o=vec4(fog(c,length(lp)),1.);}"#;
+
+  const BOX_VS: &str = r#"#version 300 es

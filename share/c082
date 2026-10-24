@@ -1,0 +1,9 @@
+              _ => col_in.set_value(&format!("#{:06x}", (js_sys::Math::random() * 16_777_215.0) as u32)),
+          }
+      }
+      let touch = win.match_media("(pointer: coarse)").ok().flatten().map(|m| m.matches()).unwrap_or(false);
+      if touch { if let Some(b) = doc.body() { let _ = b.set_attribute("data-touch", "1"); } }
+
+      let g = Rc::new(RefCell::new(Game {
+          nav: win.navigator(),
+          ui: el(&doc, "ui")?, hud: el(&doc, "hud")?, labels: el(&doc, "labels")?, chatlog: el(&doc, "chatlog")?,

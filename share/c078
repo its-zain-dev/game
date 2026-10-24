@@ -1,0 +1,12 @@
+          let g = g.clone();
+          on(&jump, "pointerdown", move |e| { e.prevent_default(); e.stop_propagation(); g.borrow_mut().jump_tap = true; });
+      }
+      { let g = g.clone(); on(&chatbtn, "click", move |_| g.borrow_mut().open_chat()); }
+      Ok(())
+  }
+
+  fn run_loop(g: Rc<RefCell<Game>>) {
+      let f: Rc<RefCell<Option<Closure<dyn FnMut(f64)>>>> = Rc::new(RefCell::new(None));
+      let f2 = f.clone();
+      let win = g.borrow().win.clone();
+      *f2.borrow_mut() = Some(Closure::new(move |t: f64| {

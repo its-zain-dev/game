@@ -1,0 +1,9 @@
+//   [3, text...]                                      شات
+//   [6, weapon(|0x80 راس), target u16, dx, dy, dz]    ضربة / طلقة
+//   [7]                                               ريلود
+//   [12, voice...]                                    صوت
+//   [13, payload...]                                  ping
+//
+// server -> client
+//   [1, id, x, z]                                 ترحيب
+//   [2, n u16, (id u16, x, y, z, yaw f32) * n]    مواقع القريبين

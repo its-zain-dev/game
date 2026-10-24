@@ -1,0 +1,12 @@
+          let proto = if loc.protocol().unwrap_or_default() == "https:" { "wss://" } else { "ws://" };
+          format!("{proto}{}/ws", loc.host().unwrap_or_default())
+      };
+      let Ok(ws) = WebSocket::new(&url) else { return };
+      ws.set_binary_type(BinaryType::Arraybuffer);
+
+      let g1 = g.clone();
+      let onopen = Closure::<dyn FnMut(Event)>::new(move |_| g1.borrow().send_join());
+      ws.set_onopen(Some(onopen.as_ref().unchecked_ref()));
+      onopen.forget();
+
+      let g2 = g.clone();

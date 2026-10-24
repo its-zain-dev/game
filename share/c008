@@ -1,0 +1,10 @@
+      if gl.get_shader_parameter(&s, GL::COMPILE_STATUS).as_bool() == Some(true) { Ok(s) }
+      else { Err(gl.get_shader_info_log(&s).unwrap_or_default().into()) }
+  }
+
+  fn program(gl: &GL, vs: &str, fs: &str) -> Result<WebGlProgram, JsValue> {
+      let p = gl.create_program().ok_or("program")?;
+      gl.attach_shader(&p, &shader(gl, GL::VERTEX_SHADER, vs)?);
+      gl.attach_shader(&p, &shader(gl, GL::FRAGMENT_SHADER, fs)?);
+      gl.link_program(&p);
+      if gl.get_program_parameter(&p, GL::LINK_STATUS).as_bool() == Some(true) { Ok(p) }

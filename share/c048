@@ -1,0 +1,11 @@
+              }
+              2 if d.len() >= 3 => {
+                  let n = u16le(d, 1) as usize;
+                  if d.len() < 3 + n * 18 { return; }
+                  self.seen_buf.clear();
+                  for i in 0..n {
+                      let o = 3 + i * 18;
+                      let id = u16le(d, o);
+                      if id == self.my_id { continue; }
+                      let (x, y, z, yw) = (f32le(d, o + 2), f32le(d, o + 6), f32le(d, o + 10), f32le(d, o + 14));
+                      self.seen_buf.push(id);

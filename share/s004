@@ -1,0 +1,15 @@
+    fn drop(&mut self) { CONNS.fetch_sub(1, Ordering::Relaxed); }
+}
+
+fn lock(w: &Shared) -> MutexGuard<'_, World> { w.lock().unwrap_or_else(|e| e.into_inner()) }
+
+fn etags() -> &'static [String; 3] {
+    ETAGS.get_or_init(|| [etag(INDEX), etag(JS), etag(WASM)])
+}
+
+fn main() {
+    let port: u16 = std::env::var("PORT").ok().and_then(|p| p.parse().ok()).unwrap_or(8080);
+    let listener = TcpListener::bind(("0.0.0.0", port)).expect("bind failed");
+    etags();
+    println!("World on http://0.0.0.0:{port}  (wasm {} KB)", WASM.len() / 1024);
+

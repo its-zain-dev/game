@@ -1,0 +1,16 @@
+    if let Some(&(lt, lp)) = r.buf.back() {
+        if ts <= lt && lt - ts < 60000.0 { return; }
+        let (dx, dy, dz) = (p[0] - lp[0], p[1] - lp[1], p[2] - lp[2]);
+        if ts <= lt || dx * dx + dy * dy + dz * dz > 100.0 {
+            r.buf.clear();
+            r.off = f64::NAN;
+        } else if ts - lt > 150.0 {
+            r.buf.push_back((ts - SEND_MS, lp));
+        }
+    }
+    let o = now - ts;
+    if r.off.is_nan() {
+        r.off = o;
+    } else {
+        r.off = (r.off + 0.005).min(o);
+        let e = o - r.off;

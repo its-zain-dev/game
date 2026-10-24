@@ -1,0 +1,11 @@
+              a: b(0), run: b(10) || b(7) || b(5), start: b(9), zin: b(12), zout: b(13),
+          });
+      }
+      None
+  }
+
+  // ---------------- Game ----------------
+  struct Remote { x: f32, y: f32, z: f32, yaw: f32, tx: f32, ty: f32, tz: f32, tyaw: f32, ph: f32, amp: f32, rgb: [f32; 3], label: Label, buf: VecDeque<(f64, [f32; 4])>, off: f64, jit: f64, dly: f64, st: [u8; 4] }
+
+// ---- Jitter buffer: نعرض اللاعب الثاني بخطه الزمني الحقيقي ----
+fn rs_push(r: &mut Remote, now: f64, ts: f64, p: [f32; 4]) {

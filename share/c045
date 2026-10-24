@@ -1,0 +1,8 @@
+          let (x, y) = (e.client_x() as f32, e.client_y() as f32);
+          if id == self.joy_id && id.is_some() {
+              let (mut dx, mut dy) = (x - self.joy_o.0, y - self.joy_o.1);
+              let l = dx.hypot(dy);
+              if l > JOY_R { dx *= JOY_R / l; dy *= JOY_R / l; }
+              self.joy_v = (dx / JOY_R, dy / JOY_R);
+              let _ = self.knob.style().set_property("transform", &format!("translate({dx:.0}px,{dy:.0}px)"));
+          } else if id == self.look_id && id.is_some() {

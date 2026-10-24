@@ -1,0 +1,12 @@
+                    }
+                    let mut h: u64 = 0;
+                    let mut any = false;
+                    for &(_, oid) in &vis {
+                        h = h.wrapping_add(mix(oid));
+                        any |= g.players[&oid].moved;
+                    }
+                    if !any && h == rp.seen { continue; }
+                    seen.push((rid, h));
+                    buf.clear();
+                    buf.push(2);
+                    buf.extend_from_slice(&(vis.len() as u16).to_le_bytes());

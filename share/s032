@@ -1,0 +1,13 @@
+    }
+}
+
+fn attack(g: &mut World, id: u16, m: &[u8], now: Instant) {
+    let wpn = m[1] & 0x7F;
+    let head = m[1] & 0x80 != 0;
+    let target = u16::from_le_bytes([m[2], m[3]]);
+    let (mut dx, mut dy, mut dz) = (f32at(m, 4), f32at(m, 8), f32at(m, 12));
+    let l = (dx * dx + dy * dy + dz * dz).sqrt();
+    if !l.is_finite() || l < 0.5 { return; }
+    dx /= l; dy /= l; dz /= l;
+    let (range, gap, dmg, push, up) = match wpn {
+        W_BAT => (BAT_RANGE, BAT_GAP, BAT_DMG, BAT_PUSH, BAT_UP),

@@ -1,0 +1,13 @@
+            e.extend_from_slice(name.as_bytes());
+            p.info = Some(e.clone());
+            p.moved = true;
+            p.last = now;
+            let me_tx = p.tx.clone();
+            g.dirty = true;
+            let mut all = vec![3u8];
+            for o in g.players.values() {
+                if let Some(i) = &o.info { all.extend_from_slice(i); }
+            }
+            let _ = me_tx.try_send(Arc::new(ws_frame(2, &all)));
+            let mut one = vec![3u8];
+            one.extend_from_slice(&e);

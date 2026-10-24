@@ -1,0 +1,24 @@
+    tx: SyncSender<Frame>,
+    info: Option<Vec<u8>>, // [id u16, r, g, b, len, name...]
+    x: f32,
+    y: f32,
+    z: f32,
+    yaw: f32,
+    last: Instant,
+    last_chat: Instant,
+    moved: bool,
+    seen: u64, // hash لآخر مجموعة لاعبين انرسلت
+    c: Combat,
+}
+impl Player {
+    fn joined(&self) -> bool { self.info.is_some() }
+}
+
+struct World {
+    players: HashMap<u16, Player>,
+    next_id: u16,
+    dirty: bool,
+}
+
+struct ConnGuard;
+impl Drop for ConnGuard {

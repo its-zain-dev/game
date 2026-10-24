@@ -1,0 +1,13 @@
+      let onmsg = Closure::<dyn FnMut(MessageEvent)>::new(move |e: MessageEvent| {
+          if let Ok(ab) = e.data().dyn_into::<js_sys::ArrayBuffer>() {
+              let v = js_sys::Uint8Array::new(&ab).to_vec();
+              g2.borrow_mut().on_net(&v);
+          }
+      });
+      ws.set_onmessage(Some(onmsg.as_ref().unchecked_ref()));
+      onmsg.forget();
+
+      let g3 = g.clone();
+      let onclose = Closure::<dyn FnMut(Event)>::new(move |_| {
+          let mut gm = g3.borrow_mut();
+          gm.joined = false;

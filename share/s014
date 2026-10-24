@@ -1,0 +1,14 @@
+            last: now, last_chat: now.checked_sub(CHAT_GAP).unwrap_or(now), moved: false, seen: 0, c: Combat::default(),
+        });
+        (id, sx, sz)
+    };
+
+    // [1, id, x, z]
+    let mut hello = vec![1u8];
+    hello.extend_from_slice(&id.to_le_bytes());
+    hello.extend_from_slice(&sx.to_le_bytes());
+    hello.extend_from_slice(&sz.to_le_bytes());
+    let _ = tx.try_send(Arc::new(ws_frame(2, &hello)));
+
+    let res = (|| -> io::Result<()> {
+        let mut r = BufReader::with_capacity(1024, s.try_clone()?);

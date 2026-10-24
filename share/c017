@@ -1,0 +1,9 @@
+      fn draw(&self, gl: &GL, vp: &[f32; 16], off: (f32, f32)) {
+          gl.clear_color(SKY[0], SKY[1], SKY[2], 1.0);
+          gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT);
+          // 1) الأرض
+          gl.use_program(Some(&self.gp));
+          gl.uniform_matrix4fv_with_f32_array(self.g_vp.as_ref(), false, vp);
+          gl.uniform3f(self.g_sky.as_ref(), SKY[0], SKY[1], SKY[2]);
+          gl.uniform2f(self.g_off.as_ref(), off.0, off.1);
+          gl.bind_vertex_array(Some(&self.g_vao));

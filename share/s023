@@ -1,0 +1,12 @@
+    let g = &mut *guard;
+    let now = Instant::now();
+    match m.first().copied() {
+        Some(1) if m.len() >= 4 => {
+            let Some(p) = g.players.get_mut(&id) else { return };
+            if p.joined() { return; }
+            let mut name = clean(&m[4..], NAME_MAX);
+            if name.is_empty() { name = format!("Player{id}"); }
+            let mut e = Vec::with_capacity(6 + name.len());
+            e.extend_from_slice(&id.to_le_bytes());
+            e.extend_from_slice(&m[1..4]);
+            e.push(name.len() as u8);

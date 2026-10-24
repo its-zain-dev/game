@@ -1,0 +1,4 @@
+.n{font-size:13px;font-weight:600;color:#fff;background:rgba(0,0,0,.45);padding:2px 8px;border-radius:6px;border-bottom:2px solid #fff}
+.b{max-width:220px;white-space:normal;text-align:center;font-size:13px;background:#fff;color:#222;padding:5px 9px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.b:empty{display:none}
+#hud{position:fixed;top:8px;left:8px;font:12px monospace;color:#333;direction:ltr;pointer-events:none}

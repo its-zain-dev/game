@@ -1,0 +1,16 @@
+  *s ^= *s >> 7;
+  *s ^= *s << 17;
+  (*s >> 40) as f32 / 16_777_216.0
+}
+
+// ETag: بصمة للملف تنحسب مرة وحدة عند التشغيل (FNV-1a)
+fn etag(b: &[u8]) -> String {
+  let mut h: u64 = 0xcbf2_9ce4_8422_2325;
+  for &x in b { h ^= x as u64; h = h.wrapping_mul(0x0100_0000_01b3); }
+  format!("\"{h:016x}-{}\"", b.len())
+}
+
+fn sha1(data: &[u8]) -> [u8; 20] {
+  let mut h: [u32; 5] = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0];
+  let mut m = data.to_vec();
+  let bits = (data.len() as u64).wrapping_mul(8);

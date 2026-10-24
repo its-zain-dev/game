@@ -1,0 +1,10 @@
+              self.z += mz * sp * dt;
+              self.ph += sp * mag * dt * 1.8;
+              self.face += wrap((-mx).atan2(-mz) - self.face) * (dt * 12.0).min(1.0);
+          }
+          self.amp += ((if moving { mag.max(0.4) } else { 0.0 }) - self.amp) * (dt * 10.0).min(1.0);
+
+          if (k[5] || pad.a || self.jump_tap) && self.grounded { self.vy = JUMP; self.grounded = false; }
+          self.jump_tap = false;
+          self.vy -= GRAVITY * dt;
+          self.y += self.vy * dt;

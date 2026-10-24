@@ -1,0 +1,8 @@
+<canvas id="c"></canvas>
+<div id="labels"></div>
+<div id="hud">Loading...</div>
+<div id="chatlog"></div>
+<input id="chatin" maxlength="100" placeholder="اكتب رسالة... Enter للإرسال" autocomplete="off">
+<div id="tc"><div id="joy"><div id="knob"></div></div><button id="jump">⤒</button><button id="chatbtn">💬</button></div>
+<div id="help">WASD حركة · Shift ركض · Space قفز · Enter شات · F ملء الشاشة · الماوس للتدوير · العجلة للزوم</div>
+<div id="ui"><div class="card">

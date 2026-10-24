@@ -1,0 +1,10 @@
+          let g = g.clone();
+          on(&win, "wheel", move |e| {
+              let e: &WheelEvent = e.unchecked_ref();
+              let mut gm = g.borrow_mut();
+              gm.dist = (gm.dist * if e.delta_y() > 0.0 { 1.1 } else { 0.9 }).clamp(3.0, 25.0);
+          });
+      }
+      { let g = g.clone(); on(&canvas, "pointerdown", move |e| g.borrow_mut().pdown(e.unchecked_ref())); }
+      { let g = g.clone(); on(&win, "pointermove", move |e| g.borrow_mut().pmove(e.unchecked_ref())); }
+      for ev in ["pointerup", "pointercancel"] {

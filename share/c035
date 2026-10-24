@@ -1,0 +1,9 @@
+      keys: [bool; 6], touch: bool, chat_open: bool,
+      joy_id: Option<i32>, joy_o: (f32, f32), joy_v: (f32, f32), look_id: Option<i32>, look_p: (f32, f32), jump_tap: bool,
+      infos: HashMap<u16, (String, [f32; 3])>, remotes: HashMap<u16, Remote>, me_label: Option<Label>,
+      chat_lines: VecDeque<(f64, Element)>, seen_buf: Vec<u16>,
+      now: f64, last_t: f64, last_send: f64, last_ka: f64, sent: [f32; 4], fps_n: u32, fps_t: f64, pad_on: bool,
+  }
+
+  impl Game {
+      fn fullscreen(&self) {

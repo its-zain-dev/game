@@ -1,0 +1,12 @@
+    for v in end { fx.extend_from_slice(&v.to_le_bytes()); }
+    send_near(g, sx, sz, VIEW, id, &Arc::new(ws_frame(2, &fx)));
+    if hit == 0 { return; }
+
+    let Some(t) = g.players.get_mut(&hit) else { return };
+    let (hx, hz) = (t.x - sx, t.z - sz);
+    let h = (hx * hx + hz * hz).sqrt();
+    let (nx, nz) = if h > 0.05 { (hx / h, hz / h) } else { (dx, dz) };
+    let imp = [nx * push, up + dy.max(0.0) * push * 0.3, nz * push];
+    t.c.hp = t.c.hp.saturating_sub(dmg);
+    t.c.knock_until = now + KNOCK_TIME;
+    t.moved = true;

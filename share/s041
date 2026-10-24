@@ -1,0 +1,12 @@
+                    if d <= t { respawn(p, t, &mut seed); g.dirty = true; }
+                }
+                if let Some(rl) = p.c.reload_until {
+                    if rl <= t { p.c.ammo = MAG; p.c.reload_until = None; p.moved = true; g.dirty = true; }
+                }
+            }
+            if g.dirty {
+                g.dirty = false;
+                grid.clear();
+                for (&id, p) in &g.players {
+                    if p.joined() { grid.entry(cell(p.x, p.z)).or_default().push(id); }
+                }

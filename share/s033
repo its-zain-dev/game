@@ -1,0 +1,13 @@
+        W_GUN => (GUN_RANGE, GUN_GAP, if head { GUN_DMG_HEAD } else { GUN_DMG }, GUN_PUSH, 0.0),
+        _ => return,
+    };
+    let (sx, sy, sz) = {
+        let Some(p) = g.players.get_mut(&id) else { return };
+        if !p.joined() || p.c.hp == 0 || now < p.c.next_shot { return; }
+        if wpn == W_GUN {
+            if let Some(t) = p.c.reload_until {
+                if now < t { return; }
+                p.c.ammo = MAG;
+                p.c.reload_until = None;
+            }
+            if p.c.ammo == 0 { return; }

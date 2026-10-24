@@ -1,0 +1,11 @@
+        let r = s.read(&mut buf[n..])?;
+        if r == 0 { return Ok(()); }
+        n += r;
+        if buf[..n].windows(4).any(|x| x == b"\r\n\r\n") { break; }
+        if n == buf.len() { return Ok(()); }
+    }
+    let req = String::from_utf8_lossy(&buf[..n]).into_owned();
+    let path = req.split_whitespace().nth(1).unwrap_or("/").split('?').next().unwrap_or("/").to_owned();
+    let header = |name: &str| {
+        req.lines().find_map(|l| {
+            let (k, v) = l.split_once(':')?;

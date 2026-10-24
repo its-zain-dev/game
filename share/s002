@@ -1,0 +1,15 @@
+const CHAT_GAP: Duration = Duration::from_millis(700);
+const QUEUE: usize = 256;
+const STACK: usize = 128 * 1024;
+const WS_GUID: &str = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+
+static INDEX: &[u8] = include_bytes!("../index.html");
+static JS: &[u8] = include_bytes!("../pkg/client.js");
+static WASM: &[u8] = include_bytes!("../pkg/client_bg.wasm");
+static CONNS: AtomicUsize = AtomicUsize::new(0);
+static ETAGS: OnceLock<[String; 3]> = OnceLock::new();
+
+type Frame = Arc<Vec<u8>>;
+type Shared = Arc<Mutex<World>>;
+
+struct Player {

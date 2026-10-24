@@ -1,0 +1,17 @@
+        let mut msg = Vec::with_capacity(128);
+        loop {
+            match read_frame(&mut r, &mut msg)? {
+                0x8 => return Ok(()),
+                0x9 => { let _ = tx.try_send(Arc::new(ws_frame(0xA, &msg))); }
+                0x2 => on_msg(&w, id, &msg),
+                _ => {}
+            }
+        }
+    })();
+
+    {
+        let mut g = lock(&w);
+        g.players.remove(&id);
+        g.dirty = true;
+        let mut b = vec![4u8];
+        b.extend_from_slice(&id.to_le_bytes());

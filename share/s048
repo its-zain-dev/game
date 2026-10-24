@@ -1,0 +1,17 @@
+    let masked = h[1] & 0x80 != 0;
+    let mut len = (h[1] & 0x7F) as u64;
+    if len == 126 {
+        let mut b = [0u8; 2];
+        r.read_exact(&mut b)?;
+        len = u16::from_be_bytes(b) as u64;
+    } else if len == 127 {
+        let mut b = [0u8; 8];
+        r.read_exact(&mut b)?;
+        len = u64::from_be_bytes(b);
+    }
+    if !masked || len > MAX_MSG {
+        return Err(io::Error::new(io::ErrorKind::InvalidData, "bad frame"));
+    }
+    let mut mask = [0u8; 4];
+    r.read_exact(&mut mask)?;
+    buf.resize(len as usize, 0);

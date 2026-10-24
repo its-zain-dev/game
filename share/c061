@@ -1,0 +1,12 @@
+          if self.y <= 0.0 { self.y = 0.0; self.vy = 0.0; self.grounded = true; }
+      }
+
+      fn animate(&mut self, dt: f32) {
+          let k = 1.0 - (-dt * 25.0).exp();
+          let now = self.now;
+          for r in self.remotes.values_mut() {
+              let k = if r.off.is_nan() { k } else { rs_interp(r, now, dt); 1.0 };
+              let (dx, dz) = ((r.tx - r.x) * k, (r.tz - r.z) * k);
+              r.x += dx; r.z += dz;
+              r.y += (r.ty - r.y) * k;
+              r.yaw += wrap(r.tyaw - r.yaw) * k;

@@ -1,0 +1,13 @@
+      { let g = g.clone(); on(&win, "blur", move |_| g.borrow_mut().keys = [false; 6]); }
+      {
+          let g = g.clone();
+          on(&win, "mousemove", move |e| {
+              let e: &MouseEvent = e.unchecked_ref();
+              let mut gm = g.borrow_mut();
+              if gm.doc.pointer_lock_element().is_some() {
+                  gm.yaw -= e.movement_x() as f32 * 0.0025;
+                  gm.pitch = (gm.pitch + e.movement_y() as f32 * 0.0025).clamp(-0.15, 1.3);
+              }
+          });
+      }
+      {

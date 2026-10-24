@@ -1,0 +1,8 @@
+                    sbuf.clear();
+                    sbuf.push(14);
+                    sbuf.extend_from_slice(&(vis.len() as u16).to_le_bytes());
+                    for &(_, oid) in &vis {
+                        let o = &g.players[&oid];
+                        buf.extend_from_slice(&oid.to_le_bytes());
+                        for v in [o.x, o.y, o.z, o.yaw] { buf.extend_from_slice(&v.to_le_bytes()); }
+                        sbuf.extend_from_slice(&oid.to_le_bytes());

@@ -1,0 +1,11 @@
+          match t {
+              1 if d.len() >= 11 => {
+                  self.my_id = u16le(d, 1);
+                  self.x = f32le(d, 3);
+                  self.z = f32le(d, 7);
+                  self.joined = true;
+                  if self.name.is_empty() { self.name = format!("Player{}", self.my_id); }
+                  if self.me_label.is_none() {
+                      let c = self.rgb.map(|v| v as f32 / 255.0);
+                      self.me_label = Some(new_label(&self.doc, &self.labels, &self.name, c));
+                  }

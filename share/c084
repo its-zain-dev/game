@@ -1,0 +1,8 @@
+          infos: HashMap::new(), remotes: HashMap::new(), me_label: None,
+          chat_lines: VecDeque::new(), seen_buf: Vec::with_capacity(128),
+          now: 0.0, last_t: 0.0, last_send: 0.0, last_ka: 0.0, sent: [f32::NAN; 4], fps_n: 0, fps_t: 0.0, pad_on: false,
+      }));
+      bind(&g)?;
+      run_loop(g);
+      Ok(())
+  }

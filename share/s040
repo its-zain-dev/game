@@ -1,0 +1,11 @@
+    let mut buf: Vec<u8> = Vec::with_capacity(4096);
+    let mut sbuf: Vec<u8> = Vec::with_capacity(1024);
+    let mut seed = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos() as u64).unwrap_or(7) | 1;
+    let r = (VIEW / CELL).ceil() as i32;
+    loop {
+        let t = Instant::now();
+        {
+            let mut guard = lock(&w);
+            let g = &mut *guard;
+            for p in g.players.values_mut() {
+                if let Some(d) = p.c.dead_until {

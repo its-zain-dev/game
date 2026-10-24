@@ -1,0 +1,8 @@
+      let (win, doc, canvas) = { let gm = g.borrow(); (gm.win.clone(), gm.doc.clone(), gm.canvas.clone()) };
+      let go: HtmlElement = el(&doc, "go")?;
+      let jump: HtmlElement = el(&doc, "jump")?;
+      let chatbtn: HtmlElement = el(&doc, "chatbtn")?;
+
+      { let g = g.clone(); on(&go, "click", move |_| join(&g, true)); }
+      { let g = g.clone(); on(&win, "keydown", move |e| g.borrow_mut().key(e.unchecked_ref(), true)); }
+      { let g = g.clone(); on(&win, "keyup", move |e| g.borrow_mut().key(e.unchecked_ref(), false)); }

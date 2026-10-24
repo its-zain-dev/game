@@ -1,0 +1,9 @@
+  vec3 fog(vec3 c,float d){return mix(c,sky,1.-exp(-d*d*.000004));}
+  void main(){vec3 N=normalize(vn);float d=max(dot(N,normalize(vec3(.4,1.,.3))),0.);float h=.5+.5*N.y;
+  o=vec4(fog(vc*(.35+.15*h+.5*d),length(wp.xz)),1.);}"#;
+
+  const SHADOW_VS: &str = r#"#version 300 es
+  layout(location=0)in vec3 s;uniform mat4 vp;out vec2 uv;
+  void main(){vec2 c=vec2(gl_VertexID&1,gl_VertexID>>1)*2.-1.;uv=c;gl_Position=vp*vec4(s.x+c.x*s.z,.01,s.y+c.y*s.z,1.);}"#;
+
+  const SHADOW_FS: &str = r#"#version 300 es

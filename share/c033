@@ -1,0 +1,14 @@
+            return Some([a[0] + (q[0] - a[0]) * k, a[1] + (q[1] - a[1]) * k, a[2] + (q[2] - a[2]) * k, a[3] + wrap(q[3] - a[3]) * k]);
+        }
+    }
+    b.back().map(|v| v.1)
+}
+
+fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
+    let tgt = (r.jit + 12.0).clamp(24.0, 300.0);
+    r.dly += (tgt - r.dly) * (dt as f64 * 2.0).min(1.0);
+    let t = now - r.off - r.dly;
+    while r.buf.len() > 2 && r.buf[1].0 <= t { r.buf.pop_front(); }
+    if let Some(p) = rs_sample(&r.buf, t) { r.tx = p[0]; r.ty = p[1].max(0.0); r.tz = p[2]; r.tyaw = p[3]; }
+}
+

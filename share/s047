@@ -1,0 +1,19 @@
+                for p in g.players.values_mut() { p.moved = false; }
+            }
+        }
+        thread::sleep(TICK.saturating_sub(t.elapsed()));
+    }
+}
+
+fn cell(x: f32, z: f32) -> (i32, i32) { ((x / CELL).floor() as i32, (z / CELL).floor() as i32) }
+
+fn mix(id: u16) -> u64 {
+    let mut x = (id as u64 + 1).wrapping_mul(0x9E37_79B9_7F4A_7C15);
+    x ^= x >> 31;
+    x
+}
+
+fn read_frame<R: Read>(r: &mut R, buf: &mut Vec<u8>) -> io::Result<u8> {
+    let mut h = [0u8; 2];
+    r.read_exact(&mut h)?;
+    let op = h[0] & 0x0F;

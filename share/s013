@@ -1,0 +1,8 @@
+        let nanos = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos() as u64).unwrap_or(7);
+        let mut seed = (nanos ^ ((id as u64) << 32)) | 1;
+        let a = rnd(&mut seed) * TAU;
+        let r = 3.0 + rnd(&mut seed) * 10.0;
+        let (sx, sz) = (a.cos() * r, a.sin() * r);
+        let now = Instant::now();
+        g.players.insert(id, Player {
+            tx: tx.clone(), info: None, x: sx, y: 0.0, z: sz, yaw: 0.0,

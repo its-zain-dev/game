@@ -1,0 +1,15 @@
+      let _ = l.root.style().set_property("transform", &format!("translate3d({sx:.1}px,{sy:.1}px,0) translate(-50%,-100%)"));
+  }
+
+  fn expire(l: &mut Label, now: f64) {
+      if l.bubble_until > 0.0 && now > l.bubble_until {
+          l.bub.set_text_content(None);
+          l.bubble_until = 0.0;
+      }
+  }
+
+  // ---------------- Gamepad ----------------
+  #[derive(Default, Clone, Copy)]
+  struct Pad { lx: f32, ly: f32, rx: f32, ry: f32, a: bool, run: bool, start: bool, zin: bool, zout: bool }
+
+  fn poll_pad(nav: &Navigator) -> Option<Pad> {

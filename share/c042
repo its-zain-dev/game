@@ -1,0 +1,14 @@
+              "Space" => 5,
+              "Enter" if down => { e.prevent_default(); self.open_chat(); return; }
+              "KeyF" if down => { self.toggle_fs(); return; }
+              _ => return,
+          };
+          self.keys[i] = down;
+          if i == 5 || code.starts_with("Arrow") { e.prevent_default(); }
+      }
+
+      fn pdown(&mut self, e: &PointerEvent) {
+          if !self.started || self.chat_open { return; }
+          if e.pointer_type() == "touch" {
+              self.set_touch();
+              e.prevent_default();

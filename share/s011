@@ -1,0 +1,7 @@
+fn ws_session(mut s: TcpStream, w: Shared, key: &str) -> io::Result<()> {
+    s.set_read_timeout(Some(Duration::from_secs(90)))?;
+    s.set_write_timeout(Some(Duration::from_secs(5)))?;
+    let accept = base64(&sha1(format!("{key}{WS_GUID}").as_bytes()));
+    s.write_all(format!("HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: {accept}\r\n\r\n").as_bytes())?;
+
+    // خيط كتابة مستقل: اللاعب البطيء ما يأخر الباقين

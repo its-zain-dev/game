@@ -1,0 +1,11 @@
+  #![cfg(target_arch = "wasm32")]
+  //! العميل: الرسم + الشبكة + كيبورد/ماوس/لمس/جويستك + شات + ملء الشاشة. كله Rust
+
+  use std::cell::RefCell;
+  use std::collections::{HashMap, VecDeque};
+  use std::f32::consts::{PI, TAU};
+  use std::rc::Rc;
+  use wasm_bindgen::prelude::*;
+  use wasm_bindgen::JsCast;
+  use web_sys::{
+      BinaryType, Document, Element, Event, EventTarget, Gamepad, GamepadButton, HtmlCanvasElement,

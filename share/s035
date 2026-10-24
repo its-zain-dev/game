@@ -1,0 +1,13 @@
+                let tol = if wpn == W_BAT { 2.5 } else { 2.0 + along * 0.02 };
+                if along > -1.0 && along <= range + 2.0 && perp <= tol { hit = target; }
+            }
+        }
+    }
+    let end = match g.players.get(&hit) {
+        Some(t) if hit != 0 => [t.x, t.y + if head { 1.65 } else { 1.1 }, t.z],
+        _ => [sx + dx * range, sy + dy * range, sz + dz * range],
+    };
+    let mut fx = vec![9u8];
+    fx.extend_from_slice(&id.to_le_bytes());
+    fx.push(m[1]);
+    fx.extend_from_slice(&hit.to_le_bytes());

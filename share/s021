@@ -1,0 +1,20 @@
+    hp: u8,
+    flags: u8,
+    pitch: i8,
+    roll: i8,
+    ammo: u8,
+    reload_until: Option<Instant>,
+    next_shot: Instant,
+    knock_until: Instant,
+    dead_until: Option<Instant>,
+    frozen_until: Instant,
+    voice_t: Instant,
+    voice_tokens: f32,
+    ts: u32,
+}
+impl Default for Combat {
+    fn default() -> Self {
+        let n = Instant::now();
+        Combat {
+            hp: 100, flags: 0, pitch: 0, roll: 0, ammo: MAG, reload_until: None,
+            next_shot: n, knock_until: n, dead_until: None, frozen_until: n,

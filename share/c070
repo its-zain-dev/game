@@ -1,0 +1,18 @@
+          gm.rgb = [(v >> 16) as u8, (v >> 8) as u8, v as u8];
+          if let Ok(Some(s)) = gm.win.local_storage() {
+              let _ = s.set_item("name", &gm.name);
+              let _ = s.set_item("col", &col);
+          }
+          show(&gm.ui, false);
+          if gesture {
+              gm.fullscreen();
+              if !gm.touch { gm.canvas.request_pointer_lock(); }
+          }
+      }
+      connect(g);
+  }
+
+  fn connect(g: &Rc<RefCell<Game>>) {
+      let url = {
+          let gm = g.borrow();
+          let loc = gm.win.location();

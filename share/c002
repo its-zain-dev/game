@@ -1,0 +1,14 @@
+  const CHAT_LINES: u32 = 8;
+  const SKY: [f32; 3] = [0.86, 0.90, 0.95];
+  const DEAD: f32 = 0.15;
+  const JOY_R: f32 = 60.0;
+
+  thread_local! {
+      static NOOP: Closure<dyn FnMut(JsValue)> = Closure::new(|_: JsValue| {});
+  }
+
+  // ---------------- Shaders ----------------
+  const GROUND_VS: &str = r#"#version 300 es
+  uniform mat4 vp;uniform vec2 off;out vec2 lp;out vec2 gp;
+  void main(){vec2 c=vec2(gl_VertexID&1,gl_VertexID>>1)*2.-1.;lp=c*1500.;gp=lp+off;gl_Position=vp*vec4(lp.x,0.,lp.y,1.);}"#;
+

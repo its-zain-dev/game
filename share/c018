@@ -1,0 +1,10 @@
+          gl.draw_arrays(GL::TRIANGLE_STRIP, 0, 4);
+          // 2) الظلال
+          let ns = (self.shad.len() / 3) as i32;
+          if ns > 0 {
+              gl.disable(GL::DEPTH_TEST);
+              gl.enable(GL::BLEND);
+              gl.use_program(Some(&self.sp));
+              gl.uniform_matrix4fv_with_f32_array(self.s_vp.as_ref(), false, vp);
+              gl.bind_vertex_array(Some(&self.s_vao));
+              gl.bind_buffer(GL::ARRAY_BUFFER, Some(&self.sb));

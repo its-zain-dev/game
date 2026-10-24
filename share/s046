@@ -1,0 +1,9 @@
+                        for v in [o.x, o.y, o.z, o.yaw] { sbuf.extend_from_slice(&v.to_le_bytes()); }
+                        sbuf.extend_from_slice(&o.c.ts.to_le_bytes());
+                        sbuf.extend_from_slice(&[state_of(o), o.c.pitch as u8, o.c.roll as u8, o.c.hp]);
+                    }
+                    let _ = rp.tx.try_send(Arc::new(ws_frame(2, &sbuf)));
+                }
+                for &(id, h) in &seen {
+                    if let Some(p) = g.players.get_mut(&id) { p.seen = h; }
+                }

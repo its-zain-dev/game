@@ -1,0 +1,10 @@
+                                let o = &g.players[&oid];
+                                let (dx, dz) = (o.x - rp.x, o.z - rp.z);
+                                let d2 = dx * dx + dz * dz;
+                                if d2 <= VIEW * VIEW { vis.push((d2, oid)); }
+                            }
+                        }
+                    }
+                    if vis.len() > MAX_VISIBLE {
+                        vis.select_nth_unstable_by(MAX_VISIBLE, |a, b| a.0.total_cmp(&b.0));
+                        vis.truncate(MAX_VISIBLE);

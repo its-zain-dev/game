@@ -1,0 +1,7 @@
+//   [3, (id u16, r, g, b, len, name) * ]          معلومات لاعبين
+//   [4, id]                                       خروج
+//   [5, id, text]                                 شات
+//   [6, n u16, (id u16, flags, pitch, roll, hp)*n] حالة القريبين
+//   [8, from u16, ix, iy, iz f32, hp]             انضربت (دفع + صحة)
+//   [9, id u16, weapon, hit u16, ex, ey, ez f32]  أثر طلقة/ضربة لاعب ثاني
+//   [10, x, z f32]                                إعادة ظهور

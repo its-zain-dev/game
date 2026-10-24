@@ -1,0 +1,16 @@
+fn respawn(p: &mut Player, now: Instant, seed: &mut u64) {
+    let a = rnd(seed) * TAU;
+    let r = 3.0 + rnd(seed) * 10.0;
+    (p.x, p.y, p.z) = (a.cos() * r, 0.0, a.sin() * r);
+    p.c.hp = 100;
+    p.c.ammo = MAG;
+    p.c.reload_until = None;
+    p.c.dead_until = None;
+    p.c.frozen_until = now + Duration::from_millis(300);
+    p.moved = true;
+    let mut b = vec![10u8];
+    b.extend_from_slice(&p.x.to_le_bytes());
+    b.extend_from_slice(&p.z.to_le_bytes());
+    let _ = p.tx.try_send(Arc::new(ws_frame(2, &b)));
+}
+

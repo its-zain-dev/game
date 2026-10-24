@@ -1,0 +1,13 @@
+          gm.hud.set_text_content(Some("Disconnected... reconnecting"));
+          let loc = gm.win.location();
+          let cb = Closure::once_into_js(move || { let _ = loc.reload(); });
+          let _ = gm.win.set_timeout_with_callback_and_timeout_and_arguments_0(cb.unchecked_ref(), 2000);
+      });
+      ws.set_onclose(Some(onclose.as_ref().unchecked_ref()));
+      onclose.forget();
+
+      g.borrow_mut().ws = Some(ws);
+  }
+
+  // ---------------- Input binding ----------------
+  fn bind(g: &Rc<RefCell<Game>>) -> Result<(), JsValue> {

@@ -1,0 +1,12 @@
+        "/pkg/client_bg.wasm" => serve(&mut s, 2, WASM, "application/wasm", inm),
+        _ => reply(&mut s, "404 Not Found"),
+    }
+}
+
+fn reply(s: &mut TcpStream, status: &str) -> io::Result<()> {
+    s.write_all(format!("HTTP/1.1 {status}\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").as_bytes())
+}
+
+// ETag: إذا الملف ما تغيّر يرجع 304 بدون ما يرسله مرة ثانية
+fn serve(s: &mut TcpStream, i: usize, body: &[u8], ctype: &str, inm: Option<String>) -> io::Result<()> {
+    let tag = &etags()[i];

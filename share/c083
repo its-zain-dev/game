@@ -1,0 +1,6 @@
+          chatin: el(&doc, "chatin")?, joy: el(&doc, "joy")?, knob: el(&doc, "knob")?,
+          name_in, col_in, win, doc, canvas, gl, r,
+          ws: None, started: false, joined: false, my_id: 0, name: String::new(), rgb: [255; 3],
+          x: 0.0, y: 0.0, z: 0.0, vy: 0.0, yaw: 0.0, face: 0.0, pitch: 0.35, dist: 7.0, ph: 0.0, amp: 0.0, grounded: true,
+          keys: [false; 6], touch, chat_open: false,
+          joy_id: None, joy_o: (0.0, 0.0), joy_v: (0.0, 0.0), look_id: None, look_p: (0.0, 0.0), jump_tap: false,

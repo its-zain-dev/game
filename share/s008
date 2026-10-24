@@ -1,0 +1,11 @@
+            k.trim().eq_ignore_ascii_case(name).then(|| v.trim().to_owned())
+        })
+    };
+    let inm = header("if-none-match");
+    match path.as_str() {
+        "/ws" => match header("sec-websocket-key") {
+            Some(k) => ws_session(s, w, &k),
+            None => reply(&mut s, "400 Bad Request"),
+        },
+        "/" | "/index.html" => serve(&mut s, 0, INDEX, "text/html; charset=utf-8", inm),
+        "/pkg/client.js" => serve(&mut s, 1, JS, "text/javascript; charset=utf-8", inm),

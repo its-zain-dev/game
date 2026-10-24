@@ -1,0 +1,11 @@
+          self.r.draw(&self.gl, &vp, (self.x.rem_euclid(10.0), self.z.rem_euclid(10.0)));
+
+          let (lw, lh) = (cw as f32, ch as f32);
+          if let Some(l) = self.me_label.as_mut() { place(l, &vp, [0.0, self.y + 2.25, 0.0], lw, lh, true); }
+          for r in self.remotes.values_mut() {
+              let (x, z) = (r.x - self.x, r.z - self.z);
+              place(&mut r.label, &vp, [x, r.y + 2.25, z], lw, lh, x * x + z * z < LABEL_DIST * LABEL_DIST);
+          }
+      }
+
+      fn hud_update(&mut self, t: f64) {

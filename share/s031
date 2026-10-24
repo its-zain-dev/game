@@ -1,0 +1,13 @@
+            if p.c.voice_tokens < n { return; }
+            p.c.voice_tokens -= n;
+            let (x, z) = (p.x, p.z);
+            let mut b = Vec::with_capacity(m.len() + 2);
+            b.push(12);
+            b.extend_from_slice(&id.to_le_bytes());
+            b.extend_from_slice(&m[1..]);
+            send_near(g, x, z, VOICE_DIST, id, &Arc::new(ws_frame(2, &b)));
+        }
+        Some(13) if m.len() <= 32 => {
+            if let Some(p) = g.players.get(&id) { let _ = p.tx.try_send(Arc::new(ws_frame(2, m))); }
+        }
+        _ => {}

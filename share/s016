@@ -1,0 +1,17 @@
+        send_all(&g, &Arc::new(ws_frame(2, &b)));
+    }
+    drop(tx);
+    let _ = s.shutdown(Shutdown::Both);
+    res
+}
+
+fn send_all(g: &World, f: &Frame) {
+    for p in g.players.values() {
+        if p.joined() { let _ = p.tx.try_send(f.clone()); }
+    }
+}
+
+// client -> server
+//   [0]                                               keepalive
+//   [1, r, g, b, name...]                             دخول
+//   [2, x, y, z, yaw f32, flags, pitch i8, roll i8]   حركة (آخر 3 اختيارية)

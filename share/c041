@@ -1,0 +1,14 @@
+                      "Enter" => { e.prevent_default(); self.send_chat(); self.close_chat(); }
+                      "Escape" => self.close_chat(),
+                      _ => {}
+                  }
+              }
+              return;
+          }
+          let code = e.code();
+          let i = match code.as_str() {
+              "KeyW" | "ArrowUp" => 0,
+              "KeyS" | "ArrowDown" => 1,
+              "KeyA" | "ArrowLeft" => 2,
+              "KeyD" | "ArrowRight" => 3,
+              "ShiftLeft" | "ShiftRight" => 4,

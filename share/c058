@@ -1,0 +1,9 @@
+          let (k, pad) = if self.chat_open { ([false; 6], Pad::default()) } else { (self.keys, pad) };
+          let mut ix = (k[3] as i32 - k[2] as i32) as f32 + pad.lx;
+          let mut iy = (k[0] as i32 - k[1] as i32) as f32 - pad.ly;
+          if self.joy_id.is_some() { ix += self.joy_v.0; iy -= self.joy_v.1; }
+          let mag = ix.hypot(iy);
+          if mag > 1.0 { ix /= mag; iy /= mag; }
+          let mag = mag.min(1.0);
+          let run = k[4] || pad.run || (self.joy_id.is_some() && mag > 0.95);
+

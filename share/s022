@@ -1,0 +1,17 @@
+            voice_t: n, voice_tokens: VOICE_RATE * 0.5, ts: 0,
+        }
+    }
+}
+
+fn f32at(m: &[u8], i: usize) -> f32 { f32::from_le_bytes([m[i], m[i + 1], m[i + 2], m[i + 3]]) }
+
+fn send_near(g: &World, x: f32, z: f32, r: f32, skip: u16, f: &Frame) {
+    for (&oid, o) in &g.players {
+        if oid == skip || !o.joined() { continue; }
+        let (dx, dz) = (o.x - x, o.z - z);
+        if dx * dx + dz * dz <= r * r { let _ = o.tx.try_send(f.clone()); }
+    }
+}
+
+fn on_msg(w: &Shared, id: u16, m: &[u8]) {
+    let mut guard = lock(w);

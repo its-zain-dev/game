@@ -1,0 +1,7 @@
+#go{font-size:18px;padding:12px;border:0;border-radius:8px;background:#222;color:#fff;cursor:pointer}
+.tip{margin:0;font-size:12px;color:#777}
+#help{position:fixed;bottom:8px;right:8px;font-size:12px;color:#555;pointer-events:none}
+#tc{display:none}
+body[data-touch] #tc{display:block}
+body[data-touch] #help{display:none}
+#joy{position:fixed;left:0;top:0;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:rgba(0,0,0,.12);border:2px solid rgba(0,0,0,.2);display:none;pointer-events:none}

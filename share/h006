@@ -1,0 +1,7 @@
+#knob{position:absolute;left:33px;top:33px;width:50px;height:50px;border-radius:50%;background:rgba(0,0,0,.35)}
+#jump,#chatbtn{position:fixed;border:0;border-radius:50%;background:rgba(0,0,0,.25);color:#fff;touch-action:none}
+#jump{right:calc(24px + env(safe-area-inset-right));bottom:calc(30px + env(safe-area-inset-bottom));width:80px;height:80px;font-size:34px}
+#chatbtn{right:calc(120px + env(safe-area-inset-right));bottom:calc(40px + env(safe-area-inset-bottom));width:56px;height:56px;font-size:24px}
+</style>
+</head>
+<body>

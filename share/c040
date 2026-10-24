@@ -1,0 +1,13 @@
+          e.set_text_content(Some(&format!("{name}: {text}")));
+          let _ = self.chatlog.append_child(&e);
+          self.chat_lines.push_back((self.now, e));
+          while self.chatlog.child_element_count() > CHAT_LINES {
+              if let Some((_, old)) = self.chat_lines.pop_front() { old.remove(); } else { break; }
+          }
+      }
+
+      fn key(&mut self, e: &KeyboardEvent, down: bool) {
+          if !self.started { return; }
+          if self.chat_open {
+              if down {
+                  match e.key().as_str() {

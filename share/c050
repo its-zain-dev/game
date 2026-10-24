@@ -1,0 +1,13 @@
+                      r.tx = x; r.ty = y; r.tz = z; r.tyaw = yw;
+                  }
+                  let seen = &self.seen_buf;
+                  self.remotes.retain(|id, r| {
+                      let keep = seen.contains(id);
+                      if !keep { r.label.root.remove(); }
+                      keep
+                  });
+              }
+              14 if d.len() >= 3 => {
+                  let n = u16le(d, 1) as usize;
+                  if d.len() < 3 + n * 26 { return; }
+                  let now = self.now;

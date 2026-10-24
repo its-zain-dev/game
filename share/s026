@@ -1,0 +1,7 @@
+            if !(x.is_finite() && y.is_finite() && z.is_finite() && yaw.is_finite()) { return; }
+            let (flags, pitch, roll) = if m.len() >= 20 { (m[17] & 0x1F, m[18] as i8, m[19] as i8) } else { (0, 0, 0) };
+            if m.len() >= 24 { p.c.ts = u32::from_le_bytes([m[20], m[21], m[22], m[23]]); }
+            let dt = now.duration_since(p.last).as_secs_f32().min(1.0);
+            p.last = now;
+            let flying = flags & F_FLY != 0;
+            let knocked = now < p.c.knock_until;

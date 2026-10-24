@@ -1,0 +1,16 @@
+const RELOAD: Duration = Duration::from_millis(2200);
+const RESPAWN: Duration = Duration::from_secs(3);
+const BAT_RANGE: f32 = 3.2;
+const BAT_GAP: Duration = Duration::from_millis(550);
+const BAT_DMG: u8 = 15;
+const BAT_PUSH: f32 = 22.0;
+const BAT_UP: f32 = 9.0;
+const GUN_RANGE: f32 = 150.0;
+const GUN_GAP: Duration = Duration::from_millis(140);
+const GUN_DMG: u8 = 20;
+const GUN_DMG_HEAD: u8 = 50;
+const GUN_PUSH: f32 = 2.0;
+const VOICE_DIST: f32 = 40.0;
+const VOICE_RATE: f32 = 20000.0; // بايت/ثانية لكل لاعب
+
+struct Combat {

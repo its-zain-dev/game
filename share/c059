@@ -1,0 +1,12 @@
+          self.yaw -= pad.rx * 2.6 * dt;
+          self.pitch = (self.pitch + pad.ry * 1.8 * dt).clamp(-0.15, 1.3);
+          if pad.zin { self.dist *= 1.0 - dt * 1.5; }
+          if pad.zout { self.dist *= 1.0 + dt * 1.5; }
+          self.dist = self.dist.clamp(3.0, 25.0);
+
+          let (s, c) = self.yaw.sin_cos();
+          let (mx, mz) = (-s * iy + c * ix, -c * iy - s * ix);
+          let sp = if run { RUN } else { WALK };
+          let moving = mag > 0.01;
+          if moving {
+              self.x += mx * sp * dt;

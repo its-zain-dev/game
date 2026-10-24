@@ -1,0 +1,10 @@
+//! سيرفر العالم: HTTP + WebSocket + Interest Management + Chat
+//! بدون أي مكتبة خارجية، وملفات اللعبة مدموجة داخل الملف التنفيذي
+use std::collections::HashMap;
+use std::f32::consts::TAU;
+use std::io::{self, BufReader, Read, Write};
+use std::net::{Shutdown, TcpListener, TcpStream};
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::mpsc::{sync_channel, SyncSender};
+use std::sync::{Arc, Mutex, MutexGuard, OnceLock};
+use std::thread;

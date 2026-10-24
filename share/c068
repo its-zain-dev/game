@@ -1,0 +1,8 @@
+          self.fps_n += 1;
+          if t - self.fps_t < 500.0 { return; }
+          let fps = (self.fps_n as f64 * 1000.0 / (t - self.fps_t)) as u32;
+          self.fps_n = 0;
+          self.fps_t = t;
+          let s = if self.joined {
+              format!("FPS {fps} | players {} | X {:.0} Z {:.0}{}", self.remotes.len() + 1, self.x, self.z, if self.pad_on { " | 🎮" } else { "" })
+          } else if self.started { "Connecting...".into() } else { format!("FPS {fps}{}", if self.pad_on { " | 🎮 Start" } else { "" }) };

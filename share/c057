@@ -1,0 +1,14 @@
+          self.now = t;
+          let pad = poll_pad(&self.nav);
+          self.pad_on = pad.is_some();
+          let pad = pad.unwrap_or_default();
+          let want_join = !self.started && (pad.start || pad.a);
+          if self.joined { self.control(dt, pad); }
+          self.animate(dt);
+          self.net();
+          self.render();
+          self.hud_update(t);
+          want_join
+      }
+
+      fn control(&mut self, dt: f32, pad: Pad) {

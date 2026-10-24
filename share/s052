@@ -1,0 +1,11 @@
+              0..=19 => ((b & cc) | (!b & d), 0x5A827999),
+              20..=39 => (b ^ cc ^ d, 0x6ED9EBA1),
+              40..=59 => ((b & cc) | (b & d) | (cc & d), 0x8F1BBCDC),
+              _ => (b ^ cc ^ d, 0xCA62C1D6u32),
+          };
+          let t = a.rotate_left(5).wrapping_add(f).wrapping_add(e).wrapping_add(k).wrapping_add(*wi);
+          e = d; d = cc; cc = b.rotate_left(30); b = a; a = t;
+      }
+      for (x, v) in h.iter_mut().zip([a, b, cc, d, e]) { *x = x.wrapping_add(v); }
+  }
+  let mut out = [0u8; 20];

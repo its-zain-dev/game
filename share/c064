@@ -1,0 +1,12 @@
+              self.last_ka = self.now;
+          } else if self.now - self.last_ka > KEEPALIVE_MS {
+              self.send(&[0]);
+              self.last_ka = self.now;
+          }
+      }
+
+      fn render(&mut self) {
+          let dpr = self.win.device_pixel_ratio().min(2.0);
+          let (cw, ch) = (self.canvas.client_width().max(1), self.canvas.client_height().max(1));
+          let (w, h) = ((cw as f64 * dpr) as u32, (ch as f64 * dpr) as u32);
+          if self.canvas.width() != w || self.canvas.height() != h {

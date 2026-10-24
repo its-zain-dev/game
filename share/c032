@@ -1,0 +1,14 @@
+        r.jit = if e > r.jit { e } else { r.jit + (e - r.jit) * 0.01 };
+    }
+    r.buf.push_back((ts, p));
+    while r.buf.len() > 64 { r.buf.pop_front(); }
+}
+
+fn rs_sample(b: &VecDeque<(f64, [f32; 4])>, t: f64) -> Option<[f32; 4]> {
+    let (t0, a) = *b.front()?;
+    if t <= t0 { return Some(a); }
+    for i in 1..b.len() {
+        let (t1, q) = b[i];
+        if t <= t1 {
+            let (t0, a) = b[i - 1];
+            let k = ((t - t0) / (t1 - t0).max(1.0)) as f32;

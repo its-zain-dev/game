@@ -1,0 +1,10 @@
+                seen.clear();
+                for (&rid, rp) in &g.players {
+                    if !rp.joined() { continue; }
+                    vis.clear();
+                    let (cx, cz) = cell(rp.x, rp.z);
+                    for gx in cx - r..=cx + r {
+                        for gz in cz - r..=cz + r {
+                            let Some(ids) = grid.get(&(gx, gz)) else { continue };
+                            for &oid in ids {
+                                if oid == rid { continue; }

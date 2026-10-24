@@ -1,0 +1,8 @@
+              let (x, y) = (e.client_x() as f32, e.client_y() as f32);
+              if x < self.canvas.client_width() as f32 * 0.45 && self.joy_id.is_none() {
+                  self.joy_id = Some(e.pointer_id());
+                  self.joy_o = (x, y);
+                  self.joy_v = (0.0, 0.0);
+                  let st = self.joy.style();
+                  let _ = st.set_property("left", &format!("{x}px"));
+                  let _ = st.set_property("top", &format!("{y}px"));

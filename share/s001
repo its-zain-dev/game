@@ -1,0 +1,12 @@
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+
+const TICK: Duration = Duration::from_millis(16); // 60Hz
+const MAX_CONN: usize = 1000;
+const MAX_MSG: u64 = 512;
+const MAX_SPEED: f32 = 12.0;
+const MAX_Y: f32 = 400.0;
+const VIEW: f32 = 150.0; // كل لاعب يشوف اللي ضمن هالمسافة بس
+const CELL: f32 = 50.0; // حجم خلية الشبكة المكانية
+const MAX_VISIBLE: usize = 128; // أقصى عدد لاعبين ينرسلون لكل لاعب
+const NAME_MAX: usize = 16;
+const CHAT_MAX: usize = 100;

@@ -1,0 +1,13 @@
+              let m = dx.hypot(dz);
+              r.ph += m * 1.8;
+              let target = if dt > 0.0 { (m / dt / 3.0).min(1.0) } else { 0.0 };
+              r.amp += (target - r.amp) * (dt * 8.0).min(1.0);
+              expire(&mut r.label, now);
+          }
+          if let Some(l) = self.me_label.as_mut() { expire(l, now); }
+          while let Some((t0, _)) = self.chat_lines.front() {
+              if now - *t0 < CHAT_LINE_MS { break; }
+              if let Some((_, e)) = self.chat_lines.pop_front() { e.remove(); }
+          }
+      }
+

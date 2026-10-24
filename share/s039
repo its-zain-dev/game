@@ -1,0 +1,13 @@
+fn state_of(p: &Player) -> u8 {
+    p.c.flags | if p.c.reload_until.is_some() { S_RELOAD } else { 0 } | if p.c.hp == 0 { S_DEAD } else { 0 }
+}
+
+fn clean(b: &[u8], max: usize) -> String {
+    let s: String = String::from_utf8_lossy(b).chars().filter(|c| !c.is_control()).take(max).collect();
+    s.trim().to_owned()
+}
+
+fn broadcaster(w: Shared) {
+    let mut grid: HashMap<(i32, i32), Vec<u16>> = HashMap::new();
+    let mut vis: Vec<(f32, u16)> = Vec::new();
+    let mut seen: Vec<(u16, u64)> = Vec::new();

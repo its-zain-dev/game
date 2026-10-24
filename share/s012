@@ -1,0 +1,14 @@
+    let (tx, rx) = sync_channel::<Frame>(QUEUE);
+    let mut out = s.try_clone()?;
+    thread::Builder::new().stack_size(STACK).spawn(move || {
+        for f in rx {
+            if out.write_all(&f).is_err() { break; }
+        }
+        let _ = out.shutdown(Shutdown::Both);
+    })?;
+
+    let (id, sx, sz) = {
+        let mut g = lock(&w);
+        let mut id = g.next_id;
+        while id == 0 || g.players.contains_key(&id) { id = id.wrapping_add(1); }
+        g.next_id = id.wrapping_add(1);

@@ -1,0 +1,3 @@
+#chatlog{position:fixed;left:10px;bottom:60px;width:min(420px,70vw);display:flex;flex-direction:column;gap:3px;pointer-events:none}
+#chatlog div{background:rgba(0,0,0,.4);color:#fff;font-size:13px;padding:3px 8px;border-radius:6px;align-self:flex-start;max-width:100%;overflow-wrap:anywhere}
+#chatin{position:fixed;left:10px;bottom:12px;width:min(420px,80vw);display:none;font-size:16px;padding:8px 12px;border-radius:8px;border:0;outline:2px solid #222}

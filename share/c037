@@ -1,0 +1,17 @@
+          if self.doc.fullscreen_element().is_some() { self.doc.exit_fullscreen(); } else { self.fullscreen(); }
+      }
+
+      fn set_touch(&mut self) {
+          if !self.touch {
+              self.touch = true;
+              if let Some(b) = self.doc.body() { let _ = b.set_attribute("data-touch", "1"); }
+          }
+      }
+
+      fn send(&self, b: &[u8]) {
+          if let Some(ws) = &self.ws {
+              if ws.ready_state() == WebSocket::OPEN { let _ = ws.send_with_u8_array(b); }
+          }
+      }
+
+      fn send_join(&self) {

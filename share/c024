@@ -1,0 +1,12 @@
+      doc.get_element_by_id(id).ok_or_else(|| JsValue::from_str(id))?.dyn_into::<T>().map_err(Into::into)
+  }
+
+  fn on(t: &EventTarget, ev: &str, f: impl FnMut(Event) + 'static) {
+      let c = Closure::<dyn FnMut(Event)>::new(f);
+      let _ = t.add_event_listener_with_callback(ev, c.as_ref().unchecked_ref());
+      c.forget();
+  }
+
+  fn show(e: &HtmlElement, v: bool) { let _ = e.style().set_property("display", if v { "block" } else { "none" }); }
+
+  fn css_rgb(c: [f32; 3]) -> String {

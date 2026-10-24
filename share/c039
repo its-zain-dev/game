@@ -1,0 +1,15 @@
+          let _ = self.chatin.blur();
+          show(&self.chatin, false);
+          if !self.touch { self.canvas.request_pointer_lock(); }
+      }
+
+      fn send_chat(&self) {
+          let t: String = self.chatin.value().trim().chars().take(100).collect();
+          if t.is_empty() { return; }
+          let mut b = vec![3u8];
+          b.extend_from_slice(t.as_bytes());
+          self.send(&b);
+      }
+
+      fn add_chat(&mut self, name: &str, text: &str) {
+          let Ok(e) = self.doc.create_element("div") else { return };

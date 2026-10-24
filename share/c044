@@ -1,0 +1,13 @@
+                  let _ = self.knob.style().set_property("transform", "translate(0,0)");
+                  show(&self.joy, true);
+              } else if self.look_id.is_none() {
+                  self.look_id = Some(e.pointer_id());
+                  self.look_p = (x, y);
+              }
+          } else if self.doc.pointer_lock_element().is_none() {
+              self.canvas.request_pointer_lock();
+          }
+      }
+
+      fn pmove(&mut self, e: &PointerEvent) {
+          let id = Some(e.pointer_id());

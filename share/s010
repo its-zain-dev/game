@@ -1,0 +1,12 @@
+    if inm.as_deref() == Some(tag.as_str()) {
+        return s.write_all(format!("HTTP/1.1 304 Not Modified\r\nETag: {tag}\r\nCache-Control: no-cache\r\nConnection: close\r\n\r\n").as_bytes());
+    }
+    let h = format!(
+        "HTTP/1.1 200 OK\r\nContent-Type: {ctype}\r\nContent-Length: {}\r\nETag: {tag}\r\nCache-Control: no-cache\r\nX-Content-Type-Options: nosniff\r\nConnection: close\r\n\r\n",
+        body.len()
+    );
+    s.write_all(h.as_bytes())?;
+    s.write_all(body)
+}
+
+// ---------------- WebSocket ----------------

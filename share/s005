@@ -1,0 +1,12 @@
+    let w: Shared = Arc::new(Mutex::new(World { players: HashMap::new(), next_id: 1, dirty: false }));
+    {
+        let w = w.clone();
+        thread::Builder::new().name("tick".into()).spawn(move || broadcaster(w)).expect("tick");
+    }
+    for s in listener.incoming() {
+        let Ok(s) = s else { continue };
+        if CONNS.fetch_add(1, Ordering::Relaxed) >= MAX_CONN {
+            CONNS.fetch_sub(1, Ordering::Relaxed);
+            continue;
+        }
+        let w = w.clone();

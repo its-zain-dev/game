@@ -1,0 +1,15 @@
+      let (yx, yy, yz) = (zy * xz - zz * xy, zz * xx - zx * xz, zx * xy - zy * xx);
+      [xx, yx, zx, 0., xy, yy, zy, 0., xz, yz, zz, 0.,
+       -(xx * e[0] + xy * e[1] + xz * e[2]), -(yx * e[0] + yy * e[1] + yz * e[2]), -(zx * e[0] + zy * e[1] + zz * e[2]), 1.]
+  }
+
+  fn mul(a: &[f32; 16], b: &[f32; 16]) -> [f32; 16] {
+      let mut o = [0.0; 16];
+      for c in 0..4 { for r in 0..4 {
+          let mut s = 0.0;
+          for k in 0..4 { s += a[k * 4 + r] * b[c * 4 + k]; }
+          o[c * 4 + r] = s;
+      } }
+      o
+  }
+

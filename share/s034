@@ -1,0 +1,13 @@
+            p.c.ammo -= 1;
+        }
+        p.c.next_shot = now + gap;
+        (p.x, p.y + EYE, p.z)
+    };
+    let mut hit = 0u16;
+    if target != 0 && target != id {
+        if let Some(t) = g.players.get(&target) {
+            if t.joined() && t.c.hp > 0 {
+                let (vx, vy, vz) = (t.x - sx, t.y + 1.0 - sy, t.z - sz);
+                let along = vx * dx + vy * dy + vz * dz;
+                let (px, py, pz) = (vx - dx * along, vy - dy * along, vz - dz * along);
+                let perp = (px * px + py * py + pz * pz).sqrt();

@@ -1,0 +1,12 @@
+            if n != (p.x, p.y, p.z, p.yaw) || st != (p.c.flags, p.c.pitch, p.c.roll) {
+                (p.x, p.y, p.z, p.yaw) = n;
+                (p.c.flags, p.c.pitch, p.c.roll) = st;
+                p.moved = true;
+                g.dirty = true;
+            }
+        }
+        Some(3) if m.len() >= 2 => {
+            let Some(p) = g.players.get_mut(&id) else { return };
+            if !p.joined() { return; }
+            if now.duration_since(p.last_chat) < CHAT_GAP { return; }
+            let text = clean(&m[1..], CHAT_MAX);
