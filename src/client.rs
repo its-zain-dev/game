@@ -152,7 +152,23 @@
           })
       }
 
-      fn begin(&mut self) { self.inst.clear(); self.shad.clear(); }
+      fn wings(&mut self, x: f32, y: f32, z: f32, yaw: f32, roll: f32, time: f32, color: [f32; 3]) {
+    let (sn, cs) = yaw.sin_cos();
+    let flap = (time * 5.0).sin() * 0.09;
+    for side in [-1.0f32, 1.0] {
+        for i in 0..5 {
+            let span = 0.52 + i as f32 * 0.39;
+            let lateral = side * span;
+            let sweep = 0.12 + i as f32 * 0.13;
+            let lift = lateral * roll.sin() + span * flap;
+            let c = color.map(|v| (v * 0.55 + 0.35).min(1.0));
+            self.bx(
+                [x + cs * lateral + sn * sweep, y + 1.25 + lift, z - sn * lateral + cs * sweep, yaw],
+                [0.43, 0.09, 0.85 - i as f32 * 0.11], c);
+        }
+    }
+}
+fn begin(&mut self) { self.inst.clear(); self.shad.clear(); }
 
       #[inline]
       fn bx(&mut self, p: [f32; 4], s: [f32; 3], c: [f32; 3]) {
@@ -379,7 +395,14 @@ fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
   // NET_PING_V1
 #[derive(Default)]
 struct NetPing { last: f64, seq: u32, waiting: Option<(u32, f64)>, rtt: Option<f64> }
+// FLIGHT_V1
+#[derive(Default)]
+struct FlightState {
+    active: bool, sent_active: bool, held: bool,
+    last_jump: f64, speed: f32, lift: f32, roll: f32,
+}
 struct Game {
+    fly: FlightState,
     ping: NetPing,
       win: Window, doc: Document, nav: Navigator, canvas: HtmlCanvasElement, gl: GL, r: Renderer,
       ui: HtmlElement, hud: HtmlElement, labels: HtmlElement, chatlog: HtmlElement, chatin: HtmlInputElement,
@@ -690,9 +713,65 @@ fn on_net(&mut self, d: &[u8]) {
           want_join
       }
 
-      fn control(&mut self, dt: f32, pad: Pad) {
+      fn flight_input(&mut self, down: bool) -> bool {
+    let pressed = down && !self.fly.held;
+    self.fly.held = down;
+    if pressed {
+        if self.now - self.fly.last_jump <= 330.0 {
+            self.fly.active = !self.fly.active;
+            self.fly.last_jump = -1000.0;
+            if self.fly.active {
+                self.fly.speed = 23.0;
+                self.fly.lift = 9.0;
+                self.grounded = false;
+                self.y = self.y.max(0.15);
+            } else {
+                self.fly.lift = 0.0;
+            }
+        } else {
+            self.fly.last_jump = self.now;
+            if self.fly.active {
+                self.fly.lift = (self.fly.lift + 8.0).min(12.0);
+                self.fly.speed = (self.fly.speed + 3.0).min(48.0);
+            }
+        }
+    }
+    pressed
+}
+
+fn flight_step(&mut self, dt: f32, steer: f32, throttle: f32) {
+    self.yaw -= steer * 1.6 * dt;
+    let angle = (-self.pitch).clamp(-1.15, 0.45);
+    let target_speed = (23.0 + throttle * 10.0 - angle.sin() * 12.0).clamp(10.0, 48.0);
+    self.fly.speed += (target_speed - self.fly.speed) * (dt * 1.6).min(1.0);
+    let stall = ((16.0 - self.fly.speed) / 6.0).clamp(0.0, 1.0);
+    self.fly.roll += (-steer * 0.65 - self.fly.roll) * (dt * 5.0).min(1.0);
+    self.fly.lift *= (-dt * 1.8).exp();
+    let horizontal = self.fly.speed * angle.cos();
+    self.x -= self.yaw.sin() * horizontal * dt;
+    self.z -= self.yaw.cos() * horizontal * dt;
+    self.vy = (angle.sin() * self.fly.speed + self.fly.lift - 1.8 - stall * 12.0).clamp(-45.0, 22.0);
+    self.y += self.vy * dt;
+    self.face = self.yaw;
+    self.ph += dt * 4.0;
+    self.amp *= (-dt * 8.0).exp();
+    self.grounded = false;
+    if self.y >= 400.0 { self.y = 400.0; self.vy = self.vy.min(0.0); }
+    if self.y <= 0.0 {
+        self.y = 0.0;
+        self.vy = 0.0;
+        self.grounded = true;
+        self.fly.active = false;
+        self.fly.lift = 0.0;
+        self.fly.roll = 0.0;
+    }
+}
+fn control(&mut self, dt: f32, pad: Pad) {
           let (k, pad) = if self.chat_open { ([false; 6], Pad::default()) } else { (self.keys, pad) };
-          let mut ix = (k[3] as i32 - k[2] as i32) as f32 + pad.lx;
+          let jump_down = !self.chat_open && (k[5] || pad.a || self.jump_tap);
+    let jump_pressed = self.flight_input(jump_down);
+    self.jump_tap = false;
+    let mut ix = (k[3] as i32 - k[2] as i32) as f32 + pad.lx;
           let mut iy = (k[0] as i32 - k[1] as i32) as f32 - pad.ly;
           if self.joy_id.is_some() { ix += self.joy_v.0; iy -= self.joy_v.1; }
           let mag = ix.hypot(iy);
@@ -706,7 +785,12 @@ fn on_net(&mut self, d: &[u8]) {
           if pad.zout { self.dist *= 1.0 + dt * 1.5; }
           self.dist = self.dist.clamp(3.0, 25.0);
 
-          let (s, c) = self.yaw.sin_cos();
+          if self.fly.active {
+    self.flight_step(dt, ix, iy);
+    return;
+}
+self.fly.roll = 0.0;
+let (s, c) = self.yaw.sin_cos();
           let (mx, mz) = (-s * iy + c * ix, -c * iy - s * ix);
           let sp = if run { RUN } else { WALK };
           let moving = mag > 0.01;
@@ -718,7 +802,7 @@ fn on_net(&mut self, d: &[u8]) {
           }
           self.amp += ((if moving { mag.max(0.4) } else { 0.0 }) - self.amp) * (dt * 10.0).min(1.0);
 
-          if (k[5] || pad.a || self.jump_tap) && self.grounded { self.vy = JUMP; self.grounded = false; }
+          if jump_pressed && self.grounded { self.vy = JUMP; self.grounded = false; }
           self.jump_tap = false;
           self.vy -= GRAVITY * dt;
           self.y += self.vy * dt;
@@ -751,9 +835,13 @@ fn on_net(&mut self, d: &[u8]) {
           if !self.joined || self.now - self.last_send < SEND_MS { return; }
           self.last_send = self.now;
           let cur = [self.x, self.y, self.z, self.face];
-          if cur != self.sent {
+          if cur != self.sent || self.fly.active != self.fly.sent_active || self.fly.active {
               let mut b = [0u8; 24];
               b[0] = 2;
+    b[17] = if self.fly.active { 1 } else { 0 };
+    b[18] = ((-self.pitch * 60.0).clamp(-127.0, 127.0) as i8) as u8;
+    b[19] = ((self.fly.roll * 60.0).clamp(-127.0, 127.0) as i8) as u8;
+    self.fly.sent_active = self.fly.active;
               for (i, v) in cur.iter().enumerate() { b[1 + i * 4..5 + i * 4].copy_from_slice(&v.to_le_bytes()); }
               b[20..24].copy_from_slice(&(self.now as u32).to_le_bytes());
               self.send(&b);
@@ -791,7 +879,19 @@ fn on_net(&mut self, d: &[u8]) {
               if x.abs() > 1500.0 || z.abs() > 1500.0 { continue; }
               self.r.hero(x, r.y, z, r.yaw, r.rgb, r.ph, r.amp);
           }
-          self.r.draw(&self.gl, &vp, (self.x.rem_euclid(10.0), self.z.rem_euclid(10.0)));
+          if self.joined && self.fly.active {
+    self.r.wings(0.0, self.y, 0.0, self.face, self.fly.roll, (self.now * 0.001) as f32, self.rgb.map(|v| v as f32 / 255.0));
+}
+for remote in self.remotes.values() {
+    if remote.st[0] & 1 != 0 {
+        let x = remote.x - self.x;
+        let z = remote.z - self.z;
+        if x.abs() <= 1500.0 && z.abs() <= 1500.0 {
+            self.r.wings(x, remote.y, z, remote.yaw, remote.st[2] as i8 as f32 / 60.0, (self.now * 0.001) as f32, remote.rgb);
+        }
+    }
+}
+self.r.draw(&self.gl, &vp, (self.x.rem_euclid(10.0), self.z.rem_euclid(10.0)));
 
           let (lw, lh) = (cw as f32, ch as f32);
           if let Some(l) = self.me_label.as_mut() { place(l, &vp, [0.0, self.y + 2.25, 0.0], lw, lh, true); }
@@ -813,6 +913,9 @@ fn on_net(&mut self, d: &[u8]) {
           let s = if self.joined {
     let ping = self.ping.rtt.map(|v| format!("{v:.0} ms")).unwrap_or_else(|| "--".into());
     format!("{s} | Ping {ping}")
+} else { s };
+let s = if self.joined && self.fly.active {
+    format!("{s} | FLY {:.0} m/s | ALT {:.0} m{}", self.fly.speed, self.y, if self.fly.speed < 16.0 { " | STALL" } else { "" })
 } else { s };
 self.hud.set_text_content(Some(&s));
       }
@@ -975,6 +1078,7 @@ self.hud.set_text_content(Some(&s));
       if touch { if let Some(b) = doc.body() { let _ = b.set_attribute("data-touch", "1"); } }
 
       let g = Rc::new(RefCell::new(Game {
+    fly: FlightState { last_jump: -1000.0, ..Default::default() },
     ping: NetPing::default(),
           nav: win.navigator(),
           ui: el(&doc, "ui")?, hud: el(&doc, "hud")?, labels: el(&doc, "labels")?, chatlog: el(&doc, "chatlog")?,
