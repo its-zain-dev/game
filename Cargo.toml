@@ -23,7 +23,7 @@
   js-sys = "0.3"
   web-sys = { version = "0.3", features = [
       # الصفحة
-      "Window",
+      "Window", "Screen", "MediaQueryList", "ScreenOrientation", "OrientationLockType", "HtmlInputElement", "HtmlButtonElement", "HtmlDivElement", "InputEvent", "AddEventListenerOptions", "DomTokenList", "DomRectReadOnly", "VisibilityState", "Gamepad", "GamepadButton",
       "Document",
       "Element",
       "HtmlElement",

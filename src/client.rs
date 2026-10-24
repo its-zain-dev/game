@@ -821,7 +821,7 @@
       }));
       if let (Some(w), Some(cb)) = (web_sys::window(), f2.borrow().as_ref()) {
           let _ = w.request_animation_frame(cb.as_ref().unchecked_ref());
-      }
+      };
   }
 
   // ---------------- Entry ----------------
