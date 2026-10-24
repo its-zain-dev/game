@@ -376,7 +376,11 @@ fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
     if let Some(p) = rs_sample(&r.buf, t) { r.tx = p[0]; r.ty = p[1].max(0.0); r.tz = p[2]; r.tyaw = p[3]; }
 }
 
-  struct Game {
+  // NET_PING_V1
+#[derive(Default)]
+struct NetPing { last: f64, seq: u32, waiting: Option<(u32, f64)>, rtt: Option<f64> }
+struct Game {
+    ping: NetPing,
       win: Window, doc: Document, nav: Navigator, canvas: HtmlCanvasElement, gl: GL, r: Renderer,
       ui: HtmlElement, hud: HtmlElement, labels: HtmlElement, chatlog: HtmlElement, chatin: HtmlInputElement,
       joy: HtmlElement, knob: HtmlElement, name_in: HtmlInputElement, col_in: HtmlInputElement,
@@ -537,9 +541,42 @@ fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
           if id == self.look_id { self.look_id = None; }
       }
 
-      fn on_net(&mut self, d: &[u8]) {
+      fn ping_clock(&self) -> f64 {
+    self.win.performance().map(|p| p.now()).unwrap_or(self.now)
+}
+fn ping_tick(&mut self) {
+    if !self.joined { return; }
+    let now = self.ping_clock();
+    if let Some((_, sent)) = self.ping.waiting {
+        if now - sent < 3000.0 { return; }
+        self.ping.waiting = None;
+        self.ping.rtt = None;
+    }
+    if now - self.ping.last < 1000.0 { return; }
+    if !self.ws.as_ref().map(|w| w.ready_state() == WebSocket::OPEN).unwrap_or(false) { return; }
+    self.ping.seq = self.ping.seq.wrapping_add(1);
+    let mut b = [0u8; 5];
+    b[0] = 13;
+    b[1..5].copy_from_slice(&self.ping.seq.to_le_bytes());
+    self.ping.last = now;
+    self.ping.waiting = Some((self.ping.seq, now));
+    self.send(&b);
+}
+fn ping_pong(&mut self, d: &[u8]) {
+    if d.len() != 5 { return; }
+    let seq = u32::from_le_bytes([d[1], d[2], d[3], d[4]]);
+    if let Some((expected, sent)) = self.ping.waiting {
+        if seq == expected {
+            let elapsed = self.ping_clock() - sent;
+            if elapsed.is_finite() && elapsed >= 0.0 { self.ping.rtt = Some(elapsed); }
+            self.ping.waiting = None;
+        }
+    }
+}
+fn on_net(&mut self, d: &[u8]) {
           let Some(&t) = d.first() else { return };
           match t {
+    13 if d.len() == 5 => { self.ping_pong(d); }
               1 if d.len() >= 11 => {
                   self.my_id = u16le(d, 1);
                   self.x = f32le(d, 3);
@@ -647,6 +684,7 @@ fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
           if self.joined { self.control(dt, pad); }
           self.animate(dt);
           self.net();
+    self.ping_tick();
           self.render();
           self.hud_update(t);
           want_join
@@ -772,7 +810,11 @@ fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
           let s = if self.joined {
               format!("FPS {fps} | players {} | X {:.0} Z {:.0}{}", self.remotes.len() + 1, self.x, self.z, if self.pad_on { " | 🎮" } else { "" })
           } else if self.started { "Connecting...".into() } else { format!("FPS {fps}{}", if self.pad_on { " | 🎮 Start" } else { "" }) };
-          self.hud.set_text_content(Some(&s));
+          let s = if self.joined {
+    let ping = self.ping.rtt.map(|v| format!("{v:.0} ms")).unwrap_or_else(|| "--".into());
+    format!("{s} | Ping {ping}")
+} else { s };
+self.hud.set_text_content(Some(&s));
       }
   }
 
@@ -933,6 +975,7 @@ fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
       if touch { if let Some(b) = doc.body() { let _ = b.set_attribute("data-touch", "1"); } }
 
       let g = Rc::new(RefCell::new(Game {
+    ping: NetPing::default(),
           nav: win.navigator(),
           ui: el(&doc, "ui")?, hud: el(&doc, "hud")?, labels: el(&doc, "labels")?, chatlog: el(&doc, "chatlog")?,
           chatin: el(&doc, "chatin")?, joy: el(&doc, "joy")?, knob: el(&doc, "knob")?,
