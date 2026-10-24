@@ -10,18 +10,18 @@ use std::sync::{Arc, Mutex, MutexGuard, OnceLock};
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
-const TICK: Duration = Duration::from_millis(50); // 20Hz
+const TICK: Duration = Duration::from_millis(16); // 60Hz
 const MAX_CONN: usize = 1000;
 const MAX_MSG: u64 = 512;
 const MAX_SPEED: f32 = 12.0;
-const MAX_Y: f32 = 4.0;
+const MAX_Y: f32 = 400.0;
 const VIEW: f32 = 150.0; // كل لاعب يشوف اللي ضمن هالمسافة بس
 const CELL: f32 = 50.0; // حجم خلية الشبكة المكانية
 const MAX_VISIBLE: usize = 128; // أقصى عدد لاعبين ينرسلون لكل لاعب
 const NAME_MAX: usize = 16;
 const CHAT_MAX: usize = 100;
 const CHAT_GAP: Duration = Duration::from_millis(700);
-const QUEUE: usize = 64;
+const QUEUE: usize = 256;
 const STACK: usize = 128 * 1024;
 const WS_GUID: &str = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
@@ -45,6 +45,7 @@ struct Player {
     last_chat: Instant,
     moved: bool,
     seen: u64, // hash لآخر مجموعة لاعبين انرسلت
+    c: Combat,
 }
 impl Player {
     fn joined(&self) -> bool { self.info.is_some() }
@@ -176,7 +177,7 @@ fn ws_session(mut s: TcpStream, w: Shared, key: &str) -> io::Result<()> {
         let now = Instant::now();
         g.players.insert(id, Player {
             tx: tx.clone(), info: None, x: sx, y: 0.0, z: sz, yaw: 0.0,
-            last: now, last_chat: now.checked_sub(CHAT_GAP).unwrap_or(now), moved: false, seen: 0,
+            last: now, last_chat: now.checked_sub(CHAT_GAP).unwrap_or(now), moved: false, seen: 0, c: Combat::default(),
         });
         (id, sx, sz)
     };

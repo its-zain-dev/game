@@ -18,7 +18,7 @@
   const RUN: f32 = 10.0;
   const GRAVITY: f32 = 25.0;
   const JUMP: f32 = 9.0;
-  const SEND_MS: f64 = 50.0;
+  const SEND_MS: f64 = 16.0;
   const KEEPALIVE_MS: f64 = 5000.0;
   const LABEL_DIST: f32 = 60.0;
   const BUBBLE_MS: f64 = 5000.0;
@@ -613,7 +613,7 @@
       }
 
       fn animate(&mut self, dt: f32) {
-          let k = 1.0 - (-dt * 12.0).exp();
+          let k = 1.0 - (-dt * 25.0).exp();
           let now = self.now;
           for r in self.remotes.values_mut() {
               let (dx, dz) = ((r.tx - r.x) * k, (r.tz - r.z) * k);
