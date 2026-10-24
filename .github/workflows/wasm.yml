@@ -1,0 +1,18 @@
+name: build-wasm
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - run: curl -sSfL https://github.com/rustwasm/wasm-pack/releases/download/v0.13.1/wasm-pack-v0.13.1-x86_64-unknown-linux-musl.tar.gz | tar xz --strip-components=1 -C ~/.cargo/bin --wildcards '*/wasm-pack'
+      - run: wasm-pack build --release --target web --no-typescript --out-dir pkg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pkg
+          path: |
+            pkg/client.js
+            pkg/client_bg.wasm

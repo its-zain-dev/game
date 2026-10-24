@@ -1,0 +1,84 @@
+  [package]
+  name = "world"
+  version = "0.1.0"
+  edition = "2021"
+
+  # ملف اللعبة (WASM)
+  [lib]
+  name = "client"
+  path = "src/client.rs"
+  crate-type = ["cdylib", "rlib"]
+
+  # السيرفر
+  [[bin]]
+  name = "world"
+  path = "src/main.rs"
+
+  # السيرفر ما يحتاج أي مكتبة، فهذا القسم يبقى فارغ
+  [dependencies]
+
+  # هذي المكتبات تنبني بس للـ WASM (بالتلفون)، والاستضافة تتجاوزها
+  [target.'cfg(target_arch = "wasm32")'.dependencies]
+  wasm-bindgen = "=0.2.129"
+  js-sys = "0.3"
+  web-sys = { version = "0.3", features = [
+      # الصفحة
+      "Window",
+      "Document",
+      "Element",
+      "HtmlElement",
+      "Node",
+      "CssStyleDeclaration",
+      "DomRect",
+      "Location",
+      "Navigator",
+      "Performance",
+      "Storage",
+      "console",
+
+      # الرسم 2D
+      "HtmlCanvasElement",
+      "CanvasRenderingContext2d",
+      "TextMetrics",
+      "ImageData",
+      "HtmlImageElement",
+
+      # WebGL
+      "WebGlRenderingContext",
+      "WebGl2RenderingContext",
+      "WebGlProgram",
+      "WebGlShader",
+      "WebGlBuffer",
+      "WebGlUniformLocation",
+      "WebGlTexture",
+      "WebGlVertexArrayObject",
+      "WebGlFramebuffer",
+
+      # الأحداث والتحكم
+      "Event",
+      "EventTarget",
+      "KeyboardEvent",
+      "MouseEvent",
+      "PointerEvent",
+      "WheelEvent",
+      "TouchEvent",
+      "TouchList",
+      "Touch",
+      "FocusEvent",
+
+      # الشبكة
+      "WebSocket",
+      "MessageEvent",
+      "BinaryType",
+      "CloseEvent",
+      "ErrorEvent",
+      "Blob",
+      "FileReader",
+  ] }
+
+  [profile.release]
+  opt-level = 3
+  lto = true
+  codegen-units = 1
+  panic = "abort"
+  strip = true
