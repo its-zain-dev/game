@@ -397,9 +397,11 @@ fn rs_interp(r: &mut Remote, now: f64, dt: f32) {
 struct NetPing { last: f64, seq: u32, waiting: Option<(u32, f64)>, rtt: Option<f64> }
 // FLIGHT_V1
 #[derive(Default)]
+// FLIGHT_V2
 struct FlightState {
     active: bool, sent_active: bool, held: bool,
     last_jump: f64, speed: f32, lift: f32, roll: f32,
+    vx: f32, vz: f32, pitch: f32, stall: bool,
 }
 struct Game {
     fly: FlightState,
@@ -721,18 +723,26 @@ fn on_net(&mut self, d: &[u8]) {
             self.fly.active = !self.fly.active;
             self.fly.last_jump = -1000.0;
             if self.fly.active {
-                self.fly.speed = 23.0;
-                self.fly.lift = 9.0;
+                let (sy, cy) = self.yaw.sin_cos();
+                let boost = 14.0;
+                self.fly.vx = -sy * boost;
+                self.fly.vz = -cy * boost;
+                self.vy = self.vy.max(5.0);
+                self.fly.pitch = 0.35;
+                self.fly.roll = 0.0;
+                self.fly.lift = 1.5;
+                self.fly.speed = boost;
                 self.grounded = false;
-                self.y = self.y.max(0.15);
+                self.y = self.y.max(0.2);
             } else {
                 self.fly.lift = 0.0;
+                self.fly.stall = false;
             }
         } else {
             self.fly.last_jump = self.now;
             if self.fly.active {
-                self.fly.lift = (self.fly.lift + 8.0).min(12.0);
-                self.fly.speed = (self.fly.speed + 3.0).min(48.0);
+                self.fly.lift = (self.fly.lift + 1.0).min(3.0);
+                self.vy += 2.5;
             }
         }
     }
@@ -740,23 +750,65 @@ fn on_net(&mut self, d: &[u8]) {
 }
 
 fn flight_step(&mut self, dt: f32, steer: f32, throttle: f32) {
-    self.yaw -= steer * 1.6 * dt;
-    let angle = (-self.pitch).clamp(-1.15, 0.45);
-    let target_speed = (23.0 + throttle * 10.0 - angle.sin() * 12.0).clamp(10.0, 48.0);
-    self.fly.speed += (target_speed - self.fly.speed) * (dt * 1.6).min(1.0);
-    let stall = ((16.0 - self.fly.speed) / 6.0).clamp(0.0, 1.0);
-    self.fly.roll += (-steer * 0.65 - self.fly.roll) * (dt * 5.0).min(1.0);
-    self.fly.lift *= (-dt * 1.8).exp();
-    let horizontal = self.fly.speed * angle.cos();
-    self.x -= self.yaw.sin() * horizontal * dt;
-    self.z -= self.yaw.cos() * horizontal * dt;
-    self.vy = (angle.sin() * self.fly.speed + self.fly.lift - 1.8 - stall * 12.0).clamp(-45.0, 22.0);
-    self.y += self.vy * dt;
+    const G: f32 = 9.81;
+    const MASS: f32 = 80.0;
+    const HALF_RHO_S: f32 = 0.5 * 1.225 * 9.0;
+    const THRUST: f32 = 220.0;
+    const STALL_AOA: f32 = 0.28;
+    let dt = dt.min(0.05);
+    let mut vel = [self.fly.vx, self.vy, self.fly.vz];
+    let speed = (vel[0] * vel[0] + vel[1] * vel[1] + vel[2] * vel[2]).sqrt();
+    let authority = (speed / 18.0).clamp(0.25, 1.0);
+    self.fly.roll += (steer * 1.1 - self.fly.roll) * (dt * 3.5 * authority).min(1.0);
+    self.fly.pitch = (self.fly.pitch - throttle * 1.3 * authority * dt).clamp(-1.25, 1.25);
+    self.fly.pitch -= self.fly.pitch * 0.15 * dt;
+    self.yaw -= G * self.fly.roll.tan().clamp(-3.0, 3.0) / speed.max(10.0) * dt;
+    let (sy, cy) = self.yaw.sin_cos();
+    let (sp, cp) = self.fly.pitch.sin_cos();
+    let (sr, cr) = self.fly.roll.sin_cos();
+    let fwd = [-sy * cp, sp, -cy * cp];
+    let right = [cy, 0.0, -sy];
+    let up0 = [sy * sp, cp, cy * sp];
+    let up = [up0[0] * cr + right[0] * sr, up0[1] * cr, up0[2] * cr + right[2] * sr];
+    let dot = |a: [f32; 3], b: [f32; 3]| a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    let (cl, cd, aoa) = if speed > 0.5 {
+        let vf = dot(vel, fwd);
+        let vu = dot(vel, up);
+        let aoa = (-vu).atan2(vf.max(0.01));
+        let a = aoa.abs();
+        let cl = if a < STALL_AOA { 5.0 * aoa } else { (5.0 * STALL_AOA - (a - STALL_AOA) * 4.0).max(0.25) * aoa.signum() };
+        let cd = 0.035 + 0.05 * cl * cl + if a > STALL_AOA { 0.35 * ((a - STALL_AOA) * 4.0).min(1.0) } else { 0.0 };
+        (cl, cd, aoa)
+    } else { (0.0, 0.05, 0.0) };
+    self.fly.stall = aoa.abs() > STALL_AOA && speed > 3.0;
+    let q = HALF_RHO_S * speed * speed;
+    let vhat = if speed > 0.01 { [vel[0] / speed, vel[1] / speed, vel[2] / speed] } else { fwd };
+    let k = dot(up, vhat);
+    let mut ld = [up[0] - vhat[0] * k, up[1] - vhat[1] * k, up[2] - vhat[2] * k];
+    let ln = (ld[0] * ld[0] + ld[1] * ld[1] + ld[2] * ld[2]).sqrt();
+    if ln > 1e-3 { ld = [ld[0] / ln, ld[1] / ln, ld[2] / ln]; } else { ld = up; }
+    self.fly.lift *= (-dt * 1.2).exp();
+    let thrust = THRUST + self.fly.lift * 120.0;
+    let lift = q * cl;
+    let drag = q * cd;
+    let mut acc = [0.0f32; 3];
+    for i in 0..3 { acc[i] = (ld[i] * lift - vhat[i] * drag + fwd[i] * thrust) / MASS; }
+    acc[1] -= G;
+    for i in 0..3 { vel[i] += acc[i] * dt; }
+    let s2 = (vel[0] * vel[0] + vel[1] * vel[1] + vel[2] * vel[2]).sqrt();
+    if s2 > 95.0 { for v in vel.iter_mut() { *v *= 95.0 / s2; } }
+    self.x += vel[0] * dt;
+    self.y += vel[1] * dt;
+    self.z += vel[2] * dt;
+    self.fly.vx = vel[0];
+    self.vy = vel[1];
+    self.fly.vz = vel[2];
+    self.fly.speed = s2;
     self.face = self.yaw;
-    self.ph += dt * 4.0;
+    self.ph += dt * (2.0 + self.fly.lift * 3.0);
     self.amp *= (-dt * 8.0).exp();
     self.grounded = false;
-    if self.y >= 400.0 { self.y = 400.0; self.vy = self.vy.min(0.0); }
+    if self.y >= 400.0 { self.y = 400.0; if self.vy > 0.0 { self.vy = 0.0; } self.fly.pitch = self.fly.pitch.min(0.0); }
     if self.y <= 0.0 {
         self.y = 0.0;
         self.vy = 0.0;
@@ -764,8 +816,13 @@ fn flight_step(&mut self, dt: f32, steer: f32, throttle: f32) {
         self.fly.active = false;
         self.fly.lift = 0.0;
         self.fly.roll = 0.0;
+        self.fly.pitch = 0.0;
+        self.fly.stall = false;
+        self.fly.vx = 0.0;
+        self.fly.vz = 0.0;
     }
 }
+
 fn control(&mut self, dt: f32, pad: Pad) {
           let (k, pad) = if self.chat_open { ([false; 6], Pad::default()) } else { (self.keys, pad) };
           let jump_down = !self.chat_open && (k[5] || pad.a || self.jump_tap);
@@ -839,7 +896,7 @@ let (s, c) = self.yaw.sin_cos();
               let mut b = [0u8; 24];
               b[0] = 2;
     b[17] = if self.fly.active { 1 } else { 0 };
-    b[18] = ((-self.pitch * 60.0).clamp(-127.0, 127.0) as i8) as u8;
+    b[18] = ((self.fly.pitch * 60.0).clamp(-127.0, 127.0) as i8) as u8;
     b[19] = ((self.fly.roll * 60.0).clamp(-127.0, 127.0) as i8) as u8;
     self.fly.sent_active = self.fly.active;
               for (i, v) in cur.iter().enumerate() { b[1 + i * 4..5 + i * 4].copy_from_slice(&v.to_le_bytes()); }
@@ -915,7 +972,7 @@ self.r.draw(&self.gl, &vp, (self.x.rem_euclid(10.0), self.z.rem_euclid(10.0)));
     format!("{s} | Ping {ping}")
 } else { s };
 let s = if self.joined && self.fly.active {
-    format!("{s} | FLY {:.0} m/s | ALT {:.0} m{}", self.fly.speed, self.y, if self.fly.speed < 16.0 { " | STALL" } else { "" })
+    format!("{s} | FLY {:.0} m/s | ALT {:.0} m{}", self.fly.speed, self.y, if self.fly.stall { " | STALL" } else { "" })
 } else { s };
 self.hud.set_text_content(Some(&s));
       }
